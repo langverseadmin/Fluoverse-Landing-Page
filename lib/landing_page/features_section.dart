@@ -163,72 +163,77 @@ class _FeatureCardState extends State<_FeatureCard> {
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 700;
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovering = true),
-      onExit: (_) => setState(() => _isHovering = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeInOut,
-        padding: EdgeInsets.symmetric(
-          vertical: isMobile ? 32 : 20,
-          horizontal: isMobile ? 24 : 20,
-        ),
-        decoration: BoxDecoration(
-          // ignore: deprecated_member_use
-          color: Colors.white.withOpacity(0.6),
-          borderRadius: BorderRadius.circular(24),
-          // ignore: deprecated_member_use
-          border: Border.all(color: Colors.white.withOpacity(0.8)),
-          boxShadow: [
-            BoxShadow(
-              // ignore: deprecated_member_use
-              color: _isHovering ? Colors.blueAccent.withOpacity(0.3) : Colors.black.withOpacity(0.05),
-              blurRadius: _isHovering ? 30 : 20,
-              offset: const Offset(0, 12),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Colors.purple, Colors.blue],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _isHovering = true),
+      onTapUp: (_) => setState(() => _isHovering = false),
+      onTapCancel: () => setState(() => _isHovering = false),
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovering = true),
+        onExit: (_) => setState(() => _isHovering = false),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+          padding: EdgeInsets.symmetric(
+            vertical: isMobile ? 32 : 20,
+            horizontal: 24,
+          ),
+          decoration: BoxDecoration(
+            // ignore: deprecated_member_use
+            color: Colors.white.withOpacity(0.6),
+            borderRadius: BorderRadius.circular(24),
+            // ignore: deprecated_member_use
+            border: Border.all(color: Colors.white.withOpacity(0.8)),
+            boxShadow: [
+              BoxShadow(
+                // ignore: deprecated_member_use
+                color: _isHovering ? Colors.blueAccent.withOpacity(0.3) : Colors.black.withOpacity(0.05),
+                blurRadius: _isHovering ? 30 : 20,
+                offset: const Offset(0, 12),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Colors.purple, Colors.blue],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    borderRadius: BorderRadius.circular(16),
+                    child: Icon(widget.icon, color: Colors.white, size: 30),
                   ),
-                  child: Icon(widget.icon, color: Colors.white, size: 30),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.title,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.title,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        widget.description,
-                        style: const TextStyle(fontSize: 16, color: Colors.black54),
-                      ),
-                    ],
+                        const SizedBox(height: 8),
+                        Text(
+                          widget.description,
+                          style: const TextStyle(fontSize: 16, color: Colors.black54),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
