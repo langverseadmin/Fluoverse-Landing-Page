@@ -118,7 +118,7 @@ class FeaturesSection extends StatelessWidget {
                         crossAxisCount: isMobile ? 1 : 2,
                         crossAxisSpacing: 32,
                         mainAxisSpacing: 32,
-                        childAspectRatio: isMobile ? 3 : 2.6,
+                        childAspectRatio: isMobile ? 3 : 2.4,
                       ),
                       itemBuilder: (context, index) {
                         final feature = features[index];
@@ -222,7 +222,10 @@ class _FeatureCardState extends State<_FeatureCard> {
         const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: _buildTextContent(alignment: TextAlign.center),
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 280),
+            child: _buildTextContent(alignment: TextAlign.center),
+          ),
         ),
       ],
     );
