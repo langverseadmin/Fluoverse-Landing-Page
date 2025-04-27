@@ -118,7 +118,7 @@ class FeaturesSection extends StatelessWidget {
                         crossAxisCount: isMobile ? 1 : 2,
                         crossAxisSpacing: 32,
                         mainAxisSpacing: 32,
-                        childAspectRatio: isMobile ? 3 : 2.4,
+                        childAspectRatio: isMobile ? 3 : 2.6,
                       ),
                       itemBuilder: (context, index) {
                         final feature = features[index];
@@ -173,7 +173,7 @@ class _FeatureCardState extends State<_FeatureCard> {
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
           padding: EdgeInsets.symmetric(
-            vertical: isMobile ? 32 : 20,
+            vertical: isMobile ? 32 : 24,
             horizontal: 24,
           ),
           decoration: BoxDecoration(
@@ -205,27 +205,30 @@ class _FeatureCardState extends State<_FeatureCard> {
 
   Widget _buildDesktopContent() {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildIcon(),
-        const SizedBox(width: 20),
-        Expanded(child: _buildTextContent()),
+        _buildIcon(size: 28),
+        const SizedBox(width: 24),
+        Expanded(child: _buildTextContent(alignment: TextAlign.start)),
       ],
     );
   }
 
   Widget _buildMobileContent() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _buildIcon(),
+        _buildIcon(size: 32),
         const SizedBox(height: 16),
-        _buildTextContent(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: _buildTextContent(alignment: TextAlign.center),
+        ),
       ],
     );
   }
 
-  Widget _buildIcon() {
+  Widget _buildIcon({double size = 30}) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -236,16 +239,17 @@ class _FeatureCardState extends State<_FeatureCard> {
         ),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Icon(widget.icon, color: Colors.white, size: 30),
+      child: Icon(widget.icon, color: Colors.white, size: size),
     );
   }
 
-  Widget _buildTextContent() {
+  Widget _buildTextContent({TextAlign alignment = TextAlign.center}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           widget.title,
+          textAlign: alignment,
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -255,6 +259,7 @@ class _FeatureCardState extends State<_FeatureCard> {
         const SizedBox(height: 8),
         Text(
           widget.description,
+          textAlign: alignment,
           style: const TextStyle(fontSize: 16, color: Colors.black54),
         ),
       ],
