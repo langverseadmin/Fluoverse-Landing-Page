@@ -90,14 +90,18 @@ class FeaturesSection extends StatelessWidget {
                     const SizedBox(height: 24),
 
                     // Main Heading
-                    const Text(
+                    Text(
                       'Master Spanish with Fluoverse',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 38,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.2,
-                        color: Colors.black,
+                        // ignore: deprecated_member_use
+                        foreground: Paint()
+                          ..shader = LinearGradient(
+                            colors: [Colors.purple, Colors.blue],
+                          ).createShader(Rect.fromLTWH(0.0, 0.0, screenWidth, 0.0)),
                       ),
                     )
                         .animate()

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:confetti/confetti.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HeroBanner extends StatefulWidget {
   const HeroBanner({super.key});
@@ -15,6 +15,8 @@ class _HeroBannerState extends State<HeroBanner> with SingleTickerProviderStateM
   final supabase = Supabase.instance.client;
 
   late AnimationController _glowController;
+  bool _isHovering = false;
+  bool _buttonHovering = false;
 
   @override
   void initState() {
@@ -39,6 +41,8 @@ class _HeroBannerState extends State<HeroBanner> with SingleTickerProviderStateM
       barrierDismissible: false,
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        // ignore: deprecated_member_use
+        backgroundColor: Colors.white.withOpacity(0.92),
         contentPadding: const EdgeInsets.all(24),
         content: Stack(
           alignment: Alignment.topCenter,
@@ -67,7 +71,7 @@ class _HeroBannerState extends State<HeroBanner> with SingleTickerProviderStateM
                 const SizedBox(height: 30),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
+                    backgroundColor: Colors.purple,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
@@ -88,108 +92,76 @@ class _HeroBannerState extends State<HeroBanner> with SingleTickerProviderStateM
 
   Future<void> _showEmailDialog() async {
     emailController.clear();
-
-    await showGeneralDialog(
+    await showDialog(
       context: context,
       barrierDismissible: true,
-      barrierLabel: 'Email Waitlist',
-      transitionDuration: const Duration(milliseconds: 500),
-      pageBuilder: (context, animation1, animation2) {
-        return Center(
-          child: ScaleTransition(
-            scale: CurvedAnimation(parent: animation1, curve: Curves.easeOutBack),
-            child: AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              backgroundColor: Colors.white,
-              title: const Text('Join the Fluoverse Waitlist 🚀',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    style: const TextStyle(fontSize: 16),
-                    decoration: InputDecoration(
-                      hintText: 'you@example.com',
-                      labelText: 'Email Address',
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      filled: true,
-                      fillColor: Colors.grey.shade100,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Colors.deepPurple, width: 2),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              actionsAlignment: MainAxisAlignment.center,
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel', style: TextStyle(color: Colors.purple)),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  ),
-                  onPressed: () async {
-                    final email = emailController.text.trim();
-                    if (email.isEmpty || !email.contains('@')) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('⚡ Please enter a valid email address')),
-                      );
-                      return;
-                    }
-                    try {
-                      final existing = await supabase.from('waitlist').select('id').eq('email', email).maybeSingle();
-                      if (existing != null) {
-                        if (mounted) {
-                          // ignore: use_build_context_synchronously
-                          Navigator.of(context).pop();
-                          await Future.delayed(const Duration(milliseconds: 200));
-                          // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('⚡ You have already joined the waitlist!')),
-                          );
-                        }
-                      } else {
-                        await supabase.from('waitlist').insert({'email': email});
-                        if (mounted) {
-                          // ignore: use_build_context_synchronously
-                          Navigator.of(context).pop();
-                          await Future.delayed(const Duration(milliseconds: 300));
-                          _showThankYouDialog();
-                        }
-                      }
-                    } catch (e) {
-                      if (mounted) {
-                        // ignore: use_build_context_synchronously
-                        Navigator.of(context).pop();
-                        // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('⚡ You have already signed up! Thank you!')),
-                        );
-                      }
-                    }
-                  },
-                  child: const Text('Join Now', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)),
-                ),
-              ],
-            ),
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: Colors.white,
+        title: const Text('Join the Fluoverse Waitlist 🚀',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+        content: TextField(
+          controller: emailController,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            hintText: 'you@example.com',
+            labelText: 'Email Address',
+            filled: true,
+            fillColor: Colors.grey.shade100,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
           ),
-        );
-      },
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel', style: TextStyle(color: Colors.purple))),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.purple,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
+            onPressed: () async {
+              final email = emailController.text.trim();
+              if (email.isEmpty || !email.contains('@')) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(const SnackBar(content: Text('⚡ Please enter a valid email address')));
+                return;
+              }
+              try {
+                final existing = await supabase.from('waitlist').select('id').eq('email', email).maybeSingle();
+                if (existing != null) {
+                  if (mounted) {
+                    Navigator.of(context).pop();
+                    await Future.delayed(const Duration(milliseconds: 200));
+                    // ignore: use_build_context_synchronously
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('⚡ You have already joined the waitlist!')));
+                  }
+                } else {
+                  await supabase.from('waitlist').insert({'email': email});
+                  if (mounted) {
+                    Navigator.of(context).pop();
+                    await Future.delayed(const Duration(milliseconds: 300));
+                    _showThankYouDialog();
+                  }
+                }
+              } catch (e) {
+                if (mounted) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(const SnackBar(content: Text('⚡ You have already signed up! Thank you!')));
+                }
+              }
+            },
+            child: const Text('Join Now', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)),
+          )
+        ],
+      ),
     );
   }
 
@@ -229,30 +201,36 @@ class _HeroBannerState extends State<HeroBanner> with SingleTickerProviderStateM
               child: const Icon(Icons.menu_book_rounded, size: 48, color: Color(0xFF8B5CF6)),
             ),
             const SizedBox(height: 24),
-            AnimatedBuilder(
-              animation: _glowController,
-              builder: (context, child) {
-                return ShaderMask(
-                  shaderCallback: (bounds) => LinearGradient(
-                    colors: [
-                      // ignore: deprecated_member_use
-                      Colors.purple.withOpacity(0.7 + (_glowController.value * 0.3)),
-                      // ignore: deprecated_member_use
-                      Colors.blue.withOpacity(0.7 + (_glowController.value * 0.3)),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ).createShader(bounds),
-                  child: child,
-                );
-              },
-              child: Text(
-                'Fluoverse: Learn the Language by Living It!',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+            MouseRegion(
+              onEnter: (_) => setState(() => _isHovering = true),
+              onExit: (_) => setState(() => _isHovering = false),
+              child: AnimatedBuilder(
+                animation: _glowController,
+                builder: (context, child) {
+                  return ShaderMask(
+                    shaderCallback: (bounds) => LinearGradient(
+                      colors: _isHovering
+                          ? [Colors.purple, Colors.blue]
+                          : [
+                              // ignore: deprecated_member_use
+                              Colors.purple.withOpacity(0.7 + (_glowController.value * 0.3)),
+                              // ignore: deprecated_member_use
+                              Colors.blue.withOpacity(0.7 + (_glowController.value * 0.3)),
+                            ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ).createShader(bounds),
+                    child: child,
+                  );
+                },
+                child: Text(
+                  'Fluoverse: Learn the Language by Living It!',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -266,18 +244,32 @@ class _HeroBannerState extends State<HeroBanner> with SingleTickerProviderStateM
               ),
             ),
             const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: _showEmailDialog,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+            MouseRegion(
+              onEnter: (_) => setState(() => _buttonHovering = true),
+              onExit: (_) => setState(() => _buttonHovering = false),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                transform: _buttonHovering 
+                    ? (Matrix4.identity()..translate(0.0, -6.0)) 
+                    : Matrix4.identity(),
+                curve: Curves.easeOut,
+                child: ElevatedButton(
+                  onPressed: _showEmailDialog,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _buttonHovering ? Colors.purpleAccent : Colors.purple,
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    elevation: _buttonHovering ? 18 : 10,
+                    // ignore: deprecated_member_use
+                    shadowColor: Colors.deepPurple.withOpacity(0.5),
+                  ),
+                  child: const Text(
+                    'Join Us Today!',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
+                  ),
                 ),
-              ),
-              child: const Text(
-                'Join Us Today!',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
               ),
             ),
           ],
