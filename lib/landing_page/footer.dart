@@ -68,9 +68,9 @@ class FooterSection extends StatelessWidget {
             spacing: 40,
             runSpacing: 16,
             children: [
-              _buildFooterColumn('Company', ['About Us', 'Careers', 'Blog', 'Press Kit']),
+              _buildFooterColumn('Company', ['About Us','Blog']),
               _buildFooterColumn('Languages', ['Spanish']),
-              _buildFooterColumn('Legal', ['Terms', 'Privacy', 'Cookies', 'Licensing']),
+              _buildFooterColumn('Legal', ['Terms', 'Privacy', 'Cookies']),
             ],
           ),
           const SizedBox(height: 32),
