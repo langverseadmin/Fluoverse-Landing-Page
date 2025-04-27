@@ -31,74 +31,80 @@ class FeaturesSection extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
 
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 800),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  // ignore: deprecated_member_use
-                  color: Colors.purple.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: const Text(
-                  "Why Choose Fluoverse",
-                  style: TextStyle(
-                    color: Colors.purple,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
+    return SafeArea(
+      child: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1000),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    // ignore: deprecated_member_use
+                    color: Colors.purple.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: const Text(
+                    "Why Choose Fluoverse",
+                    style: TextStyle(
+                      color: Colors.purple,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              ShaderMask(
-                shaderCallback: (bounds) => const LinearGradient(
-                  colors: [Colors.purple, Colors.blue],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ).createShader(bounds),
-                child: const Text(
-                  "Master Spanish with Fluoverse",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                const SizedBox(height: 20),
+                ShaderMask(
+                  shaderCallback: (bounds) => const LinearGradient(
+                    colors: [Colors.purple, Colors.blue],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ).createShader(bounds),
+                  child: Text(
+                    "Master Spanish with Fluoverse",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: isMobile ? 28 : 36,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                "Our innovative approach combines advanced AI with proven teaching methods for an unparalleled Spanish learning experience.",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: Colors.black54),
-              ),
-              const SizedBox(height: 40),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: features.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: isMobile ? 1 : 2, // 📱 1 on mobile, 2 on desktop
-                  crossAxisSpacing: 24,
-                  mainAxisSpacing: 24,
-                  childAspectRatio: isMobile ? 3 : 3, // Adjust for mobile
+                const SizedBox(height: 12),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "Our innovative approach combines advanced AI with proven teaching methods for an unparalleled Spanish learning experience.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, color: Colors.black54),
+                  ),
                 ),
-                itemBuilder: (context, index) {
-                  final feature = features[index];
-                  return _FeatureCard(
-                    icon: feature['icon'] as IconData,
-                    title: feature['title'] as String,
-                    description: feature['description'] as String,
-                  );
-                },
-              ),
-            ],
+                const SizedBox(height: 40),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: features.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: isMobile ? 1 : 2,
+                    crossAxisSpacing: 24,
+                    mainAxisSpacing: 24,
+                    childAspectRatio: isMobile ? 3 : 3,
+                  ),
+                  itemBuilder: (context, index) {
+                    final feature = features[index];
+                    return _FeatureCard(
+                      icon: feature['icon'] as IconData,
+                      title: feature['title'] as String,
+                      description: feature['description'] as String,
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -132,7 +138,7 @@ class _FeatureCardState extends State<_FeatureCard> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -150,7 +156,7 @@ class _FeatureCardState extends State<_FeatureCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [Colors.purple, Colors.blue],
@@ -159,7 +165,7 @@ class _FeatureCardState extends State<_FeatureCard> {
                 ),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Icon(widget.icon, color: Colors.white, size: 28),
+              child: Icon(widget.icon, color: Colors.white, size: 30),
             ),
             const SizedBox(width: 16),
             Expanded(
