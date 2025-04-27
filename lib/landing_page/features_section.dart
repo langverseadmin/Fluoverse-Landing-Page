@@ -35,7 +35,6 @@ class FeaturesSection extends StatelessWidget {
 
     return Stack(
       children: [
-        // Floating soft light orbs background
         Positioned(
           top: -100,
           left: -100,
@@ -119,7 +118,7 @@ class FeaturesSection extends StatelessWidget {
                         crossAxisCount: isMobile ? 1 : 2,
                         crossAxisSpacing: 32,
                         mainAxisSpacing: 32,
-                        childAspectRatio: isMobile ? 3 : 2.8,
+                        childAspectRatio: isMobile ? 3 : 2.4,
                       ),
                       itemBuilder: (context, index) {
                         final feature = features[index];
@@ -196,48 +195,69 @@ class _FeatureCardState extends State<_FeatureCard> {
             borderRadius: BorderRadius.circular(24),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Colors.purple, Colors.blue],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Icon(widget.icon, color: Colors.white, size: 30),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.title,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          widget.description,
-                          style: const TextStyle(fontSize: 16, color: Colors.black54),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              child: isMobile ? _buildMobileContent() : _buildDesktopContent(),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDesktopContent() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _buildIcon(),
+        const SizedBox(width: 20),
+        Expanded(child: _buildTextContent()),
+      ],
+    );
+  }
+
+  Widget _buildMobileContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildIcon(),
+        const SizedBox(height: 16),
+        _buildTextContent(),
+      ],
+    );
+  }
+
+  Widget _buildIcon() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Colors.purple, Colors.blue],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Icon(widget.icon, color: Colors.white, size: 30),
+    );
+  }
+
+  Widget _buildTextContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.title,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          widget.description,
+          style: const TextStyle(fontSize: 16, color: Colors.black54),
+        ),
+      ],
     );
   }
 }
