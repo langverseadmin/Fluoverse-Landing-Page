@@ -19,8 +19,7 @@ class _ParticleBackgroundState extends State<ParticleBackground> with SingleTick
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 20))
-      ..repeat();
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 20))..repeat();
 
     for (var i = 0; i < 30; i++) {
       _particles.add(_Particle(_random));
@@ -35,19 +34,21 @@ class _ParticleBackgroundState extends State<ParticleBackground> with SingleTick
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.purple, Colors.blue],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return SafeArea(
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.purple, Colors.blue],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
-      ),
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (_, __) => CustomPaint(
-          painter: _ParticlePainter(_particles, _controller.value),
-          size: Size.infinite,
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (_, __) => CustomPaint(
+            painter: _ParticlePainter(_particles, _controller.value),
+            size: Size.infinite,
+          ),
         ),
       ),
     );
@@ -77,7 +78,7 @@ class _ParticlePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // ignore: deprecated_member_use
-    final paint = Paint()..color = Colors.white.withOpacity(0.2);
+    final paint = Paint()..color = Colors.white.withOpacity(0.15);
 
     for (var p in particles) {
       final dx = p.position.dx + cos(p.direction) * p.speed * progress * size.width;
@@ -180,6 +181,9 @@ class _CallToActionSectionState extends State<CallToActionSection> {
             TextField(
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.done,
+              autocorrect: false,
+              autofillHints: const [AutofillHints.email],
               decoration: InputDecoration(
                 hintText: 'you@example.com',
                 labelText: 'Email Address',
@@ -261,9 +265,10 @@ class _CallToActionSectionState extends State<CallToActionSection> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Stack(
       children: [
-        const Positioned.fill(child: ParticleBackground()), // ✅ particles + gradient background
+        const Positioned.fill(child: ParticleBackground()),
         Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 24),
@@ -282,10 +287,14 @@ class _CallToActionSectionState extends State<CallToActionSection> {
                     child: const Icon(Icons.menu_book_rounded, size: 40, color: Colors.white),
                   ),
                   const SizedBox(height: 24),
-                  const Text(
+                  Text(
                     "Join Our Early Access Program",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: TextStyle(
+                      fontSize: width < 600 ? 24 : 36,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   const Text(
@@ -306,9 +315,10 @@ class _CallToActionSectionState extends State<CallToActionSection> {
                   ElevatedButton(
                     onPressed: _showEmailDialog,
                     style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(180, 56),
+                      padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 36),
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.purple,
-                      padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 36),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       elevation: 8,
                     ),
