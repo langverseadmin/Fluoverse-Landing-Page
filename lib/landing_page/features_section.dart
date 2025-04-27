@@ -1,4 +1,6 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class FeaturesSection extends StatelessWidget {
   const FeaturesSection({super.key});
@@ -29,85 +31,112 @@ class FeaturesSection extends StatelessWidget {
     ];
 
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
+    final isMobile = screenWidth < 700;
 
-    return SafeArea(
-      child: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1000),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    // ignore: deprecated_member_use
-                    color: Colors.purple.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: const Text(
-                    "Why Choose Fluoverse",
-                    style: TextStyle(
-                      color: Colors.purple,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
+    return Stack(
+      children: [
+        // Floating soft light orbs background
+        Positioned(
+          top: -100,
+          left: -100,
+          child: Container(
+            width: 300,
+            height: 300,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                // ignore: deprecated_member_use
+                colors: [Colors.purple.withOpacity(0.1), Colors.transparent],
+              ),
+            ),
+          ).animate().fadeIn(duration: 2.seconds),
+        ),
+        Positioned(
+          bottom: -150,
+          right: -150,
+          child: Container(
+            width: 400,
+            height: 400,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                // ignore: deprecated_member_use
+                colors: [Colors.blue.withOpacity(0.08), Colors.transparent],
+              ),
+            ),
+          ).animate().fadeIn(duration: 2.seconds),
+        ),
+        SafeArea(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
+            color: Colors.white,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1200),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ShaderMask(
+                      shaderCallback: (bounds) => const LinearGradient(
+                        colors: [Colors.purpleAccent, Colors.blueAccent],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ).createShader(bounds),
+                      child: const Text(
+                        "Why Choose Fluoverse",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ).animate().fade(duration: 800.ms),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Master Spanish with Fluoverse",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ).animate().fade(duration: 1000.ms).moveY(begin: 30, end: 0),
+                    const SizedBox(height: 16),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        "Our innovative approach combines AI with proven methods for an unparalleled Spanish learning experience.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 18, color: Colors.black54),
+                      ),
+                    ).animate().fade(duration: 1200.ms),
+                    const SizedBox(height: 60),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: features.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: isMobile ? 1 : 2,
+                        crossAxisSpacing: 32,
+                        mainAxisSpacing: 32,
+                        childAspectRatio: isMobile ? 3 : 2.8,
+                      ),
+                      itemBuilder: (context, index) {
+                        final feature = features[index];
+                        return _FeatureCard(
+                          icon: feature['icon'] as IconData,
+                          title: feature['title'] as String,
+                          description: feature['description'] as String,
+                        ).animate().fade(duration: 700.ms, delay: (index * 300).ms).moveY(begin: 50, end: 0);
+                      },
                     ),
-                  ),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                ShaderMask(
-                  shaderCallback: (bounds) => const LinearGradient(
-                    colors: [Colors.purple, Colors.blue],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ).createShader(bounds),
-                  child: Text(
-                    "Master Spanish with Fluoverse",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: isMobile ? 28 : 36,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    "Our innovative approach combines advanced AI with proven teaching methods for an unparalleled Spanish learning experience.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(height: 40),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: features.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: isMobile ? 1 : 2,
-                    crossAxisSpacing: 24,
-                    mainAxisSpacing: 24,
-                    childAspectRatio: isMobile ? 3 : 3,
-                  ),
-                  itemBuilder: (context, index) {
-                    final feature = features[index];
-                    return _FeatureCard(
-                      icon: feature['icon'] as IconData,
-                      title: feature['title'] as String,
-                      description: feature['description'] as String,
-                    );
-                  },
-                ),
-              ],
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -132,64 +161,76 @@ class _FeatureCardState extends State<_FeatureCard> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovering = true),
       onExit: (_) => setState(() => _isHovering = false),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 400),
         curve: Curves.easeInOut,
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.symmetric(
+          vertical: isMobile ? 32 : 20,
+          horizontal: isMobile ? 24 : 20,
+        ),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          // ignore: deprecated_member_use
+          color: Colors.white.withOpacity(0.6),
+          borderRadius: BorderRadius.circular(24),
+          // ignore: deprecated_member_use
+          border: Border.all(color: Colors.white.withOpacity(0.8)),
           boxShadow: [
             BoxShadow(
               // ignore: deprecated_member_use
-              color: _isHovering ? Colors.black.withOpacity(0.15) : Colors.black.withOpacity(0.05),
-              blurRadius: _isHovering ? 20 : 12,
-              offset: const Offset(0, 8),
+              color: _isHovering ? Colors.blueAccent.withOpacity(0.3) : Colors.black.withOpacity(0.05),
+              blurRadius: _isHovering ? 30 : 20,
+              offset: const Offset(0, 12),
             ),
           ],
-          border: Border.all(color: Colors.grey.shade200),
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Colors.purple, Colors.blue],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(widget.icon, color: Colors.white, size: 30),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AnimatedDefaultTextStyle(
-                    duration: const Duration(milliseconds: 300),
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: _isHovering ? Colors.purple : Colors.black87,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Colors.purple, Colors.blue],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                    child: Text(widget.title),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.description,
-                    style: const TextStyle(fontSize: 14, color: Colors.black54),
+                  child: Icon(widget.icon, color: Colors.white, size: 30),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.title,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        widget.description,
+                        style: const TextStyle(fontSize: 16, color: Colors.black54),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
