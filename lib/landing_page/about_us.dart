@@ -94,7 +94,7 @@ Widget build(BuildContext context) {
 
             // Card carousel (full height)
             SizedBox(
-              height: 500,
+              height: 600,
               child: PageView.builder(
                 controller: _pageController,
                 physics: const NeverScrollableScrollPhysics(),
