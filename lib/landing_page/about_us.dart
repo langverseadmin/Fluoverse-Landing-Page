@@ -49,23 +49,21 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
     _pageController.dispose();
     super.dispose();
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         child: Column(
           children: [
-            const SizedBox(height: 24),
-
-            // Logo
-            Image.asset('web/assets/Fluoverse_Logo.png', height: 400),
             const SizedBox(height: 12),
-
-            Text(
+            Image.asset('web/assets/Fluoverse_Logo.png', height: 280),
+            const SizedBox(height: 24),
+            const Text(
               "About Fluoverse",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
@@ -74,45 +72,49 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Card Carousel with arrows
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () => _goToPage(_currentPage - 1),
-                    icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black54),
-                    iconSize: 28,
-                    tooltip: 'Previous',
-                  ),
-                  Expanded(
-                    child: PageView.builder(
-                      controller: _pageController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: cardTexts.length,
-                      itemBuilder: (context, index) {
-                        final card = cardTexts[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
-                          child: _GradientCard(
-                            title: card["title"]!,
-                            content: card["content"]!,
-                          ),
-                        );
-                      },
+            // Navigation Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () => _goToPage(_currentPage - 1),
+                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black54),
+                  iconSize: 28,
+                  tooltip: 'Previous',
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  onPressed: () => _goToPage(_currentPage + 1),
+                  icon: const Icon(Icons.arrow_forward_ios, color: Colors.black54),
+                  iconSize: 28,
+                  tooltip: 'Next',
+                ),
+              ],
+            ),
+
+            // Card carousel (full height)
+            SizedBox(
+              height: 500,
+              child: PageView.builder(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: cardTexts.length,
+                itemBuilder: (context, index) {
+                  final card = cardTexts[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                    child: _GradientCard(
+                      title: card["title"]!,
+                      content: card["content"]!,
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () => _goToPage(_currentPage + 1),
-                    icon: const Icon(Icons.arrow_forward_ios, color: Colors.black54),
-                    iconSize: 28,
-                    tooltip: 'Next',
-                  ),
-                ],
+                  );
+                },
               ),
             ),
 
-            // Dots
+            const SizedBox(height: 16),
+
+            // Dot indicators
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(cardTexts.length, (index) {
@@ -134,29 +136,28 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
             const SizedBox(height: 32),
 
             // Back button
-            Padding(
-              padding: const EdgeInsets.only(bottom: 32),
-              child: ElevatedButton.icon(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back),
-                label: const Text("Back to Home"),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.deepPurple,
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  shadowColor: Colors.deepPurple.withOpacity(0.3),
-                  elevation: 6,
+            ElevatedButton.icon(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back),
+              label: const Text("Back to Home"),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.deepPurple,
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
                 ),
+                shadowColor: Colors.deepPurple.withOpacity(0.3),
+                elevation: 6,
               ),
             ),
+            const SizedBox(height: 32),
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 class _GradientCard extends StatelessWidget {
@@ -172,7 +173,10 @@ class _GradientCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      constraints: const BoxConstraints(
+        minHeight: 800, // Adjust as needed
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFF8B5CF6), Color(0xFF6366F1)],
@@ -189,7 +193,8 @@ class _GradientCard extends StatelessWidget {
         ],
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             title,
@@ -203,15 +208,15 @@ class _GradientCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 16), // reduced from 24
+          const SizedBox(height: 24),
           ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 600),
+            constraints: const BoxConstraints(maxWidth: 640),
             child: Text(
               content,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 16,
-                height: 1.35, // tighter line spacing
+                height: 1.4,
                 color: Colors.white,
               ),
             ),
@@ -221,3 +226,4 @@ class _GradientCard extends StatelessWidget {
     );
   }
 }
+
