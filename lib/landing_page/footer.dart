@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'about_us.dart'; // Update the path as needed
+
+
 
 class FooterSection extends StatelessWidget {
   const FooterSection({super.key});
@@ -68,9 +71,9 @@ class FooterSection extends StatelessWidget {
             spacing: 40,
             runSpacing: 16,
             children: [
-              _buildFooterColumn('Company', ['About Us','Blog']),
-              _buildFooterColumn('Languages', ['Spanish']),
-              _buildFooterColumn('Legal', ['Terms', 'Privacy', 'Cookies']),
+              _buildFooterColumn(context, 'Company', ['About Us','Blog']),
+              _buildFooterColumn(context, 'Languages', ['Spanish']),
+              _buildFooterColumn(context, 'Legal', ['Terms', 'Privacy', 'Cookies']),
             ],
           ),
           const SizedBox(height: 32),
@@ -90,27 +93,42 @@ class FooterSection extends StatelessWidget {
     );
   }
 
-  Widget _buildFooterColumn(String title, List<String> items) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
+  
+Widget _buildFooterColumn(BuildContext context, String title, List<String> items) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        title,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
         ),
-        const SizedBox(height: 10),
-        ...items.map((item) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
+      ),
+      const SizedBox(height: 10),
+      ...items.map((item) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: GestureDetector(
+          onTap: () {
+            if (item == 'About Us') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AboutUsScreen()),
+              );
+            }
+          },
           child: Text(
             item,
-            style: const TextStyle(color: Colors.grey, fontSize: 14),
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 14,
+              decoration: TextDecoration.underline,
+            ),
           ),
-        )),
-      ],
-    );
+        ),
+      )),
+    ],
+  );
   }
 }
