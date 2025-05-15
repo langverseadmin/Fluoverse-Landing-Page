@@ -1,30 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'dart:convert';
+// lib/landing_page/landing_main.dart
 
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'landing_page/landing_page.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Fetch Supabase credentials securely from your backend
-  final response = await http.get(
-    Uri.parse('https://fluoverse.onrender.com/auth/init'),
-  );
-
-  if (response.statusCode != 200) {
-    throw Exception('Failed to load Supabase config from backend');
-  }
-
-  final config = json.decode(response.body);
-  final supabaseConfig = config['supabase'];
-
   await Supabase.initialize(
-    url: supabaseConfig['url'],
-    anonKey: supabaseConfig['anon_key'],
+    url: 'https://pjjiusivnjtpzzqlhpzd.supabase.co',   // 🔥 Replace with your own
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaml1c2l2bmp0cHp6cWxocHpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4MjI2NTgsImV4cCI6MjA2MjM5ODY1OH0.OAhCRxjORCDmoBDipAc-GkLqp7xe8Tn2LV_sIoDXCqU',                       // 🔥 Replace with your own
   );
-
   runApp(const LandingMainApp());
 }
 
