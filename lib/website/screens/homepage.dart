@@ -36,6 +36,12 @@ class HomePage extends StatelessWidget {
                   .fadeIn(duration: 800.ms)
                   .slide(begin: const Offset(0, 0.2)),
 
+              // Added VisionSection below LearningCycleSection
+              const VisionSection()
+                  .animate()
+                  .fadeIn(duration: 800.ms)
+                  .slide(begin: const Offset(0, 0.2)),
+
               const FooterSection()
                   .animate()
                   .fadeIn(duration: 800.ms)
