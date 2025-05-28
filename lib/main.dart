@@ -2,31 +2,31 @@
 
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'landing_page/landing_page.dart';
-
+import '../website/screens/homepage.dart'; // 👈 Make sure this matches your file structure
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-    url: 'https://pjjiusivnjtpzzqlhpzd.supabase.co',   // 🔥 Replace with your own
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaml1c2l2bmp0cHp6cWxocHpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4MjI2NTgsImV4cCI6MjA2MjM5ODY1OH0.OAhCRxjORCDmoBDipAc-GkLqp7xe8Tn2LV_sIoDXCqU',                       // 🔥 Replace with your own
+    url: 'https://pjjiusivnjtpzzqlhpzd.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaml1c2l2bmp0cHp6cWxocHpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4MjI2NTgsImV4cCI6MjA2MjM5ODY1OH0.OAhCRxjORCDmoBDipAc-GkLqp7xe8Tn2LV_sIoDXCqU',
   );
-  runApp(const LandingMainApp());
+  runApp(const FluoverseWebsiteApp());
 }
 
-class LandingMainApp extends StatelessWidget {
-  const LandingMainApp({super.key});
+class FluoverseWebsiteApp extends StatelessWidget {
+  const FluoverseWebsiteApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fluoverse - Learn the Language by Living It',
+      title: 'Fluoverse – Speak-First AI Language Tutor',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        scaffoldBackgroundColor: Colors.transparent, // for gradient visibility
       ),
-      home: const LandingPage(),
+      home: const HomePage(), // 👈 This now launches your full website homepage
     );
   }
 }
