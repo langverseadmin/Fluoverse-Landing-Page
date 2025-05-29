@@ -108,13 +108,14 @@ class _NavButtonBar extends StatelessWidget {
           selected: isSelected('/home'),
           onTap: () {
             if (!isSelected('/home')) {
-              Navigator.pushReplacement(
-                context,
+              Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                   builder: (context) => const HomePage(),
                   settings: const RouteSettings(name: '/home'),
                 ),
+                (route) => false, // Remove all previous routes
               );
+
             }
           },
         ),
