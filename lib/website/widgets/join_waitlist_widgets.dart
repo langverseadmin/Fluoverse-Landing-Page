@@ -1,7 +1,9 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, avoid_print
 
 import 'package:flutter/material.dart';
 import 'homepage_widgets.dart'; // For shared constants and styles
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 
@@ -85,6 +87,10 @@ class TitleWidget extends StatelessWidget {
 
 // Join waitlist form widget
 
+
+
+
+
 class JoinWaitlistForm extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
@@ -111,30 +117,160 @@ class _JoinWaitlistFormState extends State<JoinWaitlistForm> {
   bool _submitted = false;
   bool _loading = false;
   String? _error;
+  bool _awaitingVerification = false;
+  String? _pendingEmail;
+  String? _pendingPassword;
+
+  // Check if user exists in users table
+  Future<bool> _userExists(String email) async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://fluoverse.onrender.com/auth/user_exists?email=$email'),
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['exists'] == true;
+      }
+    } catch (_) {}
+    return false;
+  }
+
+  // Save email to Supabase waitlist table directly
+  Future<void> _saveToWaitlistSupabase(String email) async {
+    final supabase = Supabase.instance.client;
+    try {
+      await supabase.from('waitlist').insert({'email': email});
+    } catch (e) {
+      // Ignore errors, as user may already be on waitlist
+    }
+  }
 
   Future<void> _handleSubmit() async {
     setState(() {
       _loading = true;
       _error = null;
     });
+
     final email = widget.emailController.text.trim();
-    if (email.isEmpty) {
+    final password = widget.passwordController.text.trim();
+    final firstName = widget.firstNameController.text.trim();
+    final lastName = widget.lastNameController.text.trim();
+
+    if (email.isEmpty || password.isEmpty || firstName.isEmpty || lastName.isEmpty) {
       setState(() {
-        _error = 'Please enter your email.';
+        _error = 'Please fill in all fields.';
         _loading = false;
       });
       return;
     }
-    try {
-      final supabase = Supabase.instance.client;
-      await supabase.from('waitlist').insert({'email': email});
+
+    // Save to Supabase waitlist table regardless of backend result
+    await _saveToWaitlistSupabase(email);
+
+    // Check if user already exists in users table
+    final existsInUsers = await _userExists(email);
+
+    if (existsInUsers) {
       setState(() {
-        _submitted = true;
+        _error = 'You are already registered!';
         _loading = false;
       });
+      return;
+    }
+
+    try {
+      // Call backend /signup endpoint
+      final response = await http.post(
+        Uri.parse('https://fluoverse.onrender.com/auth/signup'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+          'first_name': firstName,
+          'last_name': lastName,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        setState(() {
+          _submitted = true;
+          _loading = false;
+        });
+      } else if (response.statusCode == 202) {
+        setState(() {
+          _awaitingVerification = true;
+          _pendingEmail = email;
+          _pendingPassword = password;
+          _loading = false;
+          _error = null;
+        });
+      } else if (response.statusCode == 409) {
+        setState(() {
+          _error = 'You are already registered!';
+          _loading = false;
+        });
+      } else {
+        setState(() {
+          _error = data['error']?.toString() ?? 'Failed to join waitlist. Please try again.';
+          _loading = false;
+        });
+      }
     } catch (e) {
       setState(() {
         _error = 'Failed to join waitlist. Please try again.';
+        _loading = false;
+      });
+    }
+  }
+
+  Future<void> _retryAfterVerification() async {
+    if (_pendingEmail == null || _pendingPassword == null) {
+      setState(() {
+        _error = 'Missing information. Please try again.';
+        _awaitingVerification = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://fluoverse.onrender.com/auth/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': _pendingEmail!,
+          'password': _pendingPassword!,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _submitted = true;
+          _loading = false;
+          _awaitingVerification = false;
+        });
+      } else if (response.statusCode == 401) {
+        setState(() {
+          _error = 'Email not verified yet or invalid credentials. Please check your inbox and try again.';
+          _loading = false;
+        });
+      } else {
+        setState(() {
+          _error = data['error']?.toString() ?? 'Failed to join waitlist. Please try again!';
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _error = 'Something went wrong. Please try again later.';
         _loading = false;
       });
     }
@@ -206,7 +342,58 @@ class _JoinWaitlistFormState extends State<JoinWaitlistForm> {
                   ),
             ),
             const SizedBox(height: 32),
-            if (!submitted) ...[
+            if (_awaitingVerification) ...[
+              const Icon(Icons.mark_email_unread_rounded, color: Colors.amber, size: 56),
+              const SizedBox(height: 24),
+              Text(
+                'Please confirm your email address.',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'We’ve sent a verification link to your email. Once you confirm, click below to complete joining the waitlist.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.85),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 20),
+              _PremiumButton(
+                text: _loading ? 'Verifying...' : 'I have confirmed my email',
+                icon: Icons.verified_rounded,
+                background: const LinearGradient(
+                  colors: [kAccentBlue, kPremiumPurple],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                onPressed: _loading ? () {} : _retryAfterVerification,
+                glowColor: kAccentBlue.withOpacity(0.32),
+              ),
+              if (_error != null) ...[
+                const SizedBox(height: 10),
+                Text(
+                  _error!,
+                  style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+              const SizedBox(height: 12),
+              Text(
+                'Didn’t get the email? Check your spam folder or try again later.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.75),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ] else if (!submitted) ...[
               TextField(
                 controller: widget.firstNameController,
                 keyboardType: TextInputType.name,
