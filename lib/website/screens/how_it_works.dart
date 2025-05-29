@@ -19,6 +19,7 @@ class HowItWorksScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: kToolbarHeight), // Space for nav bar
+                  // Animate only the main content, not the nav bar
                   const HowItWorksPage()
                       .animate()
                       .fadeIn(duration: 400.ms)
@@ -30,6 +31,7 @@ class HowItWorksScreen extends StatelessWidget {
                 ],
               ),
             ),
+            // Do NOT animate the NavigationBarWidget
             const Positioned(
               top: 0,
               left: 0,
@@ -42,4 +44,3 @@ class HowItWorksScreen extends StatelessWidget {
     );
   }
 }
-

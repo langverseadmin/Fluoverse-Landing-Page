@@ -11,10 +11,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Background(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
+      // Move the navigation bar outside the animated/scrollable content
+      body: Stack(
+        children: [
+          Background(
+            child: SingleChildScrollView(
               padding: EdgeInsets.zero,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -47,15 +48,15 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-            // Static navigation bar in front of everything
-            const Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: NavigationBarWidget(),
-            ),
-          ],
-        ),
+          ),
+          // Navigation bar is now outside the animated content and will not animate
+          const Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: NavigationBarWidget(),
+          ),
+        ],
       ),
     );
   }
