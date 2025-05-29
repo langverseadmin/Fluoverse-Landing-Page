@@ -1,12 +1,11 @@
-// homepage.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../widgets/homepage_widgets.dart';
+import '../widgets/homepage_widgets.dart'; // For FooterSection
 import '../widgets/navigation_bar_widget.dart';
+import '../widgets/how_it_works_widgets.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HowItWorksScreen extends StatelessWidget {
+  const HowItWorksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,27 +18,11 @@ class HomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 80), // Reserve space for navigation bar
-                  const HeroSection()
+                  const SizedBox(height: kToolbarHeight), // Space for nav bar
+                  const HowItWorksPage()
                       .animate()
                       .fadeIn(duration: 400.ms)
                       .slide(begin: const Offset(0, -0.2)),
-                  const ComingSoonStrip()
-                      .animate()
-                      .fadeIn(duration: 400.ms)
-                      .scale(begin: const Offset(0.8, 0.8)),
-                  const ValuePropsSection()
-                      .animate()
-                      .fadeIn(duration: 400.ms)
-                      .slide(begin: const Offset(0, 0.2)),
-                  const LearningCycleSection()
-                      .animate()
-                      .fadeIn(duration: 400.ms)
-                      .slide(begin: const Offset(0, 0.2)),
-                  const VisionSection()
-                      .animate()
-                      .fadeIn(duration: 400.ms)
-                      .slide(begin: const Offset(0, 0.2)),
                   const FooterSection()
                       .animate()
                       .fadeIn(duration: 400.ms)
@@ -47,7 +30,6 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-            // Static navigation bar in front of everything
             const Positioned(
               top: 0,
               left: 0,
@@ -60,3 +42,4 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/website/widgets/homepage_widgets.dart';
 import '../widgets/join_waitlist_widgets.dart'; // Import for refactored widgets
+import '../widgets/navigation_bar_widget.dart'; // Import NavigationBarWidget
 
 class JoinWaitlist extends StatefulWidget {
   const JoinWaitlist({super.key});
@@ -25,6 +26,10 @@ class _JoinWaitlistScreenState extends State<JoinWaitlist> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(56.0),
+        child: NavigationBarWidget(), // Add NavigationBarWidget
+      ),
       body: Background(
         child: Center(
           child: SingleChildScrollView(
