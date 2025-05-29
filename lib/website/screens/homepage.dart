@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Move the navigation bar outside the animated/scrollable content
+      extendBodyBehindAppBar: true, // Add this line to allow content behind the nav bar
       body: Stack(
         children: [
           Background(
