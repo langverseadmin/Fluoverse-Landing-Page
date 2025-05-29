@@ -31,7 +31,7 @@ class HowItWorksPage extends StatelessWidget {
             "Learn essential words through visual context and immediate pronunciation practice. Your AI language tutor corrects your accent in real-time, ensuring you sound natural from the start.\n\nNo flashcards, no memorization—just speaking words as you learn them.",
       },
       {
-        "icon": Icons.menu_book_rounded,
+        "icon": Icons.menu_rounded,
         "color": const Color.fromARGB(255, 90, 152, 240),
         "title": "Reading",
         "description":
@@ -45,7 +45,7 @@ class HowItWorksPage extends StatelessWidget {
             "Train your ear with native speakers and natural conversations. Voice-based learning means you'll recognize real accents and speaking patterns.\n\nActive listening exercises prepare you for authentic dialogue.",
       },
       {
-        "icon": Icons.chat_bubble_rounded,
+        "icon": Icons.record_voice_over_rounded,
         "color": const Color.fromARGB(255, 255, 145, 0),
         "title": "Scenario",
         "description":
