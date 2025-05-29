@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:math';
 
+import 'package:frontend/website/screens/join_waitlist.dart';
+
 const Color kAccentBlue = Color(0xFF6A82FB);
 const Color kPremiumPurple = Color(0xFFB721FF);
 
@@ -595,142 +597,148 @@ class _ComingSoonStripState extends State<ComingSoonStrip>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Row(
-                            mainAxisSize: MainAxisSize.min,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Icon with glow and border for pop
+                            Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                              BoxShadow(
+                                color: kPremiumPurple.withOpacity(0.45),
+                                blurRadius: 32,
+                                spreadRadius: 2,
+                              ),
+                              BoxShadow(
+                                color: Colors.white.withOpacity(0.35),
+                                blurRadius: 8,
+                                spreadRadius: 1,
+                              ),
+                              ],
+                              border: Border.all(
+                              color: Colors.white.withOpacity(0.85),
+                              width: 3,
+                              ),
+                              gradient: const LinearGradient(
+                              colors: [kPremiumPurple, kAccentBlue],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(8),
+                            child: ShaderMask(
+                              shaderCallback: (Rect bounds) {
+                              return const LinearGradient(
+                                colors: [Colors.white, Colors.white70],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ).createShader(bounds);
+                              },
+                              child: Icon(
+                              Icons.rocket_launch_rounded,
+                              color: Colors.white,
+                              size: 64,
+                              shadows: [
+                                Shadow(
+                                color: kPremiumPurple.withOpacity(0.7),
+                                blurRadius: 24,
+                                ),
+                                Shadow(
+                                color: Colors.black.withOpacity(0.18),
+                                blurRadius: 8,
+                                ),
+                              ],
+                              ),
+                            ),
+                            )
+                              .animate()
+                              .fadeIn(duration: 600.ms)
+                              .slideY(begin: 0.3, end: 0, duration: 600.ms),
+                            const SizedBox(width: 32),
+                            // Text with strong shadow and stroke for pop
+                            Stack(
                             children: [
-                              // Icon with glow and border for pop
-                              Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: kPremiumPurple.withOpacity(0.45),
-                                      blurRadius: 32,
-                                      spreadRadius: 2,
-                                    ),
-                                    BoxShadow(
-                                      color: Colors.white.withOpacity(0.35),
-                                      blurRadius: 8,
-                                      spreadRadius: 1,
-                                    ),
-                                  ],
-                                  border: Border.all(
-                                    color: Colors.white.withOpacity(0.85),
-                                    width: 3,
-                                  ),
-                                  gradient: const LinearGradient(
-                                    colors: [kPremiumPurple, kAccentBlue],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
+                              // Stroke effect
+                              Text(
+                              'Coming Soon',
+                              style: TextStyle(
+                                fontSize: 54,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 2.2,
+                                foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 2
+                                ..color = Colors.black.withOpacity(0.18),
+                              ),
+                              ),
+                              ShaderMask(
+                              shaderCallback: (Rect bounds) {
+                                return const LinearGradient(
+                                colors: [kPremiumPurple, kAccentBlue],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                ).createShader(bounds);
+                              },
+                              child: Text(
+                                'Coming Soon',
+                                style: const TextStyle(
+                                fontSize: 54,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 2.2,
+                                color: Colors.white,
                                 ),
-                                padding: const EdgeInsets.all(8),
-                                child: ShaderMask(
-                                  shaderCallback: (Rect bounds) {
-                                    return const LinearGradient(
-                                      colors: [Colors.white, Colors.white70],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ).createShader(bounds);
-                                  },
-                                  child: Icon(
-                                    Icons.rocket_launch_rounded,
-                                    color: Colors.white,
-                                    size: 64,
-                                    shadows: [
-                                      Shadow(
-                                        color: kPremiumPurple.withOpacity(0.7),
-                                        blurRadius: 24,
-                                      ),
-                                      Shadow(
-                                        color: Colors.black.withOpacity(0.18),
-                                        blurRadius: 8,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                                  .animate()
-                                  .fadeIn(duration: 600.ms)
-                                  .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                              const SizedBox(width: 32),
-                              // Text with strong shadow and stroke for pop
-                              Stack(
-                                children: [
-                                  // Stroke effect
-                                  Text(
-                                    'Coming Soon',
-                                    style: TextStyle(
-                                      fontSize: 54,
-                                      fontWeight: FontWeight.w900,
-                                      letterSpacing: 2.2,
-                                      foreground: Paint()
-                                        ..style = PaintingStyle.stroke
-                                        ..strokeWidth = 2
-                                        ..color = Colors.black.withOpacity(0.18),
-                                    ),
-                                  ),
-                                  ShaderMask(
-                                    shaderCallback: (Rect bounds) {
-                                      return const LinearGradient(
-                                        colors: [kPremiumPurple, kAccentBlue],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                      ).createShader(bounds);
-                                    },
-                                    child: Text(
-                                      'Coming Soon',
-                                      style: const TextStyle(
-                                        fontSize: 54,
-                                        fontWeight: FontWeight.w900,
-                                        letterSpacing: 2.2,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                                  .animate()
-                                  .fadeIn(duration: 800.ms)
-                                  .slideY(begin: -0.2, end: 0, duration: 800.ms),
+                              ),
+                              ),
                             ],
+                            )
+                              .animate()
+                              .fadeIn(duration: 800.ms)
+                              .slideY(begin: -0.2, end: 0, duration: 800.ms),
+                          ],
                           ),
                           const SizedBox(height: 32),
                           Text(
-                            'Fluoverse is almost here — a bold new way to learn by speaking.\n\nJoin early and shape the future of language learning.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.92),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.6,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.white.withOpacity(0.7),
-                                  blurRadius: 12,
-                                ),
-                                Shadow(
-                                  color: kAccentBlue.withOpacity(0.18),
-                                  blurRadius: 16,
-                                ),
-                              ],
+                          'Fluoverse is almost here — a bold new way to learn by speaking.\n\nJoin early and shape the future of language learning.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.92),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.6,
+                            shadows: [
+                            Shadow(
+                              color: Colors.white.withOpacity(0.7),
+                              blurRadius: 12,
                             ),
+                            Shadow(
+                              color: kAccentBlue.withOpacity(0.18),
+                              blurRadius: 16,
+                            ),
+                            ],
+                          ),
                           ).animate().fadeIn(duration: 1200.ms),
                           const SizedBox(height: 40),
                           SizedBox(
-                            height: 62,
-                            child: Center(
-                              child: _PremiumButton(
-                                text: 'Join Waitlist',
-                                icon: Icons.star_rounded,
-                                background: const LinearGradient(
-                                  colors: [kAccentBlue, kPremiumPurple],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                onPressed: () {},
-                                glowColor: kPremiumPurple.withOpacity(0.38),
-                              ).animate().fadeIn(duration: 1400.ms),
+                          height: 62,
+                          child: Center(
+                            child: _PremiumButton(
+                            text: 'Join Waitlist',
+                            icon: Icons.star_rounded,
+                            background: const LinearGradient(
+                              colors: [kAccentBlue, kPremiumPurple],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => JoinWaitlist(),
+                              ),
+                              );
+                            },
+                            glowColor: kPremiumPurple.withOpacity(0.38),
+                            ).animate().fadeIn(duration: 1400.ms),
+                          ),
                           ),
                         ],
                       ),
