@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import '../widgets/homepage_widgets.dart'; // For FooterSection
 import '../widgets/navigation_bar_widget.dart';
 import '../widgets/how_it_works_widgets.dart';
@@ -10,8 +9,8 @@ class HowItWorksScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true, // Ensures background fills behind nav bar
-      backgroundColor: Colors.transparent, // Prevents white flash
+      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.transparent,
       body: Background(
         child: Stack(
           children: [
@@ -20,23 +19,20 @@ class HowItWorksScreen extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: kToolbarHeight), // Space for nav bar
-                    // Animate only the main content, not the nav bar
-                    const HowItWorksPage()
-                        .animate()
-                        .fadeIn(duration: 400.ms)
-                        .slide(begin: const Offset(0, -0.2)),
-                    const FooterSection()
-                        .animate()
-                        .fadeIn(duration: 400.ms)
-                        .slide(begin: const Offset(0, 0.2)),
+                  children: const [
+                    SizedBox(height: kToolbarHeight),
+
+                    // 🚫 No animation here — animation should be internal
+                    HowItWorksPage(),
+
+                    FooterSection(), // If it includes animation, keep it INSIDE
                   ],
                 ),
               ),
             ),
-            // Do NOT animate the NavigationBarWidget
-            const Positioned(
+
+            // 🧊 This stays completely static
+            Positioned(
               top: 0,
               left: 0,
               right: 0,
@@ -48,3 +44,4 @@ class HowItWorksScreen extends StatelessWidget {
     );
   }
 }
+
