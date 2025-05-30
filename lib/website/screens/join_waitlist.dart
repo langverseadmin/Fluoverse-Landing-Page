@@ -26,35 +26,46 @@ class _JoinWaitlistScreenState extends State<JoinWaitlist> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(56.0),
-        child: NavigationBarWidget(), // Add NavigationBarWidget
-      ),
+      extendBodyBehindAppBar: true, // Allow background behind nav bar
+      backgroundColor: Colors.transparent,
       body: Background(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 0),
-                const TitleWidget(),
-                const SizedBox(height: 32),
-                JoinWaitlistForm(
-                  emailController: _emailController,
-                  passwordController: _passwordController,
-                  firstNameController: _firstNameController,
-                  lastNameController: _lastNameController,
-                  submitted: _submitted,
-                  onSubmit: _submit,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.zero,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: kToolbarHeight),
+                    const TitleWidget(),
+                    const SizedBox(height: 32),
+                    JoinWaitlistForm(
+                      emailController: _emailController,
+                      passwordController: _passwordController,
+                      firstNameController: _firstNameController,
+                      lastNameController: _lastNameController,
+                      submitted: _submitted,
+                      onSubmit: _submit,
+                    ),
+                    const SizedBox(height: 24),
+                    const WhyJoinWidget(),
+                    const SizedBox(height: 48),
+                    const FooterSection(),
+                  ],
                 ),
-                const SizedBox(height: 24),
-                const WhyJoinWidget(),
-                const SizedBox(height: 48),
-                const FooterSection(), // Add FooterSection at the bottom
-              ],
+              ),
             ),
-          ),
+
+            // Static navigation bar
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: const NavigationBarWidget(),
+            ),
+          ],
         ),
       ),
     );

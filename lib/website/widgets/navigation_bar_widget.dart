@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import '../screens/homepage.dart';
 import '../screens/how_it_works.dart';
+import '../screens/features.dart';
 
 class NavigationBarWidget extends StatelessWidget {
   const NavigationBarWidget({super.key});
@@ -142,7 +143,15 @@ class _NavButtonBar extends StatelessWidget {
           icon: Icons.star_outline,
           selected: isSelected('/features'),
           onTap: () {
-            // TO DO: Implement Features navigation
+            if (!isSelected('/features')) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FeaturesScreen(),
+                  settings: const RouteSettings(name: '/features'),
+                ),
+              );
+            }
           },
         ),
         _PremiumDivider(),

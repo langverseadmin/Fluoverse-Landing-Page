@@ -123,19 +123,25 @@ class HowItWorksPage extends StatelessWidget {
                           final step = steps[i];
                           final card = Flexible(
                             flex: 6,
-                            child: _StepCard(
-                              icon: step["icon"] as IconData,
-                              color: step["color"] as Color,
-                              stepNumber: i + 1,
-                              title: step["title"] as String,
-                              description: step["description"] as String,
-                              isLeft: isWide ? i.isEven : true,
+                            child: _AnimatedStepTransition(
+                              delay: Duration(milliseconds: 200 * i),
+                              child: _StepCard(
+                                icon: step["icon"] as IconData,
+                                color: step["color"] as Color,
+                                stepNumber: i + 1,
+                                title: step["title"] as String,
+                                description: step["description"] as String,
+                                isLeft: isWide ? i.isEven : true,
+                              ),
                             ),
                           );
                           final connector = isWide && i < steps.length
-                              ? _StepConnector(
-                                  color: steps[i]["color"] as Color,
-                                  isLeft: i.isEven,
+                              ? _AnimatedStepTransition(
+                                  delay: Duration(milliseconds: 200 * i + 120),
+                                  child: _StepConnector(
+                                    color: steps[i]["color"] as Color,
+                                    isLeft: i.isEven,
+                                  ),
                                 )
                               : const SizedBox.shrink();
                           return Padding(
@@ -159,10 +165,13 @@ class HowItWorksPage extends StatelessWidget {
                                     children: [
                                       card,
                                       if (i < steps.length - 1)
-                                        _StepConnector(
-                                          color: steps[i]["color"] as Color,
-                                          isLeft: true,
-                                          vertical: true,
+                                        _AnimatedStepTransition(
+                                          delay: Duration(milliseconds: 200 * i + 120),
+                                          child: _StepConnector(
+                                            color: steps[i]["color"] as Color,
+                                            isLeft: true,
+                                            vertical: true,
+                                          ),
                                         ),
                                     ],
                                   ),
@@ -177,6 +186,68 @@ class HowItWorksPage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Fade/slide transition for step cards and connectors
+class _AnimatedStepTransition extends StatefulWidget {
+  final Widget child;
+  final Duration delay;
+
+  const _AnimatedStepTransition({
+    required this.child,
+    this.delay = Duration.zero,
+  });
+
+  @override
+  State<_AnimatedStepTransition> createState() => _AnimatedStepTransitionState();
+}
+
+class _AnimatedStepTransitionState extends State<_AnimatedStepTransition>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _opacity;
+  late Animation<Offset> _offset;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 700),
+      vsync: this,
+    );
+    _opacity = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
+    _offset = Tween<Offset>(
+      begin: const Offset(0.0, 0.12),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutCubic,
+    ));
+
+    Future.delayed(widget.delay, () {
+      if (mounted) _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _opacity,
+      child: SlideTransition(
+        position: _offset,
+        child: widget.child,
+      ),
     );
   }
 }
