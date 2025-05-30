@@ -152,7 +152,7 @@ class HeroSection extends StatelessWidget {
                           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
-                              fontSize: 48,
+                              fontSize: 68,
                             ),
                           ),
                         ).animate().fadeIn(duration: 800.ms),
@@ -162,7 +162,7 @@ class HeroSection extends StatelessWidget {
                           textAlign: isWide ? TextAlign.left : TextAlign.center,
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                 color: kAccentBlue.withOpacity(0.85),
-                                fontSize: 16,
+                                fontSize: 18,
                               ),
                         ).animate().fadeIn(duration: 1000.ms),
                         const SizedBox(height: 32), // Reduced spacing

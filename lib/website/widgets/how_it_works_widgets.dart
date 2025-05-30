@@ -302,7 +302,7 @@ class _Header extends StatelessWidget {
           child: const Text(
             "How It Works",
             style: TextStyle(
-              fontSize: 48,
+              fontSize: 68,
               fontWeight: FontWeight.w900,
               color: Colors.white,
               letterSpacing: 1.5,
@@ -320,7 +320,7 @@ class _Header extends StatelessWidget {
         const Text(
           "Our AI-powered fluency cycle adapts to you—your goals, your vibe, your pace. Each step builds your confidence and skills in a natural, engaging way.",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 18,
             height: 1.8,
             color: Colors.white70,
             fontWeight: FontWeight.w500,

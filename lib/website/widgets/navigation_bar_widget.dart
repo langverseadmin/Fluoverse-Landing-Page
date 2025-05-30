@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../screens/homepage.dart';
 import '../screens/how_it_works.dart';
 import '../screens/features.dart';
+import '../screens/pricing.dart';
 
 class NavigationBarWidget extends StatelessWidget {
   const NavigationBarWidget({super.key});
@@ -160,7 +161,15 @@ class _NavButtonBar extends StatelessWidget {
           icon: Icons.attach_money_outlined,
           selected: isSelected('/pricing'),
           onTap: () {
-            // TO DO: Implement Pricing navigation
+            if (!isSelected('/pricing')) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PricingPage(),
+                  settings: const RouteSettings(name: '/pricing'),
+                ),
+              );
+            }
           },
         ),
         _PremiumDivider(),

@@ -1024,7 +1024,7 @@ class _SectionHeader extends StatelessWidget {
           'Features That Accelerate Fluency',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 44,
+            fontSize: 68,
             fontWeight: FontWeight.w900,
             color: Colors.white,
             fontFamily: 'Montserrat',
