@@ -178,7 +178,7 @@ class FeatureItem extends StatelessWidget {
   }
 }
 
-// Pricing cards row with premium hover effects and no scroll
+ // Pricing cards row with premium hover effects and no scroll
 class PricingCardsRow extends StatefulWidget {
   final bool isAnnual;
 
@@ -260,7 +260,26 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                     icon: LucideIcons.zap,
                     buttonText: 'Start Explorer Journey',
                     isPopular: false,
-                    priceWidget: PriceWidget(price: '\$14.99'),
+                    priceWidget: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        PriceWidget(price: '\$14.99'),
+                        const SizedBox(width: 6),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            '/per month',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     isHovered: hoveredIndex == 0,
                   ),
                 ),
@@ -318,9 +337,28 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                     icon: LucideIcons.crown,
                     buttonText: 'Become Pro Now',
                     isPopular: true,
-                    priceWidget: PriceWidget(
-                      price: widget.isAnnual ? '\$20.00' : '\$24.99',
-                      isGold: true,
+                    priceWidget: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        PriceWidget(
+                          price: widget.isAnnual ? '\$20.00' : '\$24.99',
+                          isGold: true,
+                        ),
+                        const SizedBox(width: 6),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            widget.isAnnual ? '/per month' : '/per month',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     isHovered: hoveredIndex == 1,
                   ),
@@ -380,7 +418,26 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                     isPopular: false,
                     subPrice: '\$299',
                     subPriceHighlight: 'Save \$59',
-                    priceWidget: PriceWidget(price: '\$240'),
+                    priceWidget: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        PriceWidget(price: '\$240'),
+                        const SizedBox(width: 6),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            '/per year',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     isHovered: hoveredIndex == 2,
                   ),
                 ),
