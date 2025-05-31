@@ -6,6 +6,7 @@ import '../screens/how_it_works.dart';
 import '../screens/features.dart';
 import '../screens/pricing.dart';
 import '../screens/get_started.dart'; // Import GetStartedScreen
+import '../screens/contact.dart'; // Import ContactScreen
 
 class NavigationBarWidget extends StatelessWidget {
   const NavigationBarWidget({super.key});
@@ -182,7 +183,15 @@ class _NavButtonBar extends StatelessWidget {
           icon: Icons.mail_outline,
           selected: isSelected('/contact'),
           onTap: () {
-            // TO DO: Implement Contact navigation
+            if (!isSelected('/contact')) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ContactScreen(),
+                  settings: const RouteSettings(name: '/contact'),
+                ),
+              );
+            }
           },
         ),
       ],
