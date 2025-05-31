@@ -5,6 +5,7 @@ import '../screens/homepage.dart';
 import '../screens/how_it_works.dart';
 import '../screens/features.dart';
 import '../screens/pricing.dart';
+import '../screens/get_started.dart'; // Import GetStartedScreen
 
 class NavigationBarWidget extends StatelessWidget {
   const NavigationBarWidget({super.key});
@@ -132,7 +133,8 @@ class _NavButtonBar extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const HowItWorksScreen(),
-                  settings: const RouteSettings(name: '/howitworks'),
+                  settings: const RouteSettings(name: '/howitworks',
+                  ),
                 ),
               );
             }
@@ -149,7 +151,8 @@ class _NavButtonBar extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const FeaturesScreen(),
-                  settings: const RouteSettings(name: '/features'),
+                  settings: const RouteSettings(name: '/features',
+                  ),
                 ),
               );
             }
@@ -166,7 +169,8 @@ class _NavButtonBar extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const PricingPage(),
-                  settings: const RouteSettings(name: '/pricing'),
+                  settings: const RouteSettings(name: '/pricing',
+                  ),
                 ),
               );
             }
@@ -368,7 +372,9 @@ class _PremiumButtonState extends State<_PremiumButton> {
             ),
           ),
           onPressed: () {
-            // TO DO: Add premium action
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const GetStartedScreen()),
+            );
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,

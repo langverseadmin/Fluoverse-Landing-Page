@@ -333,7 +333,7 @@ class _JoinWaitlistFormState extends State<JoinWaitlistForm> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Join the movement that makes language a lived experience.',
+              'Create an account and join the movement that makes language a lived experience.',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: Colors.white70,
