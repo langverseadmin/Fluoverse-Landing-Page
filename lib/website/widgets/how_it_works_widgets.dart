@@ -60,7 +60,6 @@ class HowItWorksPage extends StatelessWidget {
         // Spectacular but subtle background: blurred glowing circles and gradients
         Positioned.fill(
           child: Container(
-            width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color(0xFF1A1333), Color(0xFF7F5AF0)],
@@ -131,15 +130,18 @@ class HowItWorksPage extends StatelessWidget {
                       return Column(
                         children: List.generate(steps.length, (i) {
                           final step = steps[i];
-                          final card = _AnimatedStepTransition(
-                            delay: Duration(milliseconds: 200 * i),
-                            child: _StepCard(
-                              icon: step["icon"] as IconData,
-                              color: step["color"] as Color,
-                              stepNumber: i + 1,
-                              title: step["title"] as String,
-                              description: step["description"] as String,
-                              isLeft: isWide ? i.isEven : true,
+                          final card = Flexible(
+                            flex: 6,
+                            child: _AnimatedStepTransition(
+                              delay: Duration(milliseconds: 200 * i),
+                              child: _StepCard(
+                                icon: step["icon"] as IconData,
+                                color: step["color"] as Color,
+                                stepNumber: i + 1,
+                                title: step["title"] as String,
+                                description: step["description"] as String,
+                                isLeft: isWide ? i.isEven : true,
+                              ),
                             ),
                           );
                           final connector = isWide && i < steps.length
