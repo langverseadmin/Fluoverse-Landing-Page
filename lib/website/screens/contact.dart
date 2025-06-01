@@ -21,29 +21,39 @@ class ContactScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFF232946),
-      body: Column(
-        children: [
-          const NavigationBarWidget(),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const ContactTitle(),
-                  ContactFormSection(
-                    nameController: nameController,
-                    emailController: emailController,
-                    messageController: messageController,
-                    onSubmit: handleSubmit,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isMobile = constraints.maxWidth < 600;
+            return Column(
+              children: [
+                const NavigationBarWidget(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isMobile ? 12 : 24,
+                      vertical: isMobile ? 24 : 48,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const ContactTitle(),
+                        ContactFormSection(
+                          nameController: nameController,
+                          emailController: emailController,
+                          messageController: messageController,
+                          onSubmit: handleSubmit,
+                        ),
+                        SizedBox(height: isMobile ? 40 : 100),
+                        const FooterSection(),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 100),
-                  const FooterSection(),
-                ],
-              ),
-            ),
-          ),
-        ],
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

@@ -2,12 +2,151 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/website/screens/join_waitlist.dart';
+import 'package:frontend/website/screens/pricing.dart';
+
+// Add this widget definition if it does not exist elsewhere
+class PremiumSpectacularButton extends StatefulWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback onPressed;
+  final Gradient? gradient;
+
+  const PremiumSpectacularButton({
+    super.key,
+    required this.label,
+    required this.icon,
+    required this.onPressed,
+    this.gradient,
+  });
+
+  @override
+  State<PremiumSpectacularButton> createState() => _PremiumSpectacularButtonState();
+}
+
+class _PremiumSpectacularButtonState extends State<PremiumSpectacularButton> {
+  bool _hovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
+    final goldGradient = const LinearGradient(
+      colors: [
+        Color(0xFFFFD700),
+        Color(0xFFFFB300),
+        Color(0xFFFFF6A3),
+        Color(0xFFFFD700),
+      ],
+      stops: [0.0, 0.5, 0.8, 1.0],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+
+    final scale = _hovering && !isMobile ? 1.045 : 1.0;
+    final shadowColor = _hovering && !isMobile
+        ? Colors.amberAccent.withOpacity(0.55)
+        : Colors.amberAccent.withOpacity(0.35);
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovering = true),
+      onExit: (_) => setState(() => _hovering = false),
+      cursor: SystemMouseCursors.click,
+      child: AnimatedScale(
+        scale: scale,
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOutCubic,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          decoration: BoxDecoration(
+            gradient: widget.gradient ?? goldGradient,
+            borderRadius: BorderRadius.circular(isMobile ? 14 : 22),
+            boxShadow: [
+              BoxShadow(
+                color: shadowColor,
+                blurRadius: _hovering && !isMobile ? 28 : 18,
+                spreadRadius: _hovering && !isMobile ? 4 : 2,
+                offset: const Offset(0, 6),
+              ),
+              BoxShadow(
+                color: Colors.black.withOpacity(0.10),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+            border: Border.all(
+              color: Colors.amberAccent.withOpacity(_hovering && !isMobile ? 1.0 : 0.7),
+              width: isMobile ? 2 : 3,
+            ),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(isMobile ? 14 : 22),
+              onTap: widget.onPressed,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: isMobile ? 18 : 32,
+                  vertical: isMobile ? 10 : 18,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ShaderMask(
+                      shaderCallback: (Rect bounds) {
+                        return goldGradient.createShader(bounds);
+                      },
+                      blendMode: BlendMode.srcATop,
+                      child: Icon(
+                        widget.icon,
+                        color: Colors.white,
+                        size: isMobile ? 20 : 28,
+                        shadows: [
+                          Shadow(
+                            color: Colors.amberAccent.withOpacity(0.7),
+                            blurRadius: 12,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: isMobile ? 8 : 14),
+                    ShaderMask(
+                      shaderCallback: (Rect bounds) {
+                        return goldGradient.createShader(bounds);
+                      },
+                      blendMode: BlendMode.srcATop,
+                      child: Text(
+                        widget.label,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: isMobile ? 14 : 19,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Montserrat',
+                          letterSpacing: 0.8,
+                          shadows: const [
+                            Shadow(
+                              color: Colors.black26,
+                              blurRadius: 4,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class FeaturesSection extends StatelessWidget {
   const FeaturesSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
     final features = [
       (
         icon: Icons.auto_fix_high_rounded,
@@ -75,18 +214,20 @@ class FeaturesSection extends StatelessWidget {
       ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
+          constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 1200),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 48),
+              SizedBox(height: isMobile ? 28 : 48),
               const _SectionHeader(),
-              const SizedBox(height: 40),
+              SizedBox(height: isMobile ? 24 : 40),
               ...List.generate(features.length, (i) {
                 final f = features[i];
                 return Padding(
                   padding: EdgeInsets.only(
-                    top: i == 0 ? 0 : 32,
+                    top: i == 0 ? 0 : (isMobile ? 18 : 32),
+                    left: isMobile ? 10 : 0,
+                    right: isMobile ? 10 : 0,
                   ),
                   child: _FeaturePanel(
                     icon: f.icon,
@@ -94,13 +235,13 @@ class FeaturesSection extends StatelessWidget {
                     title: f.title,
                     description: f.description,
                     tags: f.tags,
-                    alignLeft: f.alignLeft,
+                    alignLeft: isMobile ? true : f.alignLeft,
                   ),
                 );
               }),
-              const SizedBox(height: 48),
+              SizedBox(height: isMobile ? 32 : 48),
               const UpcomingSpectacularFeature(),
-              const SizedBox(height: 48),
+              SizedBox(height: isMobile ? 32 : 48),
             ],
           ),
         ),
@@ -114,27 +255,36 @@ class UpcomingSpectacularFeature extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
     return Column(
       children: [
-        const SizedBox(height: 100),
+        SizedBox(height: isMobile ? 40 : 100),
         // "Spectacular" animated timeline for upcoming features
         LayoutBuilder(
           builder: (context, constraints) {
             final width = constraints.maxWidth;
-            // Provide bounded constraints for the Stack
+            final bubbleTop = isMobile ? 100.0 : 120.0; // Increased for mobile
+            final bubbleLeft = isMobile ? width * 0.05 : width * 0.18;
+            final bubbleRight = isMobile ? width * 0.05 : width * 0.18;
+            final timelineTop = isMobile ? 50.0 : 60.0; // Increased for mobile
+            final timelineHeight = isMobile ? 4.0 : 6.0;
+            // Increase stackHeight for mobile to allow more space for buttons
+            final stackHeight = isMobile ? 880.0 : 760.0; // <<-- increased for mobile
+            // Move buttons lower on mobile
+            final buttonBottom = isMobile ? 10.0 : 32.0; // <<-- decreased for mobile (closer to bottom)
             return SizedBox(
-              height: 760, // Increased height to fit buttons
+              height: stackHeight,
               width: width,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   // Animated glowing timeline
                   Positioned(
-                    top: 60,
-                    left: width * 0.15,
-                    right: width * 0.15,
+                    top: timelineTop,
+                    left: bubbleLeft,
+                    right: bubbleRight,
                     child: Container(
-                      height: 6,
+                      height: timelineHeight,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
@@ -157,31 +307,56 @@ class UpcomingSpectacularFeature extends StatelessWidget {
                   ),
                   // Feature 1: Fluency Rooms
                   Positioned(
-                    top: 120, // Ensures both bubbles are at the same height
-                    left: width * 0.18,
-                    child: _SpectacularFeatureBubble(
-                      icon: Icons.forum_rounded,
-                      title: 'Fluency Rooms',
+                    top: bubbleTop,
+                    left: isMobile ? 0 : bubbleLeft,
+                    right: isMobile ? 0 : null,
+                    child: isMobile
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              _SpectacularFeatureBubble(
+                                icon: Icons.forum_rounded,
+                                title: 'Fluency Rooms',
+                                description:
+                                    'Step into live themed voice rooms — practice real conversations, build confidence, make friends and experience language as it’s truly spoken!',
+                                highlight: true,
+                              ),
+                              SizedBox(height: 40),
+                              _SpectacularFeatureBubble(
+                                icon: Icons.sports_martial_arts,
+                                title: 'Fluency Battle Rooms',
+                                description:
+                                    'Challenge others in real-time language duels. Climb the leaderboards and earn exclusive rewards — all while having fun!',
+                                highlight: false,
+                              ),
+                            ],
+                          )
+                        : _SpectacularFeatureBubble(
+                            icon: Icons.forum_rounded,
+                            title: 'Fluency Rooms',
+                            description:
+                                'Step into live themed voice rooms — practice real conversations, build confidence, make friends and experience language as it’s truly spoken!',
+                            highlight: true,
+                          ),
+                  ),
+                  // Feature 2: Fluency Battle Rooms (only for desktop/tablet)
+                  if (!isMobile)
+                    Positioned(
+                      top: bubbleTop,
+                      right: bubbleRight,
+                      child: _SpectacularFeatureBubble(
+                        icon: Icons.sports_martial_arts,
+                        title: 'Fluency Battle Rooms',
                         description:
-                          'Step into live themed voice rooms — practice real conversations, build confidence, make friends and experience language as it’s truly spoken!',
-                      highlight: true,
+                            'Challenge others in real-time language duels. Climb the leaderboards and earn exclusive rewards — all while having fun!',
+                        highlight: false,
+                      ),
                     ),
-                  ),
-                  // Feature 2: Fluency Battle Rooms
-                  Positioned(
-                    top: 120, // Ensures both bubbles are at the same height
-                    right: width * 0.18,
-                    child: _SpectacularFeatureBubble(
-                        icon: Icons.sports_martial_arts, // Use martial arts icon for a "battle" theme
-                      title: 'Fluency Battle Rooms',
-                      description:
-                          'Challenge others in real-time language duels. Climb the leaderboards and earn exclusive rewards — all while having fun!',
-                      highlight: false,
-                    ),
-                  ),
                   // Animated "Coming Soon" rocket in the center
                   Positioned(
                     top: 0,
+                    left: 0,
+                    right: 0,
                     child: Column(
                       children: [
                         TweenAnimationBuilder<double>(
@@ -197,7 +372,7 @@ class UpcomingSpectacularFeature extends StatelessWidget {
                           child: Icon(
                             Icons.rocket_launch_rounded,
                             color: Colors.amberAccent.shade200,
-                            size: 54,
+                            size: isMobile ? 38 : 54,
                             shadows: [
                               Shadow(
                                 color: Colors.amberAccent.withOpacity(0.6),
@@ -207,16 +382,16 @@ class UpcomingSpectacularFeature extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
+                        Text(
                           'Spectacular Features\nComing Soon!',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: isMobile ? 14 : 18,
                             fontWeight: FontWeight.w900,
                             color: Colors.white,
                             fontFamily: 'Montserrat',
                             letterSpacing: 1.1,
-                            shadows: [
+                            shadows: const [
                               Shadow(
                                 color: Colors.black26,
                                 blurRadius: 8,
@@ -230,41 +405,82 @@ class UpcomingSpectacularFeature extends StatelessWidget {
                   ),
                   // Premium Spectacular Buttons at the very bottom
                   Positioned(
-                    bottom: 32,
+                    bottom: buttonBottom,
                     left: 0,
                     right: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        PremiumSpectacularButton(
-                          label: "Experience All Features",
-                          icon: Icons.star_rounded,
-                          onPressed: () {
-                            // TO DO: Implement navigation or action
-                          },
-                          gradient: const LinearGradient(
-                            colors: [Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                        ),
-                        const SizedBox(width: 32),
-                        PremiumSpectacularButton(
-                          label: "Stay Informed for Upcoming Features",
-                            icon: Icons.notifications_active_rounded,
-                            onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => const JoinWaitlist(),
-                            );
-                            },
-                          gradient: const LinearGradient(
-                            colors: [Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255)],
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                          ),
-                        ),
-                      ],
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 0),
+                      child: isMobile
+                          ? Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                PremiumSpectacularButton(
+                                  label: "Experience All Features",
+                                  icon: Icons.star_rounded,
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) => PricingPage()),
+                                    );
+                                  },
+                                  gradient: const LinearGradient(
+                                    colors: [Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255)],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                PremiumSpectacularButton(
+                                  label: "Stay Informed for Upcoming Features",
+                                  icon: Icons.notifications_active_rounded,
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => const JoinWaitlist(),
+                                    );
+                                  },
+                                  gradient: const LinearGradient(
+                                    colors: [Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255)],
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                PremiumSpectacularButton(
+                                  label: "Experience All Features",
+                                  icon: Icons.star_rounded,
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) => PricingPage()),
+                                    );
+                                  },
+                                  gradient: const LinearGradient(
+                                    colors: [Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255)],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                ),
+                                const SizedBox(width: 32),
+                                PremiumSpectacularButton(
+                                  label: "Stay Informed for Upcoming Features",
+                                  icon: Icons.notifications_active_rounded,
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => const JoinWaitlist(),
+                                    );
+                                  },
+                                  gradient: const LinearGradient(
+                                    colors: [Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255)],
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                  ),
+                                ),
+                              ],
+                            ),
                     ),
                   ),
                 ],
@@ -273,304 +489,6 @@ class UpcomingSpectacularFeature extends StatelessWidget {
           },
         ),
       ],
-    );
-  }
-}
-
-class PremiumSpectacularButton extends StatefulWidget {
-  final String label;
-  final IconData icon;
-  final VoidCallback onPressed;
-  final Gradient gradient;
-
-  const PremiumSpectacularButton({
-    super.key,
-    required this.label,
-    required this.icon,
-    required this.onPressed,
-    required this.gradient,
-  });
-
-  @override
-  State<PremiumSpectacularButton> createState() => _PremiumSpectacularButtonState();
-}
-
-class _PremiumSpectacularButtonState extends State<PremiumSpectacularButton> {
-  bool _hovering = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 600;
-    // Make button smaller
-    final padding = isMobile
-        ? const EdgeInsets.symmetric(horizontal: 18, vertical: 10)
-        : const EdgeInsets.symmetric(horizontal: 28, vertical: 14);
-    final fontSize = isMobile ? 15.0 : 18.0;
-    final iconSize = isMobile ? 22.0 : 28.0;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovering = true),
-      onExit: (_) => setState(() => _hovering = false),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(40),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(40),
-          onTap: widget.onPressed,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 220),
-            curve: Curves.easeOutCubic,
-            padding: padding,
-            decoration: BoxDecoration(
-              gradient: widget.gradient,
-              borderRadius: BorderRadius.circular(40),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.amberAccent.withOpacity(_hovering ? 0.35 : 0.25),
-                  blurRadius: _hovering ? 60 : 40,
-                  spreadRadius: _hovering ? 8 : 4,
-                  offset: const Offset(0, 0),
-                ),
-                BoxShadow(
-                  color: Colors.blueAccent.withOpacity(_hovering ? 0.28 : 0.18),
-                  blurRadius: _hovering ? 36 : 24,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-              border: Border.all(
-                color: Colors.white.withOpacity(_hovering ? 0.32 : 0.22),
-                width: 2.2,
-              ),
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Animated glowing ring behind the button
-                Positioned.fill(
-                  child: IgnorePointer(
-                    child: TweenAnimationBuilder<double>(
-                      tween: Tween(begin: 0.95, end: 1.15),
-                      duration: const Duration(seconds: 2),
-                      curve: Curves.easeInOutCubic,
-                      builder: (context, value, child) {
-                        return Transform.scale(
-                          scale: value,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(48),
-                              gradient: RadialGradient(
-                                colors: [
-                                  Colors.amberAccent.withOpacity(_hovering ? 0.28 : 0.18),
-                                  Colors.purpleAccent.withOpacity(_hovering ? 0.16 : 0.08),
-                                  Colors.transparent,
-                                ],
-                                stops: const [0.2, 0.7, 1.0],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TweenAnimationBuilder<double>(
-                      tween: Tween(begin: 0.92, end: 1.0),
-                      duration: const Duration(milliseconds: 700),
-                      curve: Curves.elasticOut,
-                      builder: (context, value, child) => Transform.scale(
-                        scale: _hovering ? value * 1.08 : value,
-                        child: child,
-                      ),
-                      child: ShaderMask(
-                        shaderCallback: (Rect bounds) {
-                          return const LinearGradient(
-                            colors: [Colors.amberAccent, Colors.white],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ).createShader(bounds);
-                        },
-                        blendMode: BlendMode.srcATop,
-                        child: Icon(
-                          widget.icon,
-                          color: Colors.white,
-                          size: iconSize,
-                          shadows: [
-                            Shadow(
-                              color: Colors.amberAccent.withOpacity(0.7),
-                              blurRadius: 20,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    TweenAnimationBuilder<double>(
-                      tween: Tween(begin: 0.85, end: 1.0),
-                      duration: const Duration(milliseconds: 700),
-                      curve: Curves.elasticOut,
-                      builder: (context, value, child) => Transform.scale(
-                        scale: _hovering ? value * 1.05 : value,
-                        child: ShaderMask(
-                          shaderCallback: (Rect bounds) {
-                            return const LinearGradient(
-                              colors: [Colors.white, Colors.amberAccent],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ).createShader(bounds);
-                          },
-                          blendMode: BlendMode.srcATop,
-                          child: child,
-                        ),
-                      ),
-                      child: AnimatedDefaultTextStyle(
-                        duration: const Duration(milliseconds: 250),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: fontSize,
-                          fontWeight: FontWeight.w900,
-                          fontFamily: 'Montserrat',
-                          letterSpacing: 1.1,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black.withOpacity(0.18),
-                              blurRadius: 3,
-                              offset: const Offset(0, 1),
-                            ),
-                          ],
-                        ),
-                        child: Text(widget.label),
-                      ),
-                    ),
-                    // Multiple sparkles for more spectacular effect
-                    const _ButtonSparkle(),
-                    const _ButtonSparkle(),
-                  ],
-                ),
-                // Extra animated sparkle at the top right
-                Positioned(
-                  top: 4,
-                  right: 10,
-                  child: TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 0.7, end: 1.2),
-                    duration: const Duration(milliseconds: 1200),
-                    curve: Curves.easeInOut,
-                    builder: (context, value, child) => Transform.scale(
-                      scale: value,
-                      child: Opacity(
-                        opacity: 0.7 * (1.2 - value),
-                        child: Icon(
-                          Icons.auto_awesome,
-                          color: Colors.amberAccent.withOpacity(0.85),
-                          size: 14,
-                          shadows: [
-                            Shadow(
-                              color: Colors.amberAccent.withOpacity(0.5),
-                              blurRadius: 8,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                // Extra animated sparkle at the bottom left
-                Positioned(
-                  bottom: 4,
-                  left: 10,
-                  child: TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 1.2, end: 0.7),
-                    duration: const Duration(milliseconds: 1400),
-                    curve: Curves.easeInOut,
-                    builder: (context, value, child) => Transform.scale(
-                      scale: value,
-                      child: Opacity(
-                        opacity: 0.7 * (value - 0.7),
-                        child: Icon(
-                          Icons.auto_awesome,
-                          color: Colors.white.withOpacity(0.7),
-                          size: 10,
-                          shadows: [
-                            Shadow(
-                              color: Colors.white.withOpacity(0.4),
-                              blurRadius: 6,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ButtonSparkle extends StatefulWidget {
-  const _ButtonSparkle();
-
-  @override
-  State<_ButtonSparkle> createState() => _ButtonSparkleState();
-}
-
-class _ButtonSparkleState extends State<_ButtonSparkle>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _opacity;
-  late Animation<double> _scale;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1800),
-    )..repeat(reverse: true);
-    _opacity = Tween(begin: 0.0, end: 0.7).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-    _scale = Tween(begin: 0.7, end: 1.2).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) => Opacity(
-        opacity: _opacity.value,
-        child: Transform.scale(
-          scale: _scale.value,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Icon(
-              Icons.auto_awesome,
-              color: Colors.amberAccent.withOpacity(0.85),
-              size: 18,
-              shadows: [
-                Shadow(
-                  color: Colors.amberAccent.withOpacity(0.5),
-                  blurRadius: 8,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
@@ -590,14 +508,24 @@ class _SpectacularFeatureBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Set fixed sizes for both bubbles
-    const double bubbleSize = 100;
-    const double ringSize = 120;
-    const double glowSize = 160;
-    const double iconSize = 54;
+    final isMobile = MediaQuery.of(context).size.width < 700;
+
+    // Responsive sizes
+    final double bubbleSize = isMobile ? 68 : 100;
+    final double ringSize = isMobile ? 84 : 120;
+    final double glowSize = isMobile ? 110 : 160;
+    final double iconSize = isMobile ? 32 : 54;
+    final double titleFontSize = isMobile ? 18 : 28;
+    final double descFontSize = isMobile ? 13.5 : 16;
+    final double width = isMobile ? 180 : 280;
+    final double descWidth = isMobile ? 150 : 230;
+    final double ribbonFontSize = isMobile ? 8.5 : 11;
+    final double ribbonPadH = isMobile ? 7 : 12;
+    final double ribbonPadV = isMobile ? 2 : 3;
+// for future fine-tuning
 
     return SizedBox(
-      width: 280,
+      width: width,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -663,7 +591,7 @@ class _SpectacularFeatureBubble extends StatelessWidget {
                           color: highlight
                               ? Colors.amberAccent.withOpacity(0.7)
                               : Colors.cyanAccent.withOpacity(0.5),
-                          width: 5,
+                          width: isMobile ? 3 : 5,
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -737,7 +665,7 @@ class _SpectacularFeatureBubble extends StatelessWidget {
                         ],
                         border: Border.all(
                           color: Colors.white.withOpacity(0.28),
-                          width: 2.5,
+                          width: isMobile ? 1.5 : 2.5,
                         ),
                       ),
                       child: ShaderMask(
@@ -760,7 +688,7 @@ class _SpectacularFeatureBubble extends StatelessWidget {
                               color: highlight
                                   ? Colors.amberAccent.withOpacity(0.6)
                                   : Colors.cyanAccent.withOpacity(0.4),
-                              blurRadius: 22,
+                              blurRadius: isMobile ? 10 : 22,
                             ),
                           ],
                         ),
@@ -770,15 +698,16 @@ class _SpectacularFeatureBubble extends StatelessWidget {
                 },
               ),
               // Sparkle effects (same for both bubbles)
-              ..._buildSparkles(),
+              ..._buildSparkles(isMobile: isMobile),
               // Ribbon "upcoming"
               Positioned(
-                top: 20,
+                top: isMobile ? 10 : 20,
                 right: 0,
                 child: Transform.rotate(
                   angle: 0,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ribbonPadH, vertical: ribbonPadV),
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 255, 64, 64).withOpacity(0.92),
                       borderRadius: BorderRadius.circular(8),
@@ -790,15 +719,15 @@ class _SpectacularFeatureBubble extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: const Text(
+                    child: Text(
                       'UPCOMING',
                       style: TextStyle(
                         color: Colors.amberAccent,
-                        fontSize: 11,
+                        fontSize: ribbonFontSize,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.1,
                         fontFamily: 'Montserrat',
-                        shadows: [
+                        shadows: const [
                           Shadow(
                             color: Colors.black26,
                             blurRadius: 2,
@@ -811,7 +740,7 @@ class _SpectacularFeatureBubble extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 22),
+          SizedBox(height: isMobile ? 12 : 22),
           // Animated title with shimmer and scale
           TweenAnimationBuilder<double>(
             tween: Tween(begin: 0.85, end: 1.0),
@@ -839,13 +768,13 @@ class _SpectacularFeatureBubble extends StatelessWidget {
             child: Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 28,
+              style: TextStyle(
+                fontSize: titleFontSize,
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
                 fontFamily: 'Montserrat',
                 letterSpacing: 1.2,
-                shadows: [
+                shadows: const [
                   Shadow(
                     color: Colors.black26,
                     blurRadius: 8,
@@ -855,7 +784,7 @@ class _SpectacularFeatureBubble extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: isMobile ? 7 : 12),
           // Animated description with fade-in and slide
           TweenAnimationBuilder<double>(
             tween: Tween(begin: 0, end: 1),
@@ -871,17 +800,17 @@ class _SpectacularFeatureBubble extends StatelessWidget {
               );
             },
             child: SizedBox(
-              width: 230,
+              width: descWidth,
               child: Text(
                 description,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: descFontSize,
                   color: Colors.white70,
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w600,
-                  height: 1.55,
-                  shadows: [
+                  height: 1.45,
+                  shadows: const [
                     Shadow(
                       color: Colors.black12,
                       blurRadius: 4,
@@ -896,38 +825,71 @@ class _SpectacularFeatureBubble extends StatelessWidget {
     );
   }
 
-  // Helper to build animated sparkles (same for both bubbles)
-  static List<Widget> _buildSparkles() {
-    return [
-      _AnimatedSparkle(
-        dx: 36,
-        dy: -34,
-        color: Colors.amberAccent,
-        size: 22,
-        delay: 0,
-      ),
-      _AnimatedSparkle(
-        dx: -38,
-        dy: -28,
-        color: Colors.white,
-        size: 13,
-        delay: 300,
-      ),
-      _AnimatedSparkle(
-        dx: 0,
-        dy: 48,
-        color: Colors.amberAccent.shade100,
-        size: 14,
-        delay: 600,
-      ),
-      _AnimatedSparkle(
-        dx: 44,
-        dy: 28,
-        color: Colors.amber,
-        size: 10,
-        delay: 900,
-      ),
-    ];
+  // Helper to build animated sparkles (responsive for mobile)
+  static List<Widget> _buildSparkles({required bool isMobile}) {
+    if (isMobile) {
+      return [
+        _AnimatedSparkle(
+          dx: 20,
+          dy: -18,
+          color: Colors.amberAccent,
+          size: 12,
+          delay: 0,
+        ),
+        _AnimatedSparkle(
+          dx: -22,
+          dy: -14,
+          color: Colors.white,
+          size: 7,
+          delay: 300,
+        ),
+        _AnimatedSparkle(
+          dx: 0,
+          dy: 28,
+          color: Colors.amberAccent.shade100,
+          size: 8,
+          delay: 600,
+        ),
+        _AnimatedSparkle(
+          dx: 24,
+          dy: 14,
+          color: Colors.amber,
+          size: 6,
+          delay: 900,
+        ),
+      ];
+    } else {
+      return [
+        _AnimatedSparkle(
+          dx: 36,
+          dy: -34,
+          color: Colors.amberAccent,
+          size: 22,
+          delay: 0,
+        ),
+        _AnimatedSparkle(
+          dx: -38,
+          dy: -28,
+          color: Colors.white,
+          size: 13,
+          delay: 300,
+        ),
+        _AnimatedSparkle(
+          dx: 0,
+          dy: 48,
+          color: Colors.amberAccent.shade100,
+          size: 14,
+          delay: 600,
+        ),
+        _AnimatedSparkle(
+          dx: 44,
+          dy: 28,
+          color: Colors.amber,
+          size: 10,
+          delay: 900,
+        ),
+      ];
+    }
   }
 }
 
@@ -984,9 +946,12 @@ class _AnimatedSparkleState extends State<_AnimatedSparkle>
 
   @override
   Widget build(BuildContext context) {
+    // Responsive sparkle position
+    final isMobile = MediaQuery.of(context).size.width < 700;
+    final double offset = isMobile ? 34.0 : 50.0;
     return Positioned(
-      left: 50.0 + widget.dx,
-      top: 50.0 + widget.dy,
+      left: offset + widget.dx,
+      top: offset + widget.dy,
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
@@ -1018,18 +983,19 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
     return Column(
-      children: const [
+      children: [
         Text(
           'Features That Accelerate Fluency',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 68,
+            fontSize: isMobile ? 32 : 68,
             fontWeight: FontWeight.w900,
             color: Colors.white,
             fontFamily: 'Montserrat',
             letterSpacing: 1.2,
-            shadows: [
+            shadows: const [
               Shadow(
                 color: Colors.black26,
                 blurRadius: 8,
@@ -1038,12 +1004,12 @@ class _SectionHeader extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 16),
+        SizedBox(height: isMobile ? 8 : 16),
         Text(
           'Experience next-generation language learning powered by AI coaching, gamified progression, and real conversation practice.',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: isMobile ? 14 : 18,
             color: Colors.white70,
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w500,
@@ -1074,9 +1040,11 @@ class _FeaturePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
+
     final iconWidget = Container(
-      width: 110,
-      height: 110,
+      width: isMobile ? 60 : 110,
+      height: isMobile ? 60 : 110,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: LinearGradient(
@@ -1087,16 +1055,16 @@ class _FeaturePanel extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: iconBg.first.withOpacity(0.25),
-            blurRadius: 24,
+            blurRadius: isMobile ? 10 : 24,
             offset: const Offset(0, 8),
           ),
         ],
         border: Border.all(
           color: Colors.white.withOpacity(0.25),
-          width: 2,
+          width: isMobile ? 1 : 2,
         ),
       ),
-      child: Icon(icon, size: 54, color: Colors.white),
+      child: Icon(icon, size: isMobile ? 28 : 54, color: Colors.white),
     );
 
     final textWidget = Column(
@@ -1104,40 +1072,43 @@ class _FeaturePanel extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 32,
+          style: TextStyle(
+            fontSize: isMobile ? 18 : 32,
             fontWeight: FontWeight.w900,
             color: Colors.white,
             fontFamily: 'Montserrat',
             letterSpacing: 1.1,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: isMobile ? 8 : 16),
         Text(
           description,
-          style: const TextStyle(
-            fontSize: 18,
+          style: TextStyle(
+            fontSize: isMobile ? 13 : 18,
             color: Colors.white,
             height: 1.6,
             fontFamily: 'Montserrat',
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: isMobile ? 10 : 20),
         Wrap(
-          spacing: 12,
-          runSpacing: 10,
+          spacing: isMobile ? 7 : 12,
+          runSpacing: isMobile ? 6 : 10,
           children: tags,
         ),
       ],
     );
 
     return Container(
-      width: 900,
-      padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 36),
+      width: isMobile ? double.infinity : 900,
+      padding: EdgeInsets.symmetric(
+        vertical: isMobile ? 18 : 36,
+        horizontal: isMobile ? 14 : 36,
+      ),
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.20),
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(isMobile ? 18 : 32),
         border: Border.all(
           color: Colors.white.withOpacity(0.18),
           width: 1.8,
@@ -1145,25 +1116,40 @@ class _FeaturePanel extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: iconBg.first.withOpacity(0.13),
-            blurRadius: 30,
+            blurRadius: isMobile ? 12 : 30,
             offset: const Offset(0, 12),
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: alignLeft
-            ? [
-                iconWidget,
-                const SizedBox(width: 36),
-                Expanded(child: textWidget),
-              ]
-            : [
-                Expanded(child: textWidget),
-                const SizedBox(width: 36),
-                iconWidget,
-              ],
-      ),
+      child: isMobile
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: alignLeft
+                  ? [
+                      iconWidget,
+                      SizedBox(height: 14),
+                      textWidget,
+                    ]
+                  : [
+                      textWidget,
+                      SizedBox(height: 14),
+                      iconWidget,
+                    ],
+            )
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: alignLeft
+                  ? [
+                      iconWidget,
+                      const SizedBox(width: 36),
+                      Expanded(child: textWidget),
+                    ]
+                  : [
+                      Expanded(child: textWidget),
+                      const SizedBox(width: 36),
+                      iconWidget,
+                    ],
+            ),
     );
   }
 }
@@ -1176,17 +1162,21 @@ class _FeatureTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 8 : 12,
+        vertical: isMobile ? 3 : 5,
+      ),
       decoration: BoxDecoration(
         color: color.withOpacity(0.85),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(isMobile ? 10 : 16),
       ),
       child: Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           color: Colors.white,
-          fontSize: 13,
+          fontSize: isMobile ? 10 : 13,
           fontWeight: FontWeight.w600,
           fontFamily: 'Montserrat',
           letterSpacing: 0.2,

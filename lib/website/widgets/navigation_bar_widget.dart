@@ -13,6 +13,11 @@ class NavigationBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    // Use mobile navigation bar for small screens
+    if (width < 900) {
+      return _MobileNavigationBar();
+    }
     return Material(
       elevation: 0,
       color: Colors.transparent,
@@ -51,11 +56,14 @@ class NavigationBarWidget extends StatelessWidget {
 class _BrandLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final double logoSize = width < 900 ? 36 : 44;
+    final double fontSize = width < 900 ? 22 : 32;
     return Row(
       children: [
         Container(
-          width: 44,
-          height: 44,
+          width: logoSize,
+          height: logoSize,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [Color(0xFF2E5BFF), Color(0xFF00C6FB)],
@@ -75,17 +83,17 @@ class _BrandLogo extends StatelessWidget {
             child: Icon(
               Icons.blur_on,
               color: Colors.white,
-              size: 28,
+              size: logoSize * 0.65,
             ),
           ),
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: width < 900 ? 10 : 16),
         Text(
           'Fluoverse',
           style: TextStyle(
             color: Color(0xFF1A237E),
             fontWeight: FontWeight.w900,
-            fontSize: 32,
+            fontSize: fontSize,
             letterSpacing: 1.5,
             fontFamily: 'Montserrat',
           ),
@@ -98,6 +106,10 @@ class _BrandLogo extends StatelessWidget {
 class _NavButtonBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    // Hide nav buttons on mobile, show only on desktop/tablet
+    if (width < 900) return SizedBox.shrink();
+
     // Get current route name
     final String? currentRoute = ModalRoute.of(context)?.settings.name;
 
@@ -117,9 +129,8 @@ class _NavButtonBar extends StatelessWidget {
                   builder: (context) => const HomePage(),
                   settings: const RouteSettings(name: '/home'),
                 ),
-                (route) => false, // Remove all previous routes
+                (route) => false,
               );
-
             }
           },
         ),
@@ -134,8 +145,7 @@ class _NavButtonBar extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const HowItWorksScreen(),
-                  settings: const RouteSettings(name: '/howitworks',
-                  ),
+                  settings: const RouteSettings(name: '/howitworks'),
                 ),
               );
             }
@@ -152,8 +162,7 @@ class _NavButtonBar extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const FeaturesScreen(),
-                  settings: const RouteSettings(name: '/features',
-                  ),
+                  settings: const RouteSettings(name: '/features'),
                 ),
               );
             }
@@ -170,8 +179,7 @@ class _NavButtonBar extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const PricingPage(),
-                  settings: const RouteSettings(name: '/pricing',
-                  ),
+                  settings: const RouteSettings(name: '/pricing'),
                 ),
               );
             }
@@ -202,6 +210,9 @@ class _NavButtonBar extends StatelessWidget {
 class _PremiumDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    // Hide divider on mobile for a cleaner look
+    if (width < 900) return SizedBox.shrink();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       height: 28,
@@ -241,8 +252,11 @@ class _NavButtonState extends State<_NavButton> {
   @override
   Widget build(BuildContext context) {
     final underlineColor = Color(0xFF2E5BFF);
-
     final bool isActive = widget.selected;
+    final width = MediaQuery.of(context).size.width;
+
+    // Hide nav buttons on mobile
+    if (width < 900) return SizedBox.shrink();
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hovering = true),
@@ -339,6 +353,9 @@ class _PremiumButtonState extends State<_PremiumButton> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    // On mobile, use a smaller button and font
+    final isMobile = width < 900;
     return MouseRegion(
       onEnter: (_) => setState(() => _hovering = true),
       onExit: (_) => setState(() => _hovering = false),
@@ -368,14 +385,16 @@ class _PremiumButtonState extends State<_PremiumButton> {
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
             foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 38, vertical: 18),
+            padding: isMobile
+                ? const EdgeInsets.symmetric(horizontal: 22, vertical: 12)
+                : const EdgeInsets.symmetric(horizontal: 38, vertical: 18),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(28),
             ),
             elevation: 0,
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: isMobile ? 15 : 18,
               fontFamily: 'Montserrat',
               letterSpacing: 1.1,
             ),
@@ -391,10 +410,10 @@ class _PremiumButtonState extends State<_PremiumButton> {
               Icon(
                 Icons.rocket_launch_outlined,
                 color: Colors.white,
-                size: 22,
+                size: isMobile ? 18 : 22,
               ),
               const SizedBox(width: 10),
-              const Text('Get Started'),
+              Text('Get Started'),
             ],
           ),
         ),
@@ -482,7 +501,7 @@ class _MobileNavigationBar extends StatelessWidget {
       elevation: 0,
       color: Colors.white,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: Row(
           children: [
             _BrandLogo(),
@@ -533,94 +552,114 @@ class _MobileMenuDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Use MediaQuery to make dialog width responsive
+    final width = MediaQuery.of(context).size.width;
+    final dialogWidth = width < 400 ? width * 0.98 : 340.0;
     return Dialog(
       backgroundColor: Colors.white,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: width < 400 ? 4 : 24,
+        vertical: 60,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 18),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _MobileMenuItem(
-              label: 'Home',
-              icon: Icons.home_outlined,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                );
-                onClose();
-              },
-            ),
-            _MobileMenuItem(
-              label: 'How It Works',
-              icon: Icons.info_outline,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HowItWorksScreen()),
-                );
-                onClose();
-              },
-            ),
-            _MobileMenuItem(
-              label: 'Features',
-              icon: Icons.star_outline,
-              onTap: () {
-                Navigator.pop(context);
-                // TO DO: Implement Features navigation
-                onClose();
-              },
-            ),
-            _MobileMenuItem(
-              label: 'Pricing',
-              icon: Icons.attach_money_outlined,
-              onTap: () {
-                Navigator.pop(context);
-                // TO DO: Implement Pricing navigation
-                onClose();
-              },
-            ),
-            _MobileMenuItem(
-              label: 'Contact',
-              icon: Icons.mail_outline,
-              onTap: () {
-                Navigator.pop(context);
-                // TO DO: Implement Contact navigation
-                onClose();
-              },
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF2E5BFF),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  elevation: 0,
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    fontFamily: 'Montserrat',
-                  ),
-                ),
-                onPressed: () {
+      child: SizedBox(
+        width: dialogWidth,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _MobileMenuItem(
+                label: 'Home',
+                icon: Icons.home_outlined,
+                onTap: () {
                   Navigator.pop(context);
-                  // TO DO: Add premium action
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                  );
                   onClose();
                 },
-                icon: Icon(Icons.rocket_launch_outlined, size: 22),
-                label: const Text('Get Started'),
               ),
-            ),
-          ],
+              _MobileMenuItem(
+                label: 'How It Works',
+                icon: Icons.info_outline,
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HowItWorksScreen()),
+                  );
+                  onClose();
+                },
+              ),
+              _MobileMenuItem(
+                label: 'Features',
+                icon: Icons.star_outline,
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const FeaturesScreen()),
+                  );
+                  onClose();
+                },
+              ),
+              _MobileMenuItem(
+                label: 'Pricing',
+                icon: Icons.attach_money_outlined,
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PricingPage()),
+                  );
+                  onClose();
+                },
+              ),
+              _MobileMenuItem(
+                label: 'Contact',
+                icon: Icons.mail_outline,
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ContactScreen()),
+                  );
+                  onClose();
+                },
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF2E5BFF),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    elevation: 0,
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      fontFamily: 'Montserrat',
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const GetStartedScreen()),
+                    );
+                    onClose();
+                  },
+                  icon: Icon(Icons.rocket_launch_outlined, size: 20),
+                  label: const Text('Get Started'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -641,18 +680,18 @@ class _MobileMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: Color(0xFF2E5BFF)),
+      leading: Icon(icon, color: Color(0xFF2E5BFF), size: 22),
       title: Text(
         label,
         style: TextStyle(
           color: Color(0xFF263159),
-          fontSize: 18,
+          fontSize: 16,
           fontWeight: FontWeight.w600,
           fontFamily: 'Montserrat',
         ),
       ),
       onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+      contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       hoverColor: Colors.blue.withOpacity(0.08),
     );

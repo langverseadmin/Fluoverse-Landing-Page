@@ -53,11 +53,14 @@ class HowItWorksPage extends StatelessWidget {
       },
     ];
 
+    final isMobile = MediaQuery.of(context).size.width < 600;
+
     return Stack(
       children: [
         // Spectacular but subtle background: blurred glowing circles and gradients
         Positioned.fill(
           child: Container(
+            width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color(0xFF1A1333), Color(0xFF7F5AF0)],
@@ -68,71 +71,75 @@ class HowItWorksPage extends StatelessWidget {
           ),
         ),
         // Glowing blurred circles
-        Positioned(
-          top: -120,
-          left: -80,
-          child: _SpectacularGlowCircle(
-            color: const Color(0xFF7F5AF0).withOpacity(0.18),
-            size: 320,
-            blur: 120,
+        if (!isMobile) ...[
+          Positioned(
+            top: -120,
+            left: -80,
+            child: _SpectacularGlowCircle(
+              color: const Color(0xFF7F5AF0).withOpacity(0.18),
+              size: 320,
+              blur: 120,
+            ),
           ),
-        ),
-        Positioned(
-          bottom: -100,
-          right: -60,
-          child: _SpectacularGlowCircle(
-            color: const Color(0xFF1A1333).withOpacity(0.22),
-            size: 260,
-            blur: 100,
+          Positioned(
+            bottom: -100,
+            right: -60,
+            child: _SpectacularGlowCircle(
+              color: const Color(0xFF1A1333).withOpacity(0.22),
+              size: 260,
+              blur: 100,
+            ),
           ),
-        ),
-        Positioned(
-          top: 180,
-          right: 80,
-          child: _SpectacularGlowCircle(
-            color: const Color(0xFFB39DFF).withOpacity(0.13),
-            size: 180,
-            blur: 80,
+          Positioned(
+            top: 180,
+            right: 80,
+            child: _SpectacularGlowCircle(
+              color: const Color(0xFFB39DFF).withOpacity(0.13),
+              size: 180,
+              blur: 80,
+            ),
           ),
-        ),
-        Positioned(
-          bottom: 120,
-          left: 60,
-          child: _SpectacularGlowCircle(
-            color: const Color(0xFFFFD700).withOpacity(0.10),
-            size: 140,
-            blur: 60,
+          Positioned(
+            bottom: 120,
+            left: 60,
+            child: _SpectacularGlowCircle(
+              color: const Color(0xFFFFD700).withOpacity(0.10),
+              size: 140,
+              blur: 60,
+            ),
           ),
-        ),
+        ],
         // Main content
         Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1200),
+            constraints: BoxConstraints(
+              maxWidth: isMobile ? double.infinity : 1200,
+            ),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 60),
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 12 : 32,
+                vertical: isMobile ? 24 : 60,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const _Header(),
-                  const SizedBox(height: 60),
+                  _Header(isMobile: isMobile),
+                  SizedBox(height: isMobile ? 28 : 60),
                   LayoutBuilder(
                     builder: (context, constraints) {
-                      final isWide = constraints.maxWidth > 800;
+                      final isWide = !isMobile && constraints.maxWidth > 800;
                       return Column(
                         children: List.generate(steps.length, (i) {
                           final step = steps[i];
-                          final card = Flexible(
-                            flex: 6,
-                            child: _AnimatedStepTransition(
-                              delay: Duration(milliseconds: 200 * i),
-                              child: _StepCard(
-                                icon: step["icon"] as IconData,
-                                color: step["color"] as Color,
-                                stepNumber: i + 1,
-                                title: step["title"] as String,
-                                description: step["description"] as String,
-                                isLeft: isWide ? i.isEven : true,
-                              ),
+                          final card = _AnimatedStepTransition(
+                            delay: Duration(milliseconds: 200 * i),
+                            child: _StepCard(
+                              icon: step["icon"] as IconData,
+                              color: step["color"] as Color,
+                              stepNumber: i + 1,
+                              title: step["title"] as String,
+                              description: step["description"] as String,
+                              isLeft: isWide ? i.isEven : true,
                             ),
                           );
                           final connector = isWide && i < steps.length
@@ -145,7 +152,9 @@ class HowItWorksPage extends StatelessWidget {
                                 )
                               : const SizedBox.shrink();
                           return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 24),
+                            padding: EdgeInsets.symmetric(
+                              vertical: isMobile ? 12 : 24,
+                            ),
                             child: isWide
                                 ? Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,7 +295,8 @@ class _SpectacularGlowCircle extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header();
+  final bool isMobile;
+  const _Header({this.isMobile = false});
 
   @override
   Widget build(BuildContext context) {
@@ -299,14 +309,14 @@ class _Header extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ).createShader(bounds),
-          child: const Text(
+          child: Text(
             "How It Works",
             style: TextStyle(
-              fontSize: 68,
+              fontSize: isMobile ? 36 : 68,
               fontWeight: FontWeight.w900,
               color: Colors.white,
               letterSpacing: 1.5,
-              shadows: [
+              shadows: const [
                 Shadow(
                   color: Colors.black54,
                   blurRadius: 8,
@@ -316,16 +326,16 @@ class _Header extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 24),
-        const Text(
+        SizedBox(height: isMobile ? 12 : 24),
+        Text(
           "Our AI-powered fluency cycle adapts to you—your goals, your vibe, your pace. Each step builds your confidence and skills in a natural, engaging way.",
           style: TextStyle(
-            fontSize: 18,
+            fontSize: isMobile ? 15 : 18,
             height: 1.8,
             color: Colors.white70,
             fontWeight: FontWeight.w500,
             letterSpacing: 0.2,
-            shadows: [
+            shadows: const [
               Shadow(
                 color: Colors.black26,
                 blurRadius: 4,
@@ -358,6 +368,15 @@ class _StepCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+    final double cardPadding = isMobile ? 22 : 44;
+    final double iconSize = isMobile ? 44 : 64;
+    final double titleFontSize = isMobile ? 22 : 32;
+    final double stepFontSize = isMobile ? 15 : 22;
+    final double descFontSize = isMobile ? 15 : 19;
+    final double borderRadius = isMobile ? 22 : 40;
+    final double borderWidth = isMobile ? 2.2 : 3.5;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 700),
       curve: Curves.easeOutExpo,
@@ -372,23 +391,23 @@ class _StepCard extends StatelessWidget {
           begin: isLeft ? Alignment.topLeft : Alignment.topRight,
           end: isLeft ? Alignment.bottomRight : Alignment.bottomLeft,
         ),
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
             color: color.withOpacity(0.30),
-            blurRadius: 48,
-            offset: const Offset(0, 18),
-            spreadRadius: 2,
+            blurRadius: isMobile ? 24 : 48,
+            offset: Offset(0, isMobile ? 8 : 18),
+            spreadRadius: isMobile ? 1 : 2,
           ),
           BoxShadow(
             color: Colors.black.withOpacity(0.10),
-            blurRadius: 12,
+            blurRadius: isMobile ? 6 : 12,
             offset: const Offset(0, 2),
           ),
         ],
         border: Border.all(
           color: color.withOpacity(0.38),
-          width: 3.5,
+          width: borderWidth,
         ),
       ),
       child: Stack(
@@ -417,7 +436,7 @@ class _StepCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(44),
+            padding: EdgeInsets.all(cardPadding),
             child: Column(
               crossAxisAlignment:
                   isLeft ? CrossAxisAlignment.start : CrossAxisAlignment.end,
@@ -427,10 +446,15 @@ class _StepCard extends StatelessWidget {
                       isLeft ? MainAxisAlignment.start : MainAxisAlignment.end,
                   children: [
                     if (isLeft)
-                      _AnimatedGlowIcon(icon: icon, color: color, premium: true)
+                      _AnimatedGlowIcon(
+                        icon: icon,
+                        color: color,
+                        premium: true,
+                        size: iconSize,
+                      )
                     else
                       const SizedBox(width: 0),
-                    const SizedBox(width: 24),
+                    SizedBox(width: isMobile ? 10 : 24),
                     ShaderMask(
                       shaderCallback: (bounds) => LinearGradient(
                         colors: [
@@ -444,28 +468,33 @@ class _StepCard extends StatelessWidget {
                       child: Text(
                         "Step $stepNumber",
                         style: TextStyle(
-                          fontSize: 22,
+                          fontSize: stepFontSize,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           letterSpacing: 0.7,
                           shadows: [
                             Shadow(
                               color: color.withOpacity(0.35),
-                              blurRadius: 12,
+                              blurRadius: isMobile ? 6 : 12,
                               offset: const Offset(0, 3),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(width: 24),
+                    SizedBox(width: isMobile ? 10 : 24),
                     if (!isLeft)
-                      _AnimatedGlowIcon(icon: icon, color: color, premium: true)
+                      _AnimatedGlowIcon(
+                        icon: icon,
+                        color: color,
+                        premium: true,
+                        size: iconSize,
+                      )
                     else
                       const SizedBox(width: 0),
                   ],
                 ),
-                const SizedBox(height: 28),
+                SizedBox(height: isMobile ? 16 : 28),
                 ShaderMask(
                   shaderCallback: (bounds) => LinearGradient(
                     colors: [
@@ -478,35 +507,35 @@ class _StepCard extends StatelessWidget {
                   child: Text(
                     title,
                     textAlign: isLeft ? TextAlign.left : TextAlign.right,
-                    style: const TextStyle(
-                      fontSize: 32,
+                    style: TextStyle(
+                      fontSize: titleFontSize,
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
                       letterSpacing: 0.4,
                       shadows: [
                         Shadow(
                           color: Colors.black45,
-                          blurRadius: 12,
+                          blurRadius: isMobile ? 6 : 12,
                           offset: Offset(0, 4),
                         ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: isMobile ? 10 : 18),
                 Text(
                   description,
                   textAlign: isLeft ? TextAlign.left : TextAlign.right,
-                  style: const TextStyle(
-                    fontSize: 19,
-                    height: 1.85,
+                  style: TextStyle(
+                    fontSize: descFontSize,
+                    height: 1.7,
                     color: Colors.white70,
                     fontWeight: FontWeight.w500,
                     letterSpacing: 0.13,
                     shadows: [
                       Shadow(
                         color: Colors.black26,
-                        blurRadius: 6,
+                        blurRadius: isMobile ? 3 : 6,
                         offset: Offset(0, 2),
                       ),
                     ],
@@ -521,16 +550,17 @@ class _StepCard extends StatelessWidget {
   }
 }
 
-
 class _AnimatedGlowIcon extends StatefulWidget {
   final IconData icon;
   final Color color;
   final bool premium;
+  final double? size;
 
   const _AnimatedGlowIcon({
     required this.icon,
     required this.color,
     this.premium = false,
+    this.size,
   });
 
   @override
@@ -550,7 +580,7 @@ class _AnimatedGlowIconState extends State<_AnimatedGlowIcon>
     _controller = AnimationController(
       duration: const Duration(seconds: 3),
       vsync: this,
-    )..repeat(); // Animation plays forever, no stop/start
+    )..repeat();
 
     _rotation = Tween<double>(begin: 0, end: 2 * 3.1415926535).animate(
       CurvedAnimation(parent: _controller, curve: Curves.linear),
@@ -570,11 +600,9 @@ class _AnimatedGlowIconState extends State<_AnimatedGlowIcon>
   }
 
   Widget _buildSpectacularGlow(double size) {
-    // Multi-layered animated glows and gradients, extra shine
     return Stack(
       alignment: Alignment.center,
       children: [
-        // Rotating outer glow ring (brighter)
         AnimatedBuilder(
           animation: _rotation,
           builder: (context, child) {
@@ -612,11 +640,9 @@ class _AnimatedGlowIconState extends State<_AnimatedGlowIcon>
             );
           },
         ),
-        // Pulsing radial glow (stronger)
         AnimatedBuilder(
           animation: _pulse,
           builder: (context, child) {
-            // Keep the widget size constant, only animate the opacity/blur
             return Container(
               width: size + 24,
               height: size + 24,
@@ -635,7 +661,6 @@ class _AnimatedGlowIconState extends State<_AnimatedGlowIcon>
             );
           },
         ),
-        // Extra inner highlight
         Container(
           width: size + 8,
           height: size + 8,
@@ -652,7 +677,6 @@ class _AnimatedGlowIconState extends State<_AnimatedGlowIcon>
             ),
           ),
         ),
-        // Subtle starburst overlay for extra shine
         IgnorePointer(
           child: CustomPaint(
             size: Size(size + 36, size + 36),
@@ -664,7 +688,6 @@ class _AnimatedGlowIconState extends State<_AnimatedGlowIcon>
   }
 
   Widget _buildSparkles(double size) {
-    // More sparkles, more shine!
     final sparkleColor = Colors.white.withOpacity(0.98);
     final List<Widget> sparkles = [];
     for (int i = 0; i < 10; i++) {
@@ -698,7 +721,6 @@ class _AnimatedGlowIconState extends State<_AnimatedGlowIcon>
         ),
       );
     }
-    // Add a big sparkle on top for extra shine
     sparkles.add(
       Positioned(
         left: (size + 36) / 2 - 10,
@@ -728,13 +750,12 @@ class _AnimatedGlowIconState extends State<_AnimatedGlowIcon>
 
   @override
   Widget build(BuildContext context) {
-    const double size = 64;
+    final double size = widget.size ?? 64;
     return Stack(
       alignment: Alignment.center,
       children: [
         _buildSpectacularGlow(size),
         if (widget.premium) _buildSparkles(size),
-        // Premium ring (brighter)
         if (widget.premium)
           Container(
             width: size + 14,
@@ -743,23 +764,22 @@ class _AnimatedGlowIconState extends State<_AnimatedGlowIcon>
               shape: BoxShape.circle,
               border: Border.all(
                 color: Colors.white.withOpacity(0.85),
-                width: 3.5,
+                width: size < 50 ? 2.2 : 3.5,
               ),
               boxShadow: [
                 BoxShadow(
                   color: widget.color.withOpacity(0.28),
-                  blurRadius: 24,
-                  spreadRadius: 4,
+                  blurRadius: size < 50 ? 12 : 24,
+                  spreadRadius: size < 50 ? 2 : 4,
                 ),
                 BoxShadow(
                   color: Colors.white.withOpacity(0.10),
-                  blurRadius: 8,
+                  blurRadius: size < 50 ? 4 : 8,
                   spreadRadius: 1,
                 ),
               ],
             ),
           ),
-        // Icon itself
         CircleAvatar(
           backgroundColor: widget.color,
           radius: size / 2,
@@ -772,7 +792,7 @@ class _AnimatedGlowIconState extends State<_AnimatedGlowIcon>
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ).createShader(bounds),
-            child: Icon(widget.icon, color: Colors.white, size: 36),
+            child: Icon(widget.icon, color: Colors.white, size: size / 1.8),
           ),
         ),
       ],
@@ -823,7 +843,14 @@ class _StepConnector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Premium connector: animated shimmer, glow, and subtle sparkles
+    final isMobile = MediaQuery.of(context).size.width < 600;
+    final double width = vertical
+        ? (isMobile ? 7 : 12)
+        : (isMobile ? 60 : 112);
+    final double height = vertical
+        ? (isMobile ? 36 : 64)
+        : (isMobile ? 8 : 16);
+
     final shimmerGradient = LinearGradient(
       colors: [
         color.withOpacity(0.35),
@@ -845,27 +872,25 @@ class _StepConnector extends StatelessWidget {
       return Stack(
         alignment: Alignment.center,
         children: [
-          // Glowing background
           Container(
-            width: width + (vertical ? 8 : 24),
-            height: height + (vertical ? 24 : 8),
+            width: width + (vertical ? 4 : 12),
+            height: height + (vertical ? 12 : 4),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(isMobile ? 8 : 18),
               boxShadow: [
                 BoxShadow(
                   color: color.withOpacity(0.32),
-                  blurRadius: 32,
-                  spreadRadius: 4,
+                  blurRadius: isMobile ? 12 : 32,
+                  spreadRadius: isMobile ? 2 : 4,
                 ),
                 BoxShadow(
                   color: color.withOpacity(0.10),
-                  blurRadius: 8,
+                  blurRadius: isMobile ? 3 : 8,
                   spreadRadius: 1,
                 ),
               ],
             ),
           ),
-          // Animated shimmer (infinite loop)
           _ForeverShimmer(
             color: color,
             vertical: vertical,
@@ -873,7 +898,6 @@ class _StepConnector extends StatelessWidget {
             height: height,
             shimmerGradient: shimmerGradient,
           ),
-          // Subtle sparkles
           Positioned.fill(
             child: IgnorePointer(
               child: CustomPaint(
@@ -884,15 +908,14 @@ class _StepConnector extends StatelessWidget {
               ),
             ),
           ),
-          // Premium border
           Container(
             width: width,
             height: height,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(isMobile ? 6 : 14),
               border: Border.all(
                 color: color.withOpacity(0.38),
-                width: 2,
+                width: isMobile ? 1.2 : 2,
               ),
             ),
           ),
@@ -902,16 +925,16 @@ class _StepConnector extends StatelessWidget {
 
     return vertical
         ? SizedBox(
-            height: 64,
+            height: height,
             child: Center(
-              child: connectorBar(width: 12, height: 64),
+              child: connectorBar(width: width, height: height),
             ),
           )
         : SizedBox(
-            height: 16,
+            height: height,
             child: Align(
               alignment: isLeft ? Alignment.centerLeft : Alignment.centerRight,
-              child: connectorBar(width: 112, height: 16),
+              child: connectorBar(width: width, height: height),
             ),
           );
   }
@@ -957,6 +980,8 @@ class _ForeverShimmerState extends State<_ForeverShimmer>
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+    final borderRadius = BorderRadius.circular(isMobile ? 8 : 14);
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -967,14 +992,16 @@ class _ForeverShimmerState extends State<_ForeverShimmer>
                 value * (widget.vertical ? bounds.height : bounds.width);
             return LinearGradient(
               colors: [
-                widget.color.withOpacity(0.18),
-                Colors.white.withOpacity(0.55),
-                widget.color.withOpacity(0.18),
+                widget.color.withOpacity(isMobile ? 0.12 : 0.18),
+                Colors.white.withOpacity(isMobile ? 0.38 : 0.55),
+                widget.color.withOpacity(isMobile ? 0.12 : 0.18),
               ],
               stops: [
-                (shimmerPos - 40) / (widget.vertical ? bounds.height : bounds.width),
+                (shimmerPos - (isMobile ? 24 : 40)) /
+                    (widget.vertical ? bounds.height : bounds.width),
                 shimmerPos / (widget.vertical ? bounds.height : bounds.width),
-                (shimmerPos + 40) / (widget.vertical ? bounds.height : bounds.width),
+                (shimmerPos + (isMobile ? 24 : 40)) /
+                    (widget.vertical ? bounds.height : bounds.width),
               ],
               begin: widget.vertical ? Alignment.topCenter : Alignment.centerLeft,
               end: widget.vertical ? Alignment.bottomCenter : Alignment.centerRight,
@@ -985,7 +1012,7 @@ class _ForeverShimmerState extends State<_ForeverShimmer>
             width: widget.width,
             height: widget.height,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: borderRadius,
               gradient: widget.shimmerGradient,
             ),
           ),
@@ -1002,17 +1029,26 @@ class _PremiumSparklePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final isMobile = size.shortestSide < 60;
     final sparklePaint = Paint()
-      ..color = Colors.white.withOpacity(0.7)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
+      ..color = Colors.white.withOpacity(isMobile ? 0.55 : 0.7)
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, isMobile ? 1.2 : 2);
 
     // Draw a few sparkles along the connector
-    for (int i = 0; i < 3; i++) {
-      final t = (i + 1) / 4;
+    for (int i = 0; i < (isMobile ? 2 : 3); i++) {
+      final t = (i + 1) / (isMobile ? 3 : 4);
       final dx = vertical ? size.width / 2 : size.width * t;
       final dy = vertical ? size.height * t : size.height / 2;
-      canvas.drawCircle(Offset(dx, dy), 2.5 + i, sparklePaint..color = color.withOpacity(0.25 + 0.25 * i));
-      canvas.drawCircle(Offset(dx, dy), 1.2 + i, Paint()..color = Colors.white.withOpacity(0.7 - 0.2 * i));
+      canvas.drawCircle(
+        Offset(dx, dy),
+        (isMobile ? 1.8 : 2.5) + i,
+        sparklePaint..color = color.withOpacity((isMobile ? 0.18 : 0.25) + 0.25 * i),
+      );
+      canvas.drawCircle(
+        Offset(dx, dy),
+        (isMobile ? 0.8 : 1.2) + i,
+        Paint()..color = Colors.white.withOpacity((isMobile ? 0.5 : 0.7) - 0.2 * i),
+      );
     }
   }
 

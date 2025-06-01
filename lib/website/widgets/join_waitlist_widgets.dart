@@ -13,8 +13,9 @@ class TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Container(
-      width: double.infinity, // Full screen width
+      width: double.infinity,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [kPremiumPurple, kAccentBlue],
@@ -22,44 +23,57 @@ class TitleWidget extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 96), // No horizontal padding
+      padding: EdgeInsets.symmetric(
+        vertical: isMobile ? 56 : 96,
+        horizontal: isMobile ? 16 : 0,
+      ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1100),
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? double.infinity : 1100,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(
                 Icons.workspace_premium_rounded,
                 color: Colors.white,
-                size: 64,
+                size: isMobile ? 44 : 64,
               ),
-              const SizedBox(height: 28),
+              SizedBox(height: isMobile ? 18 : 28),
               Text(
                 'Fluoverse - Where learning meets real conversations',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                      letterSpacing: 1.5,
-                    ),
+                style: (isMobile
+                        ? Theme.of(context).textTheme.headlineSmall
+                        : Theme.of(context).textTheme.displayMedium)
+                    ?.copyWith(
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                  letterSpacing: 1.2,
+                  fontSize: isMobile ? 22 : null,
+                ),
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: isMobile ? 20 : 32),
               Text(
                 'Join the Fluoverse waitlist and be\n'
                 'among the first to practice Spanish and start speaking\n'
                 'in no time',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.white.withOpacity(0.98),
                       fontWeight: FontWeight.w600,
-                      fontSize: 20,
+                      fontSize: isMobile ? 16 : 20,
                       height: 1.35,
                     ),
               ),
-              const SizedBox(height: 18),
+              SizedBox(height: isMobile ? 14 : 18),
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+                padding: EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: isMobile ? 12 : 24,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.18),
                   borderRadius: BorderRadius.circular(24),
@@ -70,10 +84,11 @@ class TitleWidget extends StatelessWidget {
                 ),
                 child: Text(
                   'Premium access • Early perks • Shape the future',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.white.withOpacity(0.92),
                         fontWeight: FontWeight.w600,
                         letterSpacing: 1.1,
+                        fontSize: isMobile ? 13.5 : 16,
                       ),
                 ),
               ),
@@ -84,8 +99,6 @@ class TitleWidget extends StatelessWidget {
     );
   }
 }
-
-// Join waitlist form widget
 
 
 
@@ -279,231 +292,247 @@ class _JoinWaitlistFormState extends State<JoinWaitlistForm> {
   @override
   Widget build(BuildContext context) {
     final submitted = _submitted || widget.submitted;
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 480),
-      child: Container(
-        padding: const EdgeInsets.all(36),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(32),
-          border: Border.all(
-            color: Colors.white.withOpacity(0.18),
-            width: 1.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: kAccentBlue.withOpacity(0.15),
-              blurRadius: 32,
-              offset: const Offset(0, 12),
-            ),
-          ],
+    final isMobile = MediaQuery.of(context).size.width < 600;
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: isMobile ? double.infinity : 480,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return const LinearGradient(
-                  colors: [kAccentBlue, kPremiumPurple],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ).createShader(bounds);
-              },
-              child: Icon(
-                Icons.language_rounded,
-                color: Colors.white,
-                size: 56,
+        child: Container(
+          padding: EdgeInsets.all(isMobile ? 18 : 36),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.08),
+            borderRadius: BorderRadius.circular(isMobile ? 18 : 32),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.18),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: kAccentBlue.withOpacity(0.15),
+                blurRadius: isMobile ? 16 : 32,
+                offset: Offset(0, isMobile ? 6 : 12),
               ),
-            ),
-            const SizedBox(height: 18),
-            Text(
-              'Fluency begins here.',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                    letterSpacing: 1.2,
-                    shadows: [
-                      Shadow(
-                        color: kAccentBlue.withOpacity(0.25),
-                        blurRadius: 12,
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return const LinearGradient(
+                    colors: [kAccentBlue, kPremiumPurple],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds);
+                },
+                child: Icon(
+                  Icons.language_rounded,
+                  color: Colors.white,
+                  size: isMobile ? 40 : 56,
+                ),
+              ),
+              SizedBox(height: isMobile ? 12 : 18),
+              Text(
+                'Fluency begins here.',
+                textAlign: TextAlign.center,
+                style: (isMobile
+                        ? Theme.of(context).textTheme.titleLarge
+                        : Theme.of(context).textTheme.headlineMedium)
+                    ?.copyWith(
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                  letterSpacing: 1.2,
+                  fontSize: isMobile ? 20 : null,
+                  shadows: [
+                    Shadow(
+                      color: kAccentBlue.withOpacity(0.25),
+                      blurRadius: 12,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: isMobile ? 10 : 16),
+              Text(
+                'Create an account and join the movement that makes language a lived experience.',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.white70,
+                      fontSize: isMobile ? 15 : 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              SizedBox(height: isMobile ? 18 : 32),
+              if (_awaitingVerification) ...[
+                Icon(Icons.mark_email_unread_rounded, color: Colors.amber, size: isMobile ? 38 : 56),
+                SizedBox(height: isMobile ? 16 : 24),
+                Text(
+                  'Please confirm your email address.',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: isMobile ? 17 : null,
                       ),
-                    ],
-                  ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Create an account and join the movement that makes language a lived experience.',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Colors.white70,
-                    fontSize: 18,
+                ),
+                SizedBox(height: isMobile ? 8 : 12),
+                Text(
+                  'We’ve sent a verification link to your email. Once you confirm, click below to complete joining the waitlist.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.85),
+                    fontSize: isMobile ? 13 : 15,
                     fontWeight: FontWeight.w500,
                   ),
-            ),
-            const SizedBox(height: 32),
-            if (_awaitingVerification) ...[
-              const Icon(Icons.mark_email_unread_rounded, color: Colors.amber, size: 56),
-              const SizedBox(height: 24),
-              Text(
-                'Please confirm your email address.',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'We’ve sent a verification link to your email. Once you confirm, click below to complete joining the waitlist.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.85),
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
                 ),
-              ),
-              const SizedBox(height: 20),
-              _PremiumButton(
-                text: _loading ? 'Verifying...' : 'I have confirmed my email',
-                icon: Icons.verified_rounded,
-                background: const LinearGradient(
-                  colors: [kAccentBlue, kPremiumPurple],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+                SizedBox(height: isMobile ? 14 : 20),
+                _PremiumButton(
+                  text: _loading ? 'Verifying...' : 'I have confirmed my email',
+                  icon: Icons.verified_rounded,
+                  background: const LinearGradient(
+                    colors: [kAccentBlue, kPremiumPurple],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  onPressed: _loading ? () {} : _retryAfterVerification,
+                  glowColor: kAccentBlue.withOpacity(0.32),
                 ),
-                onPressed: _loading ? () {} : _retryAfterVerification,
-                glowColor: kAccentBlue.withOpacity(0.32),
-              ),
-              if (_error != null) ...[
-                const SizedBox(height: 10),
+                if (_error != null) ...[
+                  SizedBox(height: 10),
+                  Text(
+                    _error!,
+                    style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+                SizedBox(height: isMobile ? 8 : 12),
                 Text(
-                  _error!,
-                  style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600),
+                  'Didn’t get the email? Check your spam folder or try again later.',
                   textAlign: TextAlign.center,
-                ),
-              ],
-              const SizedBox(height: 12),
-              Text(
-                'Didn’t get the email? Check your spam folder or try again later.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.75),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ] else if (!submitted) ...[
-              TextField(
-                controller: widget.firstNameController,
-                keyboardType: TextInputType.name,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.12),
-                  hintText: 'First name',
-                  hintStyle: const TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.75),
+                    fontSize: isMobile ? 11 : 13,
+                    fontWeight: FontWeight.w500,
                   ),
-                  prefixIcon: Icon(Icons.person_rounded, color: Colors.white.withOpacity(0.7)),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: widget.lastNameController,
-                keyboardType: TextInputType.name,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.12),
-                  hintText: 'Last name',
-                  hintStyle: const TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                  prefixIcon: Icon(Icons.person_outline_rounded, color: Colors.white.withOpacity(0.7)),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: widget.emailController,
-                keyboardType: TextInputType.emailAddress,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.12),
-                  hintText: 'Email',
-                  hintStyle: const TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                  prefixIcon: Icon(Icons.email_rounded, color: Colors.white.withOpacity(0.7)),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: widget.passwordController,
-                obscureText: true,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.12),
-                  hintText: 'Password',
-                  hintStyle: const TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                  prefixIcon: Icon(Icons.lock_rounded, color: Colors.white.withOpacity(0.7)),
-                ),
-              ),
-              const SizedBox(height: 20),
-              _PremiumButton(
-                text: _loading ? 'Joining...' : 'Join Waitlist',
-                icon: Icons.star_rounded,
-                background: const LinearGradient(
-                  colors: [kAccentBlue, kPremiumPurple],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                onPressed: _loading ? () {} : () => _handleSubmit(),
-                glowColor: kAccentBlue.withOpacity(0.32),
-              ),
-              if (_error != null) ...[
-                const SizedBox(height: 10),
-                Text(
-                  _error!,
-                  style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-              const SizedBox(height: 12),
-              Text(
-                'We’ll notify you when Fluoverse launches. No spam. Ever.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.75),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ] else ...[
-              const Icon(Icons.verified_rounded, color: Colors.greenAccent, size: 56),
-              const SizedBox(height: 24),
-              Text(
-                'You’re on the list! We’ll keep you posted. 🎉',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+              ] else if (!submitted) ...[
+                TextField(
+                  controller: widget.firstNameController,
+                  keyboardType: TextInputType.name,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.12),
+                    hintText: 'First name',
+                    hintStyle: const TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
+                      borderSide: BorderSide.none,
                     ),
-              ),
-            ]
-          ],
+                    prefixIcon: Icon(Icons.person_rounded, color: Colors.white.withOpacity(0.7)),
+                    contentPadding: EdgeInsets.symmetric(vertical: isMobile ? 12 : 18),
+                  ),
+                ),
+                SizedBox(height: isMobile ? 10 : 16),
+                TextField(
+                  controller: widget.lastNameController,
+                  keyboardType: TextInputType.name,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.12),
+                    hintText: 'Last name',
+                    hintStyle: const TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: Icon(Icons.person_outline_rounded, color: Colors.white.withOpacity(0.7)),
+                    contentPadding: EdgeInsets.symmetric(vertical: isMobile ? 12 : 18),
+                  ),
+                ),
+                SizedBox(height: isMobile ? 10 : 16),
+                TextField(
+                  controller: widget.emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.12),
+                    hintText: 'Email',
+                    hintStyle: const TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: Icon(Icons.email_rounded, color: Colors.white.withOpacity(0.7)),
+                    contentPadding: EdgeInsets.symmetric(vertical: isMobile ? 12 : 18),
+                  ),
+                ),
+                SizedBox(height: isMobile ? 10 : 16),
+                TextField(
+                  controller: widget.passwordController,
+                  obscureText: true,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.12),
+                    hintText: 'Password',
+                    hintStyle: const TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: Icon(Icons.lock_rounded, color: Colors.white.withOpacity(0.7)),
+                    contentPadding: EdgeInsets.symmetric(vertical: isMobile ? 12 : 18),
+                  ),
+                ),
+                SizedBox(height: isMobile ? 14 : 20),
+                _PremiumButton(
+                  text: _loading ? 'Joining...' : 'Join Waitlist',
+                  icon: Icons.star_rounded,
+                  background: const LinearGradient(
+                    colors: [kAccentBlue, kPremiumPurple],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  onPressed: _loading ? () {} : () => _handleSubmit(),
+                  glowColor: kAccentBlue.withOpacity(0.32),
+                ),
+                if (_error != null) ...[
+                  SizedBox(height: 10),
+                  Text(
+                    _error!,
+                    style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+                SizedBox(height: isMobile ? 8 : 12),
+                Text(
+                  'We’ll notify you when Fluoverse launches. No spam. Ever.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.75),
+                    fontSize: isMobile ? 11 : 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ] else ...[
+                Icon(Icons.verified_rounded, color: Colors.greenAccent, size: isMobile ? 38 : 56),
+                SizedBox(height: isMobile ? 16 : 24),
+                Text(
+                  'You’re on the list! We’ll keep you posted. 🎉',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: isMobile ? 17 : null,
+                      ),
+                ),
+              ]
+            ],
+          ),
         ),
       ),
     );
@@ -517,8 +546,12 @@ class WhyJoinWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 56, horizontal: 40),
+      padding: EdgeInsets.symmetric(
+        vertical: isMobile ? 32 : 56,
+        horizontal: isMobile ? 16 : 40,
+      ),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
@@ -529,13 +562,13 @@ class WhyJoinWidget extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(0),
+        borderRadius: BorderRadius.circular(isMobile ? 12 : 0),
         border: Border.all(color: const Color(0xFFE0D7FF), width: 2),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFFB6B6F8).withOpacity(0.18),
-            blurRadius: 48,
-            offset: const Offset(0, 24),
+            blurRadius: isMobile ? 18 : 48,
+            offset: Offset(0, isMobile ? 8 : 24),
           ),
         ],
       ),
@@ -543,7 +576,6 @@ class WhyJoinWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Spectacular animated gradient icon
           ShaderMask(
             shaderCallback: (Rect bounds) {
               return const LinearGradient(
@@ -552,86 +584,96 @@ class WhyJoinWidget extends StatelessWidget {
                 end: Alignment.bottomRight,
               ).createShader(bounds);
             },
-            child: Icon(Icons.workspace_premium_rounded, size: 54, color: Colors.white),
+            child: Icon(Icons.workspace_premium_rounded, size: isMobile ? 38 : 54, color: Colors.white),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: isMobile ? 12 : 18),
           Text(
             'Unlock the Premium Experience',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                  fontWeight: FontWeight.w900,
-                  color: const Color(0xFF2B2250),
-                  letterSpacing: 1.2,
-                  shadows: [
-                    Shadow(
-                      color: const Color(0xFFB6B6F8).withOpacity(0.18),
-                      blurRadius: 12,
-                    ),
-                  ],
+            style: (isMobile
+                    ? Theme.of(context).textTheme.titleLarge
+                    : Theme.of(context).textTheme.displaySmall)
+                ?.copyWith(
+              fontWeight: FontWeight.w900,
+              color: const Color(0xFF2B2250),
+              letterSpacing: 1.2,
+              fontSize: isMobile ? 20 : null,
+              shadows: [
+                Shadow(
+                  color: const Color(0xFFB6B6F8).withOpacity(0.18),
+                  blurRadius: 12,
                 ),
+              ],
+            ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: isMobile ? 12 : 18),
           Text(
             'Be among the first to shape the future of language learning.',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: const Color(0xFF4A3F7A),
                   fontWeight: FontWeight.w600,
-                  fontSize: 20,
+                  fontSize: isMobile ? 15 : 20,
                   height: 1.35,
                 ),
           ),
-          const SizedBox(height: 36),
+          SizedBox(height: isMobile ? 22 : 36),
           // Centered bullets
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
+            children: [
               _WhyJoinBullet(
                 icon: Icons.rocket_launch_rounded,
-                iconGradient: LinearGradient(
+                iconGradient: const LinearGradient(
                   colors: [Color(0xFF00CFFF), Color(0xFF7B61FF)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 text: 'Priority early access to Fluoverse and all new features.',
+                isMobile: isMobile,
               ),
-              SizedBox(height: 22),
+              SizedBox(height: isMobile ? 14 : 22),
               _WhyJoinBullet(
                 icon: Icons.military_tech_rounded,
-                iconGradient: LinearGradient(
+                iconGradient: const LinearGradient(
                   colors: [Color(0xFFFFC700), Color(0xFF7B61FF)],
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
                 ),
                 text: 'VIP perks, exclusive badges, and premium community invites.',
+                isMobile: isMobile,
               ),
-              SizedBox(height: 22),
+              SizedBox(height: isMobile ? 14 : 22),
               _WhyJoinBullet(
                 icon: Icons.lightbulb_rounded,
-                iconGradient: LinearGradient(
+                iconGradient: const LinearGradient(
                   colors: [Color(0xFFFFA726), Color(0xFF00CFFF)],
                   begin: Alignment.bottomLeft,
                   end: Alignment.topRight,
                 ),
                 text: 'Direct influence on features—your feedback shapes Fluoverse.',
+                isMobile: isMobile,
               ),
             ],
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: isMobile ? 22 : 32),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 28),
+            padding: EdgeInsets.symmetric(
+              vertical: isMobile ? 8 : 10,
+              horizontal: isMobile ? 16 : 28,
+            ),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [Color(0xFF7B61FF), Color(0xFF00CFFF)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(isMobile ? 16 : 24),
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xFF7B61FF).withOpacity(0.12),
-                  blurRadius: 16,
-                  offset: const Offset(0, 6),
+                  blurRadius: isMobile ? 8 : 16,
+                  offset: Offset(0, isMobile ? 3 : 6),
                 ),
               ],
             ),
@@ -641,6 +683,7 @@ class WhyJoinWidget extends StatelessWidget {
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,
+                    fontSize: isMobile ? 13.5 : null,
                   ),
             ),
           ),
@@ -654,11 +697,13 @@ class _WhyJoinBullet extends StatelessWidget {
   final IconData icon;
   final Gradient iconGradient;
   final String text;
+  final bool isMobile;
 
   const _WhyJoinBullet({
     required this.icon,
     required this.iconGradient,
     required this.text,
+    this.isMobile = false,
   });
 
   @override
@@ -669,15 +714,15 @@ class _WhyJoinBullet extends StatelessWidget {
       children: [
         ShaderMask(
           shaderCallback: (Rect bounds) => iconGradient.createShader(bounds),
-          child: Icon(icon, size: 28, color: Colors.white),
+          child: Icon(icon, size: isMobile ? 22 : 28, color: Colors.white),
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: isMobile ? 10 : 16),
         Flexible(
           child: Text(
             text,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: const Color(0xFF2B2250),
-                  fontSize: 17,
+                  fontSize: isMobile ? 14.5 : 17,
                   height: 1.6,
                   fontWeight: FontWeight.w600,
                 ),
@@ -688,7 +733,6 @@ class _WhyJoinBullet extends StatelessWidget {
     );
   }
 }
-
 
 // Custom Premium Button Widget
 class _PremiumButton extends StatelessWidget {
@@ -708,19 +752,20 @@ class _PremiumButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Stack(
       alignment: Alignment.center,
       children: [
         // Glowing effect
         Container(
           width: double.infinity,
-          height: 56,
+          height: isMobile ? 46 : 56,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
             boxShadow: [
               BoxShadow(
                 color: glowColor,
-                blurRadius: 24,
+                blurRadius: isMobile ? 14 : 24,
                 spreadRadius: 1,
               ),
             ],
@@ -728,10 +773,13 @@ class _PremiumButton extends StatelessWidget {
         ),
         ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-            minimumSize: const Size.fromHeight(56),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            minimumSize: Size.fromHeight(isMobile ? 46 : 56),
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 16 : 24,
+              vertical: isMobile ? 10 : 16,
+            ),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
             ),
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
@@ -745,7 +793,7 @@ class _PremiumButton extends StatelessWidget {
             shaderCallback: (Rect bounds) {
               return background.createShader(bounds);
             },
-            child: Icon(icon, color: Colors.white, size: 28),
+            child: Icon(icon, color: Colors.white, size: isMobile ? 22 : 28),
           ),
           label: ShaderMask(
             shaderCallback: (Rect bounds) {
@@ -753,10 +801,10 @@ class _PremiumButton extends StatelessWidget {
             },
             child: Text(
               text,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: isMobile ? 15 : 18,
                 letterSpacing: 1.1,
               ),
             ),
