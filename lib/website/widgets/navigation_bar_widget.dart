@@ -559,8 +559,10 @@ class _MobileMenuButtonState extends State<_MobileMenuButton> with SingleTickerP
             child: child,
           );
         },
-      );
-      _closeMenu();
+      ).then((_) {
+        // Ensure menu state is reset after dialog is dismissed (including tap outside)
+        if (mounted) _closeMenu();
+      });
     } else {
       _closeMenu();
     }
@@ -619,7 +621,11 @@ class _MobileMenuDialog extends StatelessWidget {
         children: [
           // Frosted glass blur background
           GestureDetector(
-            onTap: onClose,
+            onTap: () {
+              Navigator.of(context).pop(); // Dismiss the dialog
+              onClose(); // Animate controller and update state
+            },
+
             child: AnimatedBuilder(
               animation: controller,
               builder: (context, child) => Opacity(

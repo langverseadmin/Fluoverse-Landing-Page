@@ -559,23 +559,34 @@ class _ComingSoonStripState extends State<ComingSoonStrip>
 
   @override
   Widget build(BuildContext context) {
-  final isMobile = MediaQuery.of(context).size.width < 600;
-  final double horizontalPadding = isMobile ? 16 : 48;
-  final double verticalPadding = isMobile ? 24 : 44;
-  final double borderRadius = isMobile ? 18 : 36;
-  final double iconSize = isMobile ? 38 : 64;
-  final double iconPadding = isMobile ? 4 : 8;
-  final double titleFontSize = isMobile ? 28 : 54;
+  final mq = MediaQuery.of(context);
+  final isMobile = mq.size.width < 600;
+  final width = mq.size.width;
+  final height = mq.size.height;
+
+  // Use screen percentage for sizing, but clamp to original look
+  double percent(double v, {double min = 0, double? max}) {
+    final val = v;
+    if (max != null) return val.clamp(min, max);
+    return val < min ? min : val;
+  }
+
+  final double horizontalPadding = percent(width * 0.04, min: 12, max: 48);
+  final double verticalPadding = percent(height * 0.03, min: 18, max: 44);
+  final double borderRadius = percent(width * 0.03, min: 14, max: isMobile ? 18 : 36);
+  final double iconSize = percent(width * 0.06, min: 32, max: isMobile ? 38 : 64);
+  final double iconPadding = percent(iconSize * 0.11, min: 3, max: isMobile ? 4 : 8);
+  final double titleFontSize = percent(width * 0.045, min: 22, max: isMobile ? 28 : 54);
   final double titleLetterSpacing = isMobile ? 1.1 : 2.2;
-  final double maxWidth = isMobile ? double.infinity : 840;
-  final double textFontSize = isMobile ? 15 : 18;
-  final double buttonHeight = isMobile ? 48 : 62;
-  final double gap1 = isMobile ? 16 : 32;
-  final double gap2 = isMobile ? 18 : 40;
-  final double gap3 = isMobile ? 18 : 40;
+  final double maxWidth = isMobile ? percent(width * 0.96, min: 220, max: 380) : percent(width * 0.8, min: 320, max: 840);
+  final double textFontSize = percent(width * 0.022, min: 13, max: isMobile ? 15 : 18);
+  final double buttonHeight = percent(height * 0.06, min: 38, max: isMobile ? 48 : 62);
+  final double gap1 = percent(height * 0.015, min: 10, max: isMobile ? 16 : 32);
+  final double gap2 = percent(height * 0.018, min: 12, max: isMobile ? 18 : 40);
+  final double gap3 = percent(height * 0.018, min: 12, max: isMobile ? 18 : 40);
 
   return Padding(
-    padding: EdgeInsets.symmetric(vertical: isMobile ? 36 : 72),
+    padding: EdgeInsets.symmetric(vertical: isMobile ? percent(height * 0.045, min: 24, max: 72) : percent(height * 0.09, min: 36, max: 72)),
     child: Stack(
     alignment: Alignment.center,
     children: [
@@ -1560,6 +1571,7 @@ class ValuePropsSection extends StatelessWidget {
                       title: 'Speak from Day One',
                       description: 'Start speaking from your first session.',
                       isMobile: true,
+                      cardWidth: 210, // smaller width for mobile
                     ),
                     SizedBox(height: 18),
                     _ValueCardPremium(
@@ -1573,6 +1585,7 @@ class ValuePropsSection extends StatelessWidget {
                       title: 'AI Coaching',
                       description: 'AI coach supports and grows with you.',
                       isMobile: true,
+                      cardWidth: 210,
                     ),
                     SizedBox(height: 18),
                     _ValueCardPremium(
@@ -1586,6 +1599,7 @@ class ValuePropsSection extends StatelessWidget {
                       title: 'Personalized Learning',
                       description: 'Learning adapts to your interests.',
                       isMobile: true,
+                      cardWidth: 210,
                     ),
                   ],
                 );
@@ -1652,6 +1666,7 @@ class _ValueCardPremium extends StatefulWidget {
   final String title;
   final String description;
   final bool isMobile;
+  final double? cardWidth;
 
   const _ValueCardPremium({
     required this.icon,
@@ -1660,6 +1675,7 @@ class _ValueCardPremium extends StatefulWidget {
     required this.title,
     required this.description,
     this.isMobile = false,
+    this.cardWidth,
   });
 
   @override
@@ -1672,7 +1688,9 @@ class _ValueCardPremiumState extends State<_ValueCardPremium> {
   @override
   Widget build(BuildContext context) {
     // Responsive sizing
-    final double cardWidth = widget.isMobile ? double.infinity : 250;
+    final double cardWidth = widget.isMobile
+        ? (widget.cardWidth ?? 210)
+        : 250;
     final double cardHeight = widget.isMobile ? 210 : 320;
     final double iconSize = widget.isMobile ? 28 : 32;
     final double iconBgSize = widget.isMobile ? 48 : 58;
@@ -1922,18 +1940,31 @@ class LearningCycleSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 600;
-    final double verticalPadding = isMobile ? 48 : 120;
-    final double horizontalPadding = isMobile ? 8 : 24;
-    final double titleFontSize = isMobile ? 28 : 48;
-    final double subtitleFontSize = isMobile ? 15.5 : 22;
-    final double stepCardWidth = isMobile ? double.infinity : 180;
-    final double stepCardHeight = isMobile ? 140 : 210;
-    final double stepIconSize = isMobile ? 22 : 26;
-    final double stepIconBgSize = isMobile ? 36 : 48;
-    final double stepSpacing = isMobile ? 18 : 48;
-    final double stepTitleFontSize = isMobile ? 14.5 : 19;
-    final double stepSubtitleFontSize = isMobile ? 12 : 14.5;
+    final mq = MediaQuery.of(context);
+    final isMobile = mq.size.width < 600;
+    final width = mq.size.width;
+    final height = mq.size.height;
+
+    // Helper for percent with min/max clamp
+    double percent(double v, {double min = 0, double? max}) {
+      final val = v;
+      if (max != null) return val.clamp(min, max);
+      return val < min ? min : val;
+    }
+
+    final double verticalPadding = percent(height * 0.06, min: 32, max: isMobile ? 60 : 120);
+    final double horizontalPadding = percent(width * 0.03, min: 8, max: isMobile ? 18 : 32);
+    final double titleFontSize = percent(width * 0.045, min: 22, max: isMobile ? 32 : 54);
+    final double subtitleFontSize = percent(width * 0.022, min: 13, max: isMobile ? 16 : 22);
+    final double stepCardWidth = isMobile
+      ? percent(width * 0.82, min: 120, max: 510)
+      : percent(width * 0.19, min: 120, max: 220);
+    final double stepCardHeight = isMobile ? percent(height * 0.23, min: 90, max: 180) : percent(height * 0.16, min: 120, max: 220);
+    final double stepIconSize = isMobile ? percent(width * 0.055, min: 16, max: 28) : percent(width * 0.025, min: 18, max: 32);
+    final double stepIconBgSize = isMobile ? percent(width * 0.16, min: 24, max: 44) : percent(width * 0.08, min: 32, max: 56);
+    final double stepSpacing = isMobile ? percent(height * 0.018, min: 10, max: 24) : percent(width * 0.04, min: 24, max: 64);
+    final double stepTitleFontSize = isMobile ? percent(width * 0.088, min: 11, max: 20) : percent(width * 0.018, min: 13, max: 22);
+    final double stepSubtitleFontSize = isMobile ? percent(width * 0.082, min: 10, max: 14) : percent(width * 0.014, min: 11, max: 16);
 
     return Container(
       width: double.infinity,
