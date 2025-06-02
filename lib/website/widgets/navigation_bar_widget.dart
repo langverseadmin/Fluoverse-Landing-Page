@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import '../screens/homepage.dart';
 import '../screens/how_it_works.dart';
@@ -514,188 +516,413 @@ class _MobileNavigationBar extends StatelessWidget {
   }
 }
 
+// Enhanced mobile menu with beautiful slide & fade animation, blur, and smooth transitions
+
 class _MobileMenuButton extends StatefulWidget {
   @override
   State<_MobileMenuButton> createState() => _MobileMenuButtonState();
 }
 
-class _MobileMenuButtonState extends State<_MobileMenuButton> {
+class _MobileMenuButtonState extends State<_MobileMenuButton> with SingleTickerProviderStateMixin {
   bool _open = false;
+  late AnimationController _controller;
 
-  void _toggleMenu() {
-    setState(() {
-      _open = !_open;
-    });
-    if (_open) {
-      showDialog(
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 420),
+      vsync: this,
+    );
+  }
+
+  void _toggleMenu() async {
+    if (!_open) {
+      setState(() => _open = true);
+      _controller.forward(from: 0);
+      await showGeneralDialog(
         context: context,
-        builder: (context) => _MobileMenuDialog(onClose: _toggleMenu),
+        barrierDismissible: true,
+        barrierLabel: "Menu",
+        barrierColor: Colors.black.withOpacity(0.18),
+        transitionDuration: const Duration(milliseconds: 420),
+        pageBuilder: (context, anim1, anim2) {
+          return _MobileMenuDialog(
+            controller: _controller,
+            onClose: _closeMenu,
+          );
+        },
+        transitionBuilder: (context, anim1, anim2, child) {
+          final curved = CurvedAnimation(parent: anim1, curve: Curves.easeOutCubic);
+          return FadeTransition(
+            opacity: curved,
+            child: child,
+          );
+        },
       );
+      _closeMenu();
+    } else {
+      _closeMenu();
+    }
+  }
+
+  void _closeMenu() {
+    if (_open) {
+      _controller.reverse();
+      setState(() => _open = false);
     }
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(_open ? Icons.close : Icons.menu, color: Color(0xFF2E5BFF)),
-      onPressed: _toggleMenu,
-      iconSize: 32,
-      splashRadius: 24,
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 320),
+      transitionBuilder: (child, anim) => RotationTransition(
+        turns: Tween<double>(begin: 0.85, end: 1).animate(anim),
+        child: FadeTransition(opacity: anim, child: child),
+      ),
+      child: IconButton(
+        key: ValueKey(_open),
+        icon: Icon(_open ? Icons.close : Icons.menu, color: Color(0xFF2E5BFF)),
+        onPressed: _toggleMenu,
+        iconSize: 32,
+        splashRadius: 24,
+        tooltip: _open ? "Close menu" : "Open menu",
+      ),
     );
   }
 }
 
 class _MobileMenuDialog extends StatelessWidget {
   final VoidCallback onClose;
+  final AnimationController controller;
 
-  const _MobileMenuDialog({required this.onClose});
+  const _MobileMenuDialog({
+    required this.onClose,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Use MediaQuery to make dialog width responsive
     final width = MediaQuery.of(context).size.width;
     final dialogWidth = width < 400 ? width * 0.98 : 340.0;
-    return Dialog(
-      backgroundColor: Colors.white,
-      insetPadding: EdgeInsets.symmetric(
-        horizontal: width < 400 ? 4 : 24,
-        vertical: 60,
-      ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-      child: SizedBox(
-        width: dialogWidth,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _MobileMenuItem(
-                label: 'Home',
-                icon: Icons.home_outlined,
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                  );
-                  onClose();
-                },
+
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          // Frosted glass blur background
+          GestureDetector(
+            onTap: onClose,
+            child: AnimatedBuilder(
+              animation: controller,
+              builder: (context, child) => Opacity(
+                opacity: controller.value * 0.9,
+                child: child,
               ),
-              _MobileMenuItem(
-                label: 'How It Works',
-                icon: Icons.info_outline,
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HowItWorksScreen()),
-                  );
-                  onClose();
-                },
-              ),
-              _MobileMenuItem(
-                label: 'Features',
-                icon: Icons.star_outline,
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const FeaturesScreen()),
-                  );
-                  onClose();
-                },
-              ),
-              _MobileMenuItem(
-                label: 'Pricing',
-                icon: Icons.attach_money_outlined,
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PricingPage()),
-                  );
-                  onClose();
-                },
-              ),
-              _MobileMenuItem(
-                label: 'Contact',
-                icon: Icons.mail_outline,
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ContactScreen()),
-                  );
-                  onClose();
-                },
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF2E5BFF),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    elevation: 0,
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      fontFamily: 'Montserrat',
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const GetStartedScreen()),
-                    );
-                    onClose();
-                  },
-                  icon: Icon(Icons.rocket_launch_outlined, size: 20),
-                  label: const Text('Get Started'),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+                child: Container(
+                  color: Colors.white.withOpacity(0.12),
+                  width: double.infinity,
+                  height: double.infinity,
                 ),
               ),
-            ],
+            ),
+          ),
+          // Slide-in menu
+          AnimatedBuilder(
+            animation: controller,
+            builder: (context, child) {
+              final slide = Tween<Offset>(
+                begin: const Offset(1.0, 0),
+                end: Offset.zero,
+              ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOutExpo));
+              final fade = CurvedAnimation(parent: controller, curve: Curves.easeIn);
+              return SlideTransition(
+                position: slide,
+                child: FadeTransition(
+                  opacity: fade,
+                  child: child,
+                ),
+              );
+            },
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                width: dialogWidth,
+                margin: EdgeInsets.symmetric(
+                  horizontal: width < 400 ? 4 : 24,
+                  vertical: 60,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.98),
+                  borderRadius: BorderRadius.circular(22),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.10),
+                      blurRadius: 32,
+                      offset: Offset(-8, 8),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _PremiumMobileMenuItem(
+                        label: 'Home',
+                        icon: Icons.home_outlined,
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF2E5BFF), Color(0xFF00C6FB)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const HomePage()),
+                          );
+                          onClose();
+                        },
+                      ),
+                      _PremiumMobileMenuItem(
+                        label: 'How It Works',
+                        icon: Icons.info_outline,
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF00C6FB), Color(0xFF2E5BFF)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const HowItWorksScreen()),
+                          );
+                          onClose();
+                        },
+                      ),
+                      _PremiumMobileMenuItem(
+                        label: 'Features',
+                        icon: Icons.star_outline,
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF43E97B), Color(0xFF38F9D7)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const FeaturesScreen()),
+                          );
+                          onClose();
+                        },
+                      ),
+                      _PremiumMobileMenuItem(
+                        label: 'Pricing',
+                        icon: Icons.attach_money_outlined,
+                        gradient: LinearGradient(
+                          colors: [Color(0xFFFFA17F), Color(0xFFFFE53B)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const PricingPage()),
+                          );
+                          onClose();
+                        },
+                      ),
+                      _PremiumMobileMenuItem(
+                        label: 'Contact',
+                        icon: Icons.mail_outline,
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ContactScreen()),
+                          );
+                          onClose();
+                        },
+                      ),
+                      const SizedBox(height: 28),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF2E5BFF),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(26),
+                            ),
+                            elevation: 0,
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              fontFamily: 'Montserrat',
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => const GetStartedScreen()),
+                            );
+                            onClose();
+                          },
+                          icon: const Icon(Icons.rocket_launch_outlined, size: 22),
+                          label: const Text('Get Started'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PremiumMobileMenuItem extends StatefulWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
+  final Gradient gradient;
+
+  const _PremiumMobileMenuItem({
+    required this.label,
+    required this.icon,
+    required this.onTap,
+    required this.gradient,
+  });
+
+  @override
+  State<_PremiumMobileMenuItem> createState() => _PremiumMobileMenuItemState();
+}
+
+class _PremiumMobileMenuItemState extends State<_PremiumMobileMenuItem> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 160),
+      curve: Curves.easeInOut,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _pressed = true),
+        onTapUp: (_) => setState(() => _pressed = false),
+        onTapCancel: () => setState(() => _pressed = false),
+        onTap: widget.onTap,
+        child: AnimatedScale(
+          scale: _pressed ? 0.97 : 1.0,
+          duration: const Duration(milliseconds: 120),
+          curve: Curves.easeOut,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: _pressed
+                  ? widget.gradient
+                  : LinearGradient(
+                      colors: [
+                        Colors.white,
+                        Colors.white.withOpacity(0.98),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: [
+                BoxShadow(
+                  color: widget.gradient.colors.first.withOpacity(0.13),
+                  blurRadius: 18,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+              border: Border.all(
+                color: widget.gradient.colors.first.withOpacity(0.18),
+                width: 1.2,
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: widget.gradient,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: widget.gradient.colors.first.withOpacity(0.18),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(7),
+                  child: Icon(
+                    widget.icon,
+                    color: Colors.white,
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    widget.label,
+                    style: TextStyle(
+                      color: _pressed
+                          ? Colors.white
+                          : const Color(0xFF263159),
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Montserrat',
+                      letterSpacing: 0.5,
+                      shadows: _pressed
+                          ? [
+                              Shadow(
+                                color: Colors.black.withOpacity(0.08),
+                                blurRadius: 2,
+                                offset: const Offset(0, 1),
+                              ),
+                            ]
+                          : [],
+                    ),
+                  ),
+                ),
+                AnimatedOpacity(
+                  opacity: _pressed ? 1 : 0,
+                  duration: const Duration(milliseconds: 120),
+                  child: Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
-class _MobileMenuItem extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final VoidCallback onTap;
-
-  const _MobileMenuItem({
-    required this.label,
-    required this.icon,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon, color: Color(0xFF2E5BFF), size: 22),
-      title: Text(
-        label,
-        style: TextStyle(
-          color: Color(0xFF263159),
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          fontFamily: 'Montserrat',
-        ),
-      ),
-      onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      hoverColor: Colors.blue.withOpacity(0.08),
-    );
-  }
-}
-
-
