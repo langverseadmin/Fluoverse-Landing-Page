@@ -28,7 +28,37 @@ class _PremiumSpectacularButtonState extends State<PremiumSpectacularButton> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 700;
+    final size = MediaQuery.of(context).size;
+    final isMobile = size.width < 700;
+
+    // Use percentages of screen width/height, but keep the same look
+    double horizontalPad = isMobile ? size.width * 0.045 : size.width * 0.027;
+    double verticalPad = isMobile ? size.height * 0.012 : size.height * 0.022;
+    double borderRadius = isMobile ? size.width * 0.04 : size.width * 0.016;
+    double iconSize = isMobile ? size.width * 0.057 : size.width * 0.021;
+    double fontSize = isMobile ? size.width * 0.04 : size.width * 0.016;
+    double spacing = isMobile ? size.width * 0.023 : size.width * 0.01;
+
+    // Clamp values to original hardcoded values to avoid visual changes
+    horizontalPad = isMobile
+        ? horizontalPad.clamp(18.0, 18.0)
+        : horizontalPad.clamp(32.0, 32.0);
+    verticalPad = isMobile
+        ? verticalPad.clamp(10.0, 10.0)
+        : verticalPad.clamp(18.0, 18.0);
+    borderRadius = isMobile
+        ? borderRadius.clamp(14.0, 14.0)
+        : borderRadius.clamp(22.0, 22.0);
+    iconSize = isMobile
+        ? iconSize.clamp(20.0, 20.0)
+        : iconSize.clamp(28.0, 28.0);
+    fontSize = isMobile
+        ? fontSize.clamp(14.0, 14.0)
+        : fontSize.clamp(19.0, 19.0);
+    spacing = isMobile
+        ? spacing.clamp(8.0, 8.0)
+        : spacing.clamp(14.0, 14.0);
+
     final goldGradient = const LinearGradient(
       colors: [
         Color(0xFFFFD700),
@@ -58,7 +88,7 @@ class _PremiumSpectacularButtonState extends State<PremiumSpectacularButton> {
           duration: const Duration(milliseconds: 180),
           decoration: BoxDecoration(
             gradient: widget.gradient ?? goldGradient,
-            borderRadius: BorderRadius.circular(isMobile ? 14 : 22),
+            borderRadius: BorderRadius.circular(borderRadius),
             boxShadow: [
               BoxShadow(
                 color: shadowColor,
@@ -80,12 +110,12 @@ class _PremiumSpectacularButtonState extends State<PremiumSpectacularButton> {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              borderRadius: BorderRadius.circular(isMobile ? 14 : 22),
+              borderRadius: BorderRadius.circular(borderRadius),
               onTap: widget.onPressed,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 18 : 32,
-                  vertical: isMobile ? 10 : 18,
+                  horizontal: horizontalPad,
+                  vertical: verticalPad,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -98,7 +128,7 @@ class _PremiumSpectacularButtonState extends State<PremiumSpectacularButton> {
                       child: Icon(
                         widget.icon,
                         color: Colors.white,
-                        size: isMobile ? 20 : 28,
+                        size: iconSize,
                         shadows: [
                           Shadow(
                             color: Colors.amberAccent.withOpacity(0.7),
@@ -107,7 +137,7 @@ class _PremiumSpectacularButtonState extends State<PremiumSpectacularButton> {
                         ],
                       ),
                     ),
-                    SizedBox(width: isMobile ? 8 : 14),
+                    SizedBox(width: spacing),
                     ShaderMask(
                       shaderCallback: (Rect bounds) {
                         return goldGradient.createShader(bounds);
@@ -117,7 +147,7 @@ class _PremiumSpectacularButtonState extends State<PremiumSpectacularButton> {
                         widget.label,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: isMobile ? 14 : 19,
+                          fontSize: fontSize,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Montserrat',
                           letterSpacing: 0.8,
@@ -146,7 +176,8 @@ class FeaturesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 700;
+    final size = MediaQuery.of(context).size;
+    final isMobile = size.width < 700;
     final features = [
       (
         icon: Icons.auto_fix_high_rounded,
@@ -170,7 +201,7 @@ class FeaturesSection extends StatelessWidget {
         tags: [
           _FeatureTag('Vocabulary', Color.fromARGB(255, 255, 224, 68)),
           _FeatureTag('Reading', Color.fromARGB(255, 255, 223, 12)),
-          _FeatureTag('Listening', Color.fromARGB(255, 251, 171, 0)),
+          _FeatureTag('Listening', Color(0xFFFBAB00)),
           _FeatureTag('Speaking', Color.fromARGB(255, 251, 71, 0)),
         ],
         alignLeft: false,
@@ -218,16 +249,16 @@ class FeaturesSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: isMobile ? 28 : 48),
+              SizedBox(height: isMobile ? size.height * 0.04 : size.height * 0.06),
               const _SectionHeader(),
-              SizedBox(height: isMobile ? 24 : 40),
+              SizedBox(height: isMobile ? size.height * 0.035 : size.height * 0.05),
               ...List.generate(features.length, (i) {
                 final f = features[i];
                 return Padding(
                   padding: EdgeInsets.only(
-                    top: i == 0 ? 0 : (isMobile ? 18 : 32),
-                    left: isMobile ? 10 : 0,
-                    right: isMobile ? 10 : 0,
+                    top: i == 0 ? 0 : (isMobile ? size.height * 0.026 : size.height * 0.04),
+                    left: isMobile ? size.width * 0.014 : 0,
+                    right: isMobile ? size.width * 0.014 : 0,
                   ),
                   child: _FeaturePanel(
                     icon: f.icon,
@@ -239,9 +270,9 @@ class FeaturesSection extends StatelessWidget {
                   ),
                 );
               }),
-              SizedBox(height: isMobile ? 32 : 48),
+              SizedBox(height: isMobile ? size.height * 0.045 : size.height * 0.06),
               const UpcomingSpectacularFeature(),
-              SizedBox(height: isMobile ? 32 : 48),
+              SizedBox(height: isMobile ? size.height * 0.045 : size.height * 0.06),
             ],
           ),
         ),
