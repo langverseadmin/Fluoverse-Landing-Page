@@ -207,7 +207,7 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
             ? screenWidth * 0.85 / 3
             : screenWidth * 0.72 / 3;
     double cardHeight = screenHeight < 900
-        ? screenHeight * 0.7
+        ? screenHeight * 1
         : screenHeight * 0.7;
 
     double middleCardWidth = cardWidth * 1.13;
