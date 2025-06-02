@@ -68,24 +68,25 @@ class _BrandLogo extends StatelessWidget {
           height: logoSize,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF2E5BFF), Color(0xFF00C6FB)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+              colors: [Color.fromARGB(255, 255, 255, 255),  Color.fromARGB(100, 136, 0, 255)],
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
             ),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.blue.withOpacity(0.12),
-                blurRadius: 16,
-                offset: Offset(0, 4),
+                color: Colors.deepPurple.withOpacity(0.30),
+                blurRadius: 4,
+                offset: Offset(-2, 4),
               ),
             ],
           ),
           child: Center(
-            child: Icon(
-              Icons.blur_on,
-              color: Colors.white,
-              size: logoSize * 0.65,
+            child: Image.asset(
+              'web/assets/android-chrome-192x192.png',
+              width: logoSize * 0.65,
+              height: logoSize * 0.65,
+              fit: BoxFit.contain,
             ),
           ),
         ),
@@ -93,7 +94,12 @@ class _BrandLogo extends StatelessWidget {
         Text(
           'Fluoverse',
           style: TextStyle(
-            color: Color(0xFF1A237E),
+            foreground: Paint()
+              ..shader = LinearGradient(
+              colors: [Colors.purple, Colors.blue],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              ).createShader(Rect.fromLTWH(0, 0, 200, 40)),
             fontWeight: FontWeight.w900,
             fontSize: fontSize,
             letterSpacing: 1.5,
