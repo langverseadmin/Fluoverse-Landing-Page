@@ -2491,24 +2491,35 @@ class VisionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 600;
-    final double verticalPadding = isMobile ? 60 : 140;
-    final double planetHeight = isMobile ? 110 : 180;
-    final double titleFontSize = isMobile ? 28 : 54;
+    final mq = MediaQuery.of(context);
+    final isMobile = mq.size.width < 600;
+    final width = mq.size.width;
+    final height = mq.size.height;
+
+    // Helper for percent with min/max clamp
+    double percent(double v, {double min = 0, double? max}) {
+      final val = v;
+      if (max != null) return val.clamp(min, max);
+      return val < min ? min : val;
+    }
+
+    final double verticalPadding = percent(height * 0.09, min: 60, max: isMobile ? 80 : 140);
+    final double planetHeight = percent(height * 0.13, min: 80, max: isMobile ? 110 : 180);
+    final double titleFontSize = percent(width * 0.045, min: 28, max: isMobile ? 32 : 54);
     final double titleSpacing = isMobile ? 1.2 : 2.8;
-    final double dividerHeight = isMobile ? 2.5 : 4;
-    final double dividerWidth = isMobile ? 60 : 120;
-    final double cardPaddingV = isMobile ? 28 : 60;
-    final double cardPaddingH = isMobile ? 14 : 48;
-    final double cardFontSize = isMobile ? 18 : 38;
-    final double cardRadius = isMobile ? 18 : 40;
-    final double chipSpacing = isMobile ? 18 : 54;
-    final double chipRunSpacing = isMobile ? 14 : 38;
-    final double chipWidth = isMobile ? 120 : 210;
-    final double chipHeight = isMobile ? 48 : 80;
-    final double chipIconSize = isMobile ? 22 : 34;
-    final double chipFontSize = isMobile ? 12.5 : 18;
-    final double spaceCodeHeight = isMobile ? 32 : 60;
+    final double dividerHeight = percent(height * 0.003, min: 2.5, max: isMobile ? 3 : 4);
+    final double dividerWidth = percent(width * 0.13, min: 60, max: isMobile ? 80 : 120);
+    final double cardPaddingV = percent(height * 0.04, min: 28, max: isMobile ? 36 : 60);
+    final double cardPaddingH = percent(width * 0.025, min: 14, max: isMobile ? 22 : 48);
+    final double cardFontSize = percent(width * 0.028, min: 18, max: isMobile ? 22 : 38);
+    final double cardRadius = percent(width * 0.03, min: 18, max: isMobile ? 22 : 40);
+    final double chipSpacing = isMobile ? 8 : percent(width * 0.04, min: 18, max: 54);
+    final double chipRunSpacing = isMobile ? 8 : percent(height * 0.018, min: 14, max: 38);
+    final double chipWidth = isMobile ? 108 : percent(width * 0.18, min: 90, max: 210);
+    final double chipHeight = isMobile ? 68 : percent(height * 0.06, min: 32, max: 80);
+    final double chipIconSize = isMobile ? 18 : percent(width * 0.03, min: 16, max: 34);
+    final double chipFontSize = isMobile ? 11 : percent(width * 0.015, min: 10, max: 18);
+    final double spaceCodeHeight = percent(height * 0.04, min: 24, max: isMobile ? 32 : 60);
 
     return Container(
       width: double.infinity,
@@ -2554,9 +2565,9 @@ class VisionSection extends StatelessWidget {
                     height: planetHeight,
                     child: Center(
                       child: _AnimatedGlassPlanet(
-                        size: isMobile ? 80 : 160,
-                        iconSize: isMobile ? 36 : 70,
-                        ringSize: isMobile ? 100 : 200,
+                        size: isMobile ? percent(width * 0.13, min: 60, max: 80) : percent(width * 0.13, min: 120, max: 160),
+                        iconSize: isMobile ? percent(width * 0.06, min: 24, max: 36) : percent(width * 0.06, min: 40, max: 70),
+                        ringSize: isMobile ? percent(width * 0.16, min: 70, max: 100) : percent(width * 0.16, min: 120, max: 200),
                       ),
                     ),
                   ),
@@ -2702,8 +2713,8 @@ class VisionSection extends StatelessWidget {
                   SizedBox(
                     height: spaceCodeHeight,
                     child: _SpaceCodeLine(
-                      fontSize: isMobile ? 11.5 : 18,
-                      padding: isMobile ? 6 : 14,
+                      fontSize: isMobile ? percent(width * 0.025, min: 9, max: 11.5) : percent(width * 0.014, min: 14, max: 18),
+                      padding: isMobile ? percent(width * 0.012, min: 3, max: 6) : percent(width * 0.01, min: 8, max: 14),
                     ),
                   ),
                 ],
@@ -3013,35 +3024,52 @@ class _SpaceCodeLineState extends State<_SpaceCodeLine>
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+    final lines = isMobile ? 2 : 1;
+    // Show only half the words on mobile
+    final visibleWords = isMobile ? (_words.length / 3).ceil() : _words.length;
+    final wordsToShow = _words.take(visibleWords).toList();
+    final wordsPerLine = (wordsToShow.length / lines).ceil();
+
     return AnimatedBuilder(
       animation: _controller,
       builder: (_, __) {
         final t = _controller.value;
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          physics: const NeverScrollableScrollPhysics(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(_words.length, (i) {
-              final opacity = 0.3 + 0.7 * ((t + i / _words.length) % 1.0);
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: widget.padding),
-                child: Opacity(
-                  opacity: opacity,
-                  child: Text(
-                    _words[i],
-                    style: TextStyle(
-                      color: i % 2 == 0 ? kAccentBlue : kPremiumPurple,
-                      fontSize: widget.fontSize,
-                      fontFamily: 'Fira Mono',
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.7,
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(lines, (line) {
+            final start = line * wordsPerLine;
+            final end = ((line + 1) * wordsPerLine).clamp(0, wordsToShow.length);
+            final lineWords = wordsToShow.sublist(start, end);
+
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: const NeverScrollableScrollPhysics(),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(lineWords.length, (i) {
+                  final globalIndex = start + i;
+                  final opacity = 0.3 + 0.7 * ((t + globalIndex / wordsToShow.length) % 1.0);
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: widget.padding),
+                    child: Opacity(
+                      opacity: opacity,
+                      child: Text(
+                        lineWords[i],
+                        style: TextStyle(
+                          color: globalIndex % 2 == 0 ? kAccentBlue : kPremiumPurple,
+                          fontSize: widget.fontSize,
+                          fontFamily: 'Fira Mono',
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.7,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              );
-            }),
-          ),
+                  );
+                }),
+              ),
+            );
+          }),
         );
       },
     );
