@@ -629,6 +629,27 @@ class PricingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final isMobile = width < 600;
+
+    // Responsive sizes
+    double iconSize = isMobile ? 40 : (isHovered ? 72 : 60);
+    double iconPadding = isMobile ? 18 : (isHovered ? 36 : 28);
+    double titleFont = isMobile ? 20 : 32;
+    double priceFont = isMobile ? 28 : 48;
+    double priceSubFont = isMobile ? 13 : 22;
+    double subPriceFont = isMobile ? 13 : 18;
+    double descFont = isMobile ? 13 : 20;
+    double featureSpacing = isMobile ? 6 : 12;
+    double buttonFont = isMobile ? 15 : 20;
+    double buttonPaddingV = isMobile ? 12 : 22;
+    double cardPaddingV = isMobile ? 18 : 36;
+    double cardPaddingH = isMobile ? 12 : 32;
+    double badgeMarginB = isMobile ? 8 : 18;
+    double badgeFont = isMobile ? 12 : 18;
+    double badgeIcon = isMobile ? 14 : 22;
+    double cardRadius = isMobile ? 16 : 28;
+
     // 3D button style
     ButtonStyle premiumButtonStyle({bool filled = true}) {
       return ElevatedButton.styleFrom(
@@ -640,7 +661,7 @@ class PricingCard extends StatelessWidget {
         foregroundColor: isPopular
             ? Colors.white
             : (filled ? startColor : Colors.white),
-        padding: const EdgeInsets.symmetric(vertical: 22),
+        padding: EdgeInsets.symmetric(vertical: buttonPaddingV),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -680,8 +701,8 @@ class PricingCard extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeOutCubic,
-      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-      padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 32),
+      margin: EdgeInsets.symmetric(vertical: isMobile ? 6 : 12, horizontal: isMobile ? 4 : 8),
+      padding: EdgeInsets.symmetric(vertical: cardPaddingV, horizontal: cardPaddingH),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -695,25 +716,25 @@ class PricingCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(cardRadius),
         boxShadow: isHovered
             ? [
                 BoxShadow(
                   color: endColor.withOpacity(0.18),
-                  blurRadius: 56,
-                  offset: const Offset(0, 24),
+                  blurRadius: isMobile ? 24 : 56,
+                  offset: Offset(0, isMobile ? 12 : 24),
                 ),
                 BoxShadow(
                   color: Colors.black.withOpacity(0.13),
-                  blurRadius: 24,
-                  offset: const Offset(0, 12),
+                  blurRadius: isMobile ? 10 : 24,
+                  offset: Offset(0, isMobile ? 6 : 12),
                 ),
               ]
             : [
                 BoxShadow(
                   color: startColor.withOpacity(0.13),
-                  blurRadius: 32,
-                  offset: const Offset(0, 12),
+                  blurRadius: isMobile ? 14 : 32,
+                  offset: Offset(0, isMobile ? 6 : 12),
                 ),
               ],
         border: isPopular
@@ -728,7 +749,14 @@ class PricingCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (isPopular)
-            const _PopularBadge(),
+            Padding(
+              padding: EdgeInsets.only(bottom: badgeMarginB),
+              child: _PopularBadgeSmall(
+                fontSize: badgeFont,
+                iconSize: badgeIcon,
+                isMobile: isMobile,
+              ),
+            ),
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeOutCubic,
@@ -744,26 +772,26 @@ class PricingCard extends StatelessWidget {
                   ? [
                       BoxShadow(
                         color: endColor.withOpacity(0.22),
-                        blurRadius: 32,
-                        offset: const Offset(0, 8),
+                        blurRadius: isMobile ? 16 : 32,
+                        offset: Offset(0, isMobile ? 4 : 8),
                       ),
                     ]
                   : [],
             ),
-            padding: EdgeInsets.all(isHovered ? 36 : 28),
-            child: Icon(icon, size: isHovered ? 72 : 60, color: Colors.white),
+            padding: EdgeInsets.all(iconPadding),
+            child: Icon(icon, size: iconSize, color: Colors.white),
           ),
-          const SizedBox(height: 28),
+          SizedBox(height: isMobile ? 14 : 28),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 32,
+            style: TextStyle(
+              fontSize: titleFont,
               fontWeight: FontWeight.bold,
               color: Colors.white,
               letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: isMobile ? 7 : 14),
           priceWidget ??
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -771,18 +799,18 @@ class PricingCard extends StatelessWidget {
                 children: [
                   Text(
                     price,
-                    style: const TextStyle(
-                      fontSize: 48,
+                    style: TextStyle(
+                      fontSize: priceFont,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       letterSpacing: -1,
                     ),
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(width: isMobile ? 3 : 6),
                   Text(
                     title == 'Pro Annual' ? '/year' : '/month',
-                    style: const TextStyle(
-                      fontSize: 22,
+                    style: TextStyle(
+                      fontSize: priceSubFont,
                       color: Colors.white70,
                       fontWeight: FontWeight.w500,
                     ),
@@ -791,86 +819,156 @@ class PricingCard extends StatelessWidget {
               ),
           if (subPrice != null && subPriceHighlight != null)
             Padding(
-              padding: const EdgeInsets.only(top: 4, bottom: 4),
+              padding: EdgeInsets.only(top: isMobile ? 2 : 4, bottom: isMobile ? 2 : 4),
               child: Text(
                 '$subPrice  ($subPriceHighlight)',
-                style: const TextStyle(
-                  color: Color(0xFF00FFB2),
+                style: TextStyle(
+                  color: const Color(0xFF00FFB2),
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: subPriceFont,
                 ),
               ),
             ),
-          const SizedBox(height: 14),
+          SizedBox(height: isMobile ? 7 : 14),
           Text(
             description,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 20,
+            style: TextStyle(
+              fontSize: descFont,
               color: Colors.white70,
             ),
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: isMobile ? 16 : 32),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: features
                   .map((f) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: EdgeInsets.symmetric(vertical: featureSpacing),
                         child: FeatureItemBig(f),
                       ))
                   .toList(),
             ),
           ),
-          const SizedBox(height: 36),
+          SizedBox(height: isMobile ? 18 : 36),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               style: premiumButtonStyle(filled: true),
               onPressed: () {},
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // 3D shadow effect
-                  if (isHovered)
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        height: 12,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: isPopular
-                                  ? Colors.pinkAccent.withOpacity(0.22)
-                                  : startColor.withOpacity(0.18),
-                              blurRadius: 24,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                        ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: Text(
+                  buttonText,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: buttonFont,
+                    color: isPopular ? Colors.white : startColor,
+                    letterSpacing: 0.2,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.10),
+                        blurRadius: 2,
+                        offset: const Offset(0, 1),
                       ),
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    child: Text(
-                      buttonText,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: isPopular ? Colors.white : startColor,
-                        letterSpacing: 0.2,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black.withOpacity(0.10),
-                            blurRadius: 2,
-                            offset: const Offset(0, 1),
-                          ),
-                        ],
-                      ),
-                    ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// A smaller version of the badge for mobile
+class _PopularBadgeSmall extends StatelessWidget {
+  final double fontSize;
+  final double iconSize;
+  final bool isMobile;
+
+  const _PopularBadgeSmall({
+    this.fontSize = 18,
+    this.iconSize = 22,
+    this.isMobile = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 14 : 24, vertical: isMobile ? 5 : 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(isMobile ? 10 : 18),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFFFD700).withOpacity(0.32),
+            blurRadius: isMobile ? 8 : 18,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        gradient: const SweepGradient(
+          colors: [
+            Color(0xFFFFF9D2),
+            Color(0xFFFFE066),
+            Color(0xFFFFD700),
+            Color(0xFFFFF6C3),
+            Color(0xFFFFC700),
+            Color(0xFFFFE066),
+            Color(0xFFFFF9D2),
+          ],
+          stops: [0.0, 0.18, 0.32, 0.5, 0.68, 0.85, 1.0],
+          startAngle: 0,
+          endAngle: 6.28319,
+        ),
+        border: Border.all(
+          color: const Color(0xFFFFD700).withOpacity(0.85),
+          width: 2,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ShaderMask(
+            shaderCallback: (Rect bounds) => const LinearGradient(
+              colors: [
+                Color(0xFFB16CEA),
+                Color(0xFFFF5E69),
+                Color(0xFFB16CEA),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ).createShader(bounds),
+            child: Icon(
+              Icons.star,
+              color: Colors.white,
+              size: iconSize,
+            ),
+          ),
+          SizedBox(width: isMobile ? 5 : 10),
+          ShaderMask(
+            shaderCallback: (Rect bounds) => const LinearGradient(
+              colors: [
+                Color(0xFFB16CEA),
+                Color(0xFFFF5E69),
+                Color(0xFFB16CEA),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ).createShader(bounds),
+            child: Text(
+              'MOST POPULAR',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5,
+                fontSize: fontSize,
+                shadows: [
+                  Shadow(
+                    color: Colors.black26,
+                    blurRadius: isMobile ? 3 : 8,
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
