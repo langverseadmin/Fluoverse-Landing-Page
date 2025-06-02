@@ -18,6 +18,7 @@ class BackgroundEffects extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Stack(
       children: [
         // Gradient background
@@ -32,11 +33,11 @@ class BackgroundEffects extends StatelessWidget {
         ),
         // Blurred purple circle (top left)
         Positioned(
-          top: -100,
-          left: -80,
+          top: -size.height * 0.13,
+          left: -size.width * 0.09,
           child: Container(
-            width: 300,
-            height: 300,
+            width: size.width * 0.38,
+            height: size.width * 0.38,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: const Color(0xFFB16CEA).withOpacity(0.25),
@@ -49,11 +50,11 @@ class BackgroundEffects extends StatelessWidget {
         ),
         // Blurred blue circle (top right)
         Positioned(
-          top: -60,
-          right: -60,
+          top: -size.height * 0.08,
+          right: -size.width * 0.07,
           child: Container(
-            width: 220,
-            height: 220,
+            width: size.width * 0.28,
+            height: size.width * 0.28,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: const Color(0xFF009E8F).withOpacity(0.18),
@@ -74,11 +75,11 @@ class BackgroundEffects extends StatelessWidget {
             [0.82, 0.43], [0.7, 0.5],
           ];
           return Positioned(
-            left: positions[i][0] * MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width,
-            top: positions[i][1] * MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.height,
+            left: positions[i][0] * size.width,
+            top: positions[i][1] * size.height,
             child: Container(
-              width: 3,
-              height: 3,
+              width: size.width * 0.008,
+              height: size.width * 0.008,
               decoration: const BoxDecoration(
                 color: Colors.white24,
                 shape: BoxShape.circle,
@@ -97,14 +98,16 @@ class PricingTitleSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    double fontSize = width < 600 ? 36 : (width < 900 ? 48 : 68);
     return Column(
       children: [
         // Title
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
-            style: const TextStyle(
-              fontSize: 68,
+            style: TextStyle(
+              fontSize: fontSize,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.2,
               height: 1.1,
@@ -138,12 +141,12 @@ class PricingTitleSection extends StatelessWidget {
         ),
         const SizedBox(height: 18),
         // Subtitle
-        const Text(
+        Text(
           'Unlock fluency at the speed of thought. Every plan crafted for Spanish mastery.',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white70,
-            fontSize: 18,
+            fontSize: width < 600 ? 15 : 18,
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -153,8 +156,6 @@ class PricingTitleSection extends StatelessWidget {
   }
 }
 
-
-
 // Feature line with check icon
 class FeatureItem extends StatelessWidget {
   final String text;
@@ -163,14 +164,17 @@ class FeatureItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    double iconSize = width < 600 ? 16 : 20;
+    double fontSize = width < 600 ? 13 : 16;
     return Row(
       children: [
-        const Icon(Icons.check_circle, color: Color(0xFF00FFB2), size: 20),
+        Icon(Icons.check_circle, color: const Color(0xFF00FFB2), size: iconSize),
         const SizedBox(width: 10),
         Flexible(
           child: Text(
             text,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
+            style: TextStyle(color: Colors.white, fontSize: fontSize),
           ),
         )
       ],
@@ -178,7 +182,7 @@ class FeatureItem extends StatelessWidget {
   }
 }
 
- // Pricing cards row with premium hover effects and no scroll
+// Pricing cards row with premium hover effects and no scroll
 class PricingCardsRow extends StatefulWidget {
   final bool isAnnual;
 
@@ -193,59 +197,43 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
 
   @override
   Widget build(BuildContext context) {
-    double cardWidth = 480;
-    double cardHeight = 860;
-    double middleCardWidth = 540;
-    double middleCardHeight = 920;
-
-    // Responsive: shrink cards on small screens
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 1200;
-    final double spacing = isMobile ? 16 : 32;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Responsive card sizing
+    double cardWidth = screenWidth < 600
+        ? screenWidth * 0.92
+        : screenWidth < 900
+            ? screenWidth * 0.85 / 3
+            : screenWidth * 0.72 / 3;
+    double cardHeight = screenHeight < 900
+        ? screenHeight * 0.55
+        : screenHeight * 0.7;
+
+    double middleCardWidth = cardWidth * 1.13;
+    double middleCardHeight = cardHeight * 1.07;
+
+    // Clamp min/max for usability
+    cardWidth = cardWidth.clamp(260.0, 480.0);
+    cardHeight = cardHeight.clamp(420.0, 860.0);
+    middleCardWidth = middleCardWidth.clamp(300.0, 540.0);
+    middleCardHeight = middleCardHeight.clamp(480.0, 920.0);
+
+    final isMobile = screenWidth < 900;
+    final double spacing = isMobile ? 10 : 32;
 
     return Center(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Left card
-              MouseRegion(
-                onEnter: (_) => setState(() => hoveredIndex = 0),
-                onExit: (_) => setState(() => hoveredIndex = null),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOutCubic,
-                  width: isMobile ? cardWidth * 0.85 : cardWidth,
-                  height: isMobile ? cardHeight * 0.85 : cardHeight,
-                  margin: EdgeInsets.symmetric(horizontal: spacing / 2),
-                  transform: hoveredIndex == 0
-                      ? (Matrix4.identity()
-                        ..translate(0.0, -18.0)
-                        ..scale(1.035))
-                      : Matrix4.identity(),
-                  decoration: BoxDecoration(
-                    boxShadow: hoveredIndex == 0
-                        ? [
-                            BoxShadow(
-                              color: const Color(0xFF00FFB2).withOpacity(0.13),
-                              blurRadius: 48,
-                              offset: const Offset(0, 24),
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.10),
-                              blurRadius: 16,
-                              offset: const Offset(0, 8),
-                            ),
-                          ]
-                        : [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.08),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                  ),
+          if (isMobile) {
+            // Stack vertically on mobile
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildCard(
+                  index: 0,
+                  width: cardWidth,
+                  height: cardHeight,
                   child: PricingCard(
                     title: 'Explorer',
                     price: '\$14.99',
@@ -283,45 +271,12 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                     isHovered: hoveredIndex == 0,
                   ),
                 ),
-              ),
-              // Middle (Pro) card, larger and elevated
-              MouseRegion(
-                onEnter: (_) => setState(() => hoveredIndex = 1),
-                onExit: (_) => setState(() => hoveredIndex = null),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOutCubic,
-                  width: isMobile ? middleCardWidth * 0.92 : middleCardWidth,
-                  height: isMobile ? middleCardHeight * 0.92 : middleCardHeight,
-                  margin: EdgeInsets.symmetric(horizontal: spacing / 2),
-                  transform: hoveredIndex == 1
-                      ? (Matrix4.identity()
-                        ..translate(0.0, -32.0)
-                        ..scale(1.045))
-                      : (Matrix4.identity()..translate(0.0, -24.0)),
-                  decoration: BoxDecoration(
-                    boxShadow: hoveredIndex == 1
-                        ? [
-                            BoxShadow(
-                              color: Colors.pinkAccent.withOpacity(0.30),
-                              blurRadius: 64,
-                              offset: const Offset(0, 32),
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.13),
-                              blurRadius: 24,
-                              offset: const Offset(0, 12),
-                            ),
-                          ]
-                        : [
-                            BoxShadow(
-                              color: Colors.pinkAccent.withOpacity(0.25),
-                              blurRadius: 48,
-                              offset: const Offset(0, 24),
-                            ),
-                          ],
-                    borderRadius: BorderRadius.circular(32),
-                  ),
+                SizedBox(height: spacing),
+                _buildCard(
+                  index: 1,
+                  width: middleCardWidth,
+                  height: middleCardHeight,
+                  isMiddle: true,
                   child: PricingCard(
                     title: 'Pro',
                     price: widget.isAnnual ? '\$20.00' : '\$24.99',
@@ -363,44 +318,11 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                     isHovered: hoveredIndex == 1,
                   ),
                 ),
-              ),
-              // Right card
-              MouseRegion(
-                onEnter: (_) => setState(() => hoveredIndex = 2),
-                onExit: (_) => setState(() => hoveredIndex = null),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOutCubic,
-                  width: isMobile ? cardWidth * 0.85 : cardWidth,
-                  height: isMobile ? cardHeight * 0.85 : cardHeight,
-                  margin: EdgeInsets.symmetric(horizontal: spacing / 2),
-                  transform: hoveredIndex == 2
-                      ? (Matrix4.identity()
-                        ..translate(0.0, -18.0)
-                        ..scale(1.035))
-                      : Matrix4.identity(),
-                  decoration: BoxDecoration(
-                    boxShadow: hoveredIndex == 2
-                        ? [
-                            BoxShadow(
-                              color: const Color(0xFF00FFB2).withOpacity(0.13),
-                              blurRadius: 48,
-                              offset: const Offset(0, 24),
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.10),
-                              blurRadius: 16,
-                              offset: const Offset(0, 8),
-                            ),
-                          ]
-                        : [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.08),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                  ),
+                SizedBox(height: spacing),
+                _buildCard(
+                  index: 2,
+                  width: cardWidth,
+                  height: cardHeight,
                   child: PricingCard(
                     title: 'Pro Annual',
                     price: '\$240',
@@ -441,10 +363,232 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                     isHovered: hoveredIndex == 2,
                   ),
                 ),
-              ),
-            ],
-          );
+              ],
+            );
+          } else {
+            // Row for desktop/tablet
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildCard(
+                  index: 0,
+                  width: cardWidth,
+                  height: cardHeight,
+                  child: PricingCard(
+                    title: 'Explorer',
+                    price: '\$14.99',
+                    description: 'Perfect for curious beginners',
+                    features: [
+                      '1 cycle per day',
+                      'Fluoverse AI coaching',
+                      'Personalized content',
+                    ],
+                    startColor: const Color(0xFF232946),
+                    endColor: const Color(0xFF232946),
+                    icon: LucideIcons.zap,
+                    buttonText: 'Start Explorer Journey',
+                    isPopular: false,
+                    priceWidget: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        PriceWidget(price: '\$14.99'),
+                        const SizedBox(width: 6),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            '/per month',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    isHovered: hoveredIndex == 0,
+                  ),
+                ),
+                SizedBox(width: spacing),
+                _buildCard(
+                  index: 1,
+                  width: middleCardWidth,
+                  height: middleCardHeight,
+                  isMiddle: true,
+                  child: PricingCard(
+                    title: 'Pro',
+                    price: widget.isAnnual ? '\$20.00' : '\$24.99',
+                    description: 'For serious Spanish learners',
+                    features: [
+                      '2 cycles per day',
+                      'Fluoverse AI coaching',
+                      'Priority support',
+                      'Personalized content',
+                    ],
+                    startColor: const Color(0xFFB16CEA),
+                    endColor: const Color(0xFFFF5E69),
+                    icon: LucideIcons.crown,
+                    buttonText: 'Become Pro Now',
+                    isPopular: true,
+                    priceWidget: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        PriceWidget(
+                          price: widget.isAnnual ? '\$20.00' : '\$24.99',
+                          isGold: true,
+                        ),
+                        const SizedBox(width: 6),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            widget.isAnnual ? '/per month' : '/per month',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    isHovered: hoveredIndex == 1,
+                  ),
+                ),
+                SizedBox(width: spacing),
+                _buildCard(
+                  index: 2,
+                  width: cardWidth,
+                  height: cardHeight,
+                  child: PricingCard(
+                    title: 'Pro Annual',
+                    price: '\$240',
+                    description: 'Best value for committed learners',
+                    features: [
+                      '2 cycles per day',
+                      'Fluoverse AI coaching',
+                      'Priority support',
+                      'Personalized content',
+                    ],
+                    startColor: const Color(0xFF009E8F),
+                    endColor: const Color(0xFF00FFB2),
+                    icon: LucideIcons.star,
+                    buttonText: 'Lock in Annual Savings',
+                    isPopular: false,
+                    subPrice: '\$299',
+                    subPriceHighlight: 'Save \$59',
+                    priceWidget: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        PriceWidget(price: '\$240'),
+                        const SizedBox(width: 6),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            '/per year',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    isHovered: hoveredIndex == 2,
+                  ),
+                ),
+              ],
+            );
+          }
         },
+      ),
+    );
+  }
+
+  Widget _buildCard({
+    required int index,
+    required double width,
+    required double height,
+    required Widget child,
+    bool isMiddle = false,
+  }) {
+    final hovered = hoveredIndex == index;
+    final transform = hovered
+        ? (Matrix4.identity()
+          ..translate(0.0, isMiddle ? -24.0 : -12.0)
+          ..scale(isMiddle ? 1.045 : 1.035))
+        : (isMiddle
+            ? (Matrix4.identity()..translate(0.0, -16.0))
+            : Matrix4.identity());
+
+    BoxDecoration? boxDecoration;
+    if (isMiddle) {
+      boxDecoration = BoxDecoration(
+        boxShadow: hovered
+            ? [
+                BoxShadow(
+                  color: Colors.pinkAccent.withOpacity(0.30),
+                  blurRadius: 64,
+                  offset: const Offset(0, 32),
+                ),
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.13),
+                  blurRadius: 24,
+                  offset: const Offset(0, 12),
+                ),
+              ]
+            : [
+                BoxShadow(
+                  color: Colors.pinkAccent.withOpacity(0.25),
+                  blurRadius: 48,
+                  offset: const Offset(0, 24),
+                ),
+              ],
+        borderRadius: BorderRadius.circular(32),
+      );
+    } else {
+      boxDecoration = BoxDecoration(
+        boxShadow: hovered
+            ? [
+                BoxShadow(
+                  color: const Color(0xFF00FFB2).withOpacity(0.13),
+                  blurRadius: 48,
+                  offset: const Offset(0, 24),
+                ),
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.10),
+                  blurRadius: 16,
+                  offset: const Offset(0, 8),
+                ),
+              ]
+            : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+      );
+    }
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => hoveredIndex = index),
+      onExit: (_) => setState(() => hoveredIndex = null),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+        width: width,
+        height: height,
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        transform: transform,
+        decoration: boxDecoration,
+        child: child,
       ),
     );
   }
@@ -865,14 +1009,27 @@ class FeatureItemBig extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    // Responsive icon and font size based on screen width
+    double iconSize = width < 600 ? width * 0.07 : width < 900 ? width * 0.045 : 28;
+    iconSize = iconSize.clamp(20.0, 32.0);
+    double fontSize = width < 600 ? width * 0.045 : width < 900 ? width * 0.032 : 20;
+    fontSize = fontSize.clamp(15.0, 22.0);
+    double spacing = width < 600 ? width * 0.04 : width < 900 ? width * 0.025 : 16;
+    spacing = spacing.clamp(8.0, 20.0);
+
     return Row(
       children: [
-        const Icon(Icons.check_circle, color: Color(0xFF00FFB2), size: 28),
-        const SizedBox(width: 16),
+        Icon(Icons.check_circle, color: const Color(0xFF00FFB2), size: iconSize),
+        SizedBox(width: spacing),
         Flexible(
           child: Text(
             text,
-            style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: fontSize,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         )
       ],
@@ -916,10 +1073,16 @@ class _FaqSectionState extends State<FaqSection> {
       ),
     ];
 
-    // Set a max width for the FAQ section to keep cards centered and not too wide
+    final width = MediaQuery.of(context).size.width;
+    // Responsive FAQ card sizing
+    double maxCardWidth = width < 600 ? width * 0.92 : width < 900 ? 500 : 500;
+    double cardHeight = width < 600 ? width * 0.7 : 300;
+    maxCardWidth = maxCardWidth.clamp(220.0, 500.0);
+    cardHeight = cardHeight.clamp(160.0, 320.0);
+
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 700),
+        constraints: BoxConstraints(maxWidth: width < 900 ? width * 0.98 : 700),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -945,18 +1108,18 @@ class _FaqSectionState extends State<FaqSection> {
             LayoutBuilder(
               builder: (context, constraints) {
                 final isWide = constraints.maxWidth > 500;
-                final double cardWidth = 500;
-                final double cardHeight = 300;
+                final crossAxisCount = width < 600 ? 1 : (isWide ? 2 : 1);
+                final spacing = width < 600 ? width * 0.04 : 20.0;
                 return Center(
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: faqs.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: isWide ? 2 : 1,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 20,
-                      childAspectRatio: cardWidth / cardHeight,
+                      crossAxisCount: crossAxisCount,
+                      mainAxisSpacing: spacing,
+                      crossAxisSpacing: spacing,
+                      childAspectRatio: maxCardWidth / cardHeight,
                     ),
                     itemBuilder: (context, i) {
                       final e = faqs[i];
@@ -967,9 +1130,9 @@ class _FaqSectionState extends State<FaqSection> {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 180),
                           curve: Curves.easeOutCubic,
-                          width: cardWidth,
+                          width: maxCardWidth,
                           height: cardHeight,
-                          padding: const EdgeInsets.all(16),
+                          padding: EdgeInsets.all(width < 600 ? width * 0.04 : 16),
                           decoration: BoxDecoration(
                             color: isHovered
                                 ? const Color(0xFF2D2956)
@@ -1002,12 +1165,12 @@ class _FaqSectionState extends State<FaqSection> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(e.$3, color: const Color(0xFFFF5E69), size: 28),
+                              Icon(e.$3, color: const Color(0xFFFF5E69), size: width < 600 ? width * 0.07 : 28),
                               const SizedBox(height: 8),
                               Text(
                                 e.$1,
-                                style: const TextStyle(
-                                  fontSize: 16,
+                                style: TextStyle(
+                                  fontSize: width < 600 ? width * 0.045 : 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -1016,8 +1179,8 @@ class _FaqSectionState extends State<FaqSection> {
                               Expanded(
                                 child: Text(
                                   e.$2,
-                                  style: const TextStyle(
-                                    fontSize: 14,
+                                  style: TextStyle(
+                                    fontSize: width < 600 ? width * 0.035 : 14,
                                     color: Colors.white70,
                                   ),
                                   maxLines: 3,
@@ -1046,14 +1209,30 @@ class FinalCtaSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    double maxWidth = width < 900 ? width * 0.98 : 700;
+    double paddingV = width < 600 ? width * 0.08 : 48;
+    double paddingH = width < 600 ? width * 0.04 : 36;
+    double iconSize = width < 600 ? width * 0.11 : 48;
+    iconSize = iconSize.clamp(32.0, 54.0);
+    double titleFont = width < 600 ? width * 0.07 : 32;
+    titleFont = titleFont.clamp(20.0, 36.0);
+    double descFont = width < 600 ? width * 0.045 : 17;
+    descFont = descFont.clamp(13.0, 18.0);
+    double buttonFont = width < 600 ? width * 0.045 : 18;
+    buttonFont = buttonFont.clamp(14.0, 20.0);
+
     return Center(
       child: Container(
-        constraints: const BoxConstraints(maxWidth: 700),
-        margin: const EdgeInsets.symmetric(vertical: 48, horizontal: 16),
-        padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 36),
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        margin: EdgeInsets.symmetric(
+            vertical: width < 600 ? width * 0.08 : 48,
+            horizontal: width < 600 ? width * 0.02 : 16),
+        padding: EdgeInsets.symmetric(
+            vertical: paddingV, horizontal: paddingH),
         decoration: BoxDecoration(
           color: const Color(0xFF232946),
-          borderRadius: BorderRadius.circular(36),
+          borderRadius: BorderRadius.circular(width < 600 ? 20 : 36),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.10),
@@ -1068,15 +1247,15 @@ class FinalCtaSection extends StatelessWidget {
           children: [
             Icon(
               LucideIcons.rocket,
-              size: 48,
+              size: iconSize,
               color: Colors.white.withOpacity(0.93),
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: width < 600 ? width * 0.04 : 18),
             Text(
               'Ready to Master Spanish?',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 32,
+                fontSize: titleFont,
                 fontWeight: FontWeight.w800,
                 color: Colors.white.withOpacity(0.97),
                 letterSpacing: 1.1,
@@ -1089,24 +1268,24 @@ class FinalCtaSection extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 14),
-            const Text(
+            SizedBox(height: width < 600 ? width * 0.03 : 14),
+            Text(
               'Join thousands who chose fluency over memorization.\nStart your Spanish journey with the most advanced AI platform.',
               style: TextStyle(
                 color: Colors.white70,
-                fontSize: 17,
+                fontSize: descFont,
                 fontWeight: FontWeight.w400,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 28),
+            SizedBox(height: width < 600 ? width * 0.06 : 28),
             Wrap(
-              spacing: 16,
+              spacing: width < 600 ? width * 0.03 : 16,
               runSpacing: 10,
               alignment: WrapAlignment.center,
               children: [
                 SizedBox(
-                  height: 54,
+                  height: width < 600 ? width * 0.12 : 54,
                   child: ElevatedButton.icon(
                     icon: ShaderMask(
                       shaderCallback: (Rect bounds) => const LinearGradient(
@@ -1114,7 +1293,7 @@ class FinalCtaSection extends StatelessWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ).createShader(bounds),
-                      child: const Icon(LucideIcons.zap, color: Colors.white, size: 24),
+                      child: Icon(LucideIcons.zap, color: Colors.white, size: width < 600 ? width * 0.06 : 24),
                     ),
                     label: ShaderMask(
                       shaderCallback: (Rect bounds) => const LinearGradient(
@@ -1122,11 +1301,11 @@ class FinalCtaSection extends StatelessWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ).createShader(bounds),
-                      child: const Text(
+                      child: Text(
                         'Launch Your Journey',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: buttonFont,
                           letterSpacing: 0.3,
                           color: Colors.white,
                         ),
@@ -1135,9 +1314,11 @@ class FinalCtaSection extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 118, 27, 171),
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 16),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: width < 600 ? width * 0.08 : 36,
+                          vertical: width < 600 ? width * 0.03 : 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(width < 600 ? 12 : 16),
                       ),
                       elevation: 14,
                       shadowColor: Colors.pinkAccent.withOpacity(0.35),
@@ -1158,7 +1339,7 @@ class FinalCtaSection extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 54,
+                  height: width < 600 ? width * 0.12 : 54,
                   child: OutlinedButton.icon(
                     icon: ShaderMask(
                       shaderCallback: (Rect bounds) => const LinearGradient(
@@ -1166,7 +1347,7 @@ class FinalCtaSection extends StatelessWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ).createShader(bounds),
-                      child: const Icon(LucideIcons.mail, color: Colors.white, size: 22),
+                      child: Icon(LucideIcons.mail, color: Colors.white, size: width < 600 ? width * 0.055 : 22),
                     ),
                     label: ShaderMask(
                       shaderCallback: (Rect bounds) => const LinearGradient(
@@ -1174,11 +1355,11 @@ class FinalCtaSection extends StatelessWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ).createShader(bounds),
-                      child: const Text(
+                      child: Text(
                         'Join Waitlist',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: buttonFont,
                           letterSpacing: 0.3,
                           color: Colors.white,
                         ),
@@ -1186,10 +1367,12 @@ class FinalCtaSection extends StatelessWidget {
                     ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Color(0xFF00FFB2), width: 2.2),
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: width < 600 ? width * 0.07 : 32,
+                          vertical: width < 600 ? width * 0.03 : 16),
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(width < 600 ? 12 : 16),
                       ),
                       backgroundColor: const Color(0xFF00FFB2).withOpacity(0.10),
                       elevation: 0,
@@ -1205,18 +1388,18 @@ class FinalCtaSection extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: width < 600 ? width * 0.03 : 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(LucideIcons.shieldCheck, color: Color(0xFF00FFB2), size: 18),
-                const SizedBox(width: 8),
+                Icon(LucideIcons.shieldCheck, color: const Color(0xFF00FFB2), size: width < 600 ? width * 0.045 : 18),
+                SizedBox(width: width < 600 ? width * 0.02 : 8),
                 Text(
                   '7 - day free trial included',
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.80),
                     fontWeight: FontWeight.w500,
-                    fontSize: 14,
+                    fontSize: width < 600 ? width * 0.032 : 14,
                   ),
                 ),
               ],
@@ -1228,7 +1411,6 @@ class FinalCtaSection extends StatelessWidget {
   }
 }
 
-
 // Price widget for custom price display
 class PriceWidget extends StatelessWidget {
   final String price;
@@ -1238,31 +1420,34 @@ class PriceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    double fontSize = width < 600 ? width * 0.12 : 72;
+    fontSize = fontSize.clamp(36.0, 80.0);
+
     Shader goldGradient(Rect bounds) => const LinearGradient(
       colors: [
-      Color(0xFFFFF9D2), // soft highlight
-      Color(0xFFFFE066), // bright gold
-      Color(0xFFFFD700), // rich gold
-      Color(0xFFFFF6C3), // subtle highlight
-      Color(0xFFFFC700), // deeper gold
-      Color(0xFFFFE066), // bright gold
-      Color(0xFFFFF9D2), // soft highlight
+        Color(0xFFFFF9D2), // soft highlight
+        Color(0xFFFFE066), // bright gold
+        Color(0xFFFFD700), // rich gold
+        Color(0xFFFFF6C3), // subtle highlight
+        Color(0xFFFFC700), // deeper gold
+        Color(0xFFFFE066), // bright gold
+        Color(0xFFFFF9D2), // soft highlight
       ],
       stops: [0.0, 0.18, 0.32, 0.5, 0.68, 0.85, 1.0],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     ).createShader(bounds);
 
-
     Shader silverGradient(Rect bounds) => const LinearGradient(
       colors: [
-      Color(0xFFF5F6FA), // very light silver
-      Color(0xFFD7D7E0), // soft silver
-      Color(0xFFBFC6D1), // mid silver
-      Color(0xFFFFFFFF), // white highlight
-      Color(0xFFBFC6D1), // mid silver
-      Color(0xFFD7D7E0), // soft silver
-      Color(0xFFF5F6FA), // very light silver
+        Color(0xFFF5F6FA), // very light silver
+        Color(0xFFD7D7E0), // soft silver
+        Color(0xFFBFC6D1), // mid silver
+        Color(0xFFFFFFFF), // white highlight
+        Color(0xFFBFC6D1), // mid silver
+        Color(0xFFD7D7E0), // soft silver
+        Color(0xFFF5F6FA), // very light silver
       ],
       stops: [0.0, 0.15, 0.32, 0.5, 0.68, 0.85, 1.0],
       begin: Alignment.topLeft,
@@ -1274,12 +1459,12 @@ class PriceWidget extends StatelessWidget {
           isGold ? goldGradient(bounds) : silverGradient(bounds),
       child: Text(
         price,
-        style: const TextStyle(
-          fontSize: 72,
+        style: TextStyle(
+          fontSize: fontSize,
           fontWeight: FontWeight.w900,
           letterSpacing: -2,
           color: Colors.white, // Needed for ShaderMask
-          shadows: [
+          shadows: const [
             Shadow(
               color: Colors.black26,
               blurRadius: 8,
