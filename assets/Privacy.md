@@ -1,5 +1,8 @@
 # PRIVACY POLICY
-_Last updated May 12, 2025_
+
+**Last updated June 03, 2025**
+
+---
 
 This Privacy Notice for Fluoverse ("we," "us," or "our") describes how and why we might access, collect, store, use, and/or share ("**process**") your personal information when you use our services ("**Services**"), including when you:
 

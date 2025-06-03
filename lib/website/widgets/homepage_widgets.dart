@@ -10,6 +10,7 @@ import 'dart:math';
 import 'package:frontend/website/screens/join_waitlist.dart';
 import 'package:frontend/website/screens/pricing.dart';
 import 'package:frontend/website/screens/privacy_policy.dart';
+import 'package:frontend/website/screens/terms_policy.dart';
 
 const Color kAccentBlue = Color(0xFF6A82FB);
 const Color kPremiumPurple = Color(0xFFB721FF);
@@ -1443,7 +1444,16 @@ class FooterSection extends StatelessWidget {
                       child: _FooterLink('Privacy'),
                     ),
                     _FooterDot(),
-                    _FooterLink('Terms'),
+                    GestureDetector(
+                      onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                        builder: (context) => TermsPolicyScreen(),
+                        ),
+                      );
+                      },
+                      child: _FooterLink('Terms'),
+                    ),
                     _FooterDot(),
                     GestureDetector(
                       onTap: () {

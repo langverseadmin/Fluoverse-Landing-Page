@@ -35,21 +35,21 @@ class HowItWorksPage extends StatelessWidget {
         "color": const Color.fromARGB(255, 90, 152, 240),
         "title": "Reading",
         "description":
-            "Practice comprehension with interactive stories that use your new vocabulary. Explore short scenes designed around your level and interests, helping you understand how words work in context.\n\nStories adapt to your level — challenging but never overwhelming.",
+            "Immerse yourself in interactive stories that bring your vocabulary to life. Explore short, engaging scenes tailored to your level and interests — designed to help you truly understand how words work in context.\n\nEvery story adjusts to your level — challenging but never overwhelming.",
       },
       {
         "icon": Icons.headphones_rounded,
         "color": const Color(0xFF2CB67D),
         "title": "Listening",
         "description":
-            "Train your ear with native speakers and natural conversations. Voice-based learning means you'll recognize real accents and speaking patterns.\n\nActive listening exercises prepare you for authentic dialogue.",
+            "Train your ear with native voices and real conversations. Voice-based learning helps you recognize natural accents, rhythm, and speaking patterns.\n\nEngaging listening exercises prepare you for confident, authentic dialogue.",
       },
       {
         "icon": Icons.record_voice_over_rounded,
         "color": const Color.fromARGB(255, 255, 145, 0),
         "title": "Scenario",
         "description":
-            "Apply everything in realistic conversations with your AI coach. Order coffee, negotiate business deals, or chat about hobbies — scenarios match your goals.\n\nThe AI adapts to keep conversations flowing naturally, building your confidence.",
+            "Apply everything you've learned in realistic conversations with your AI coach. Order coffee, negotiate business deals, or chat about hobbies — each scenario is tailored to your goals.\n\nThe AI adapts to your level and responses, keeping conversations natural and building real confidence.",
       },
     ];
 
