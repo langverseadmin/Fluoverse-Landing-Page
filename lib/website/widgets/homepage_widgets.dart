@@ -11,6 +11,7 @@ import 'package:frontend/website/screens/join_waitlist.dart';
 import 'package:frontend/website/screens/pricing.dart';
 import 'package:frontend/website/screens/privacy_policy.dart';
 import 'package:frontend/website/screens/terms_policy.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const Color kAccentBlue = Color(0xFF6A82FB);
 const Color kPremiumPurple = Color(0xFFB721FF);
@@ -1473,12 +1474,62 @@ class FooterSection extends StatelessWidget {
                   alignment: WrapAlignment.center,
                   spacing: socialSpacing,
                   children: [
-                    _FooterSocialIcon(Icons.email_rounded, onTap: () {}),
-                    // Replace with a generic chat icon for Discord
-                    _FooterSocialIcon(Icons.chat_rounded, onTap: () {}),
-                    // Replace with send icon for Telegram
-                    _FooterSocialIcon(Icons.send_rounded, onTap: () {}),
-                    _FooterSocialIcon(Icons.language, onTap: () {}),
+                    Tooltip(
+                      message: 'Discord',
+                      waitDuration: const Duration(milliseconds: 300),
+                      child: _FooterSocialIcon(
+                        Icons.discord, // Use the Discord icon from Material Icons if available, else use Icons.chat_rounded as fallback
+                        onTap: () {
+                          launchUrl(
+                            Uri.parse('https://discord.gg/ZktU6pBVpt'),
+                            mode: LaunchMode.externalApplication,
+                          );
+                        },
+                      ),
+                    ),
+                    Tooltip(
+                      message: 'TikTok',
+                      waitDuration: const Duration(milliseconds: 300),
+                      child: _FooterSocialIcon(
+                        Icons.tiktok, // If you have a TikTok icon in your icon set, use it; otherwise, use a generic icon
+                        onTap: () {
+                          launchUrl(
+                            Uri.parse('https://www.tiktok.com/@fluoverse'),
+                            mode: LaunchMode.externalApplication,
+                          );
+                        },
+                      ),
+                    ),
+                    Tooltip(
+                      message: 'Instagram',
+                      waitDuration: const Duration(milliseconds: 300),
+                      child: _FooterSocialIcon(Icons.camera_alt_rounded, onTap: () {
+                        launchUrl(
+                          Uri.parse('https://www.instagram.com/fluoverse/'),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }),
+                    ),
+                    Tooltip(
+                      message: 'YouTube',
+                      waitDuration: const Duration(milliseconds: 300),
+                      child: _FooterSocialIcon(Icons.play_circle_fill, onTap: () {
+                        launchUrl(
+                          Uri.parse('https://www.youtube.com/@fluoverse'),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }),
+                    ),
+                    Tooltip(
+                      message: 'Reddit',
+                      waitDuration: const Duration(milliseconds: 300),
+                      child: _FooterSocialIcon(Icons.reddit, onTap: () {
+                        launchUrl(
+                          Uri.parse('https://www.reddit.com/r/fluoverse/'),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }),
+                    ),
                   ],
                 ).animate().fadeIn(duration: 1300.ms),
                 SizedBox(height: taglineSpacingY),
@@ -1506,7 +1557,7 @@ class FooterSection extends StatelessWidget {
                       ],
                     ),
                   ),
-                ).animate().fadeIn(duration: 1500.ms).slideY(begin: 0.12, end: 0, duration: 700.ms),
+                ).animate().fadeIn(duration: 1000.ms).slideY(begin: 0.12, end: 0, duration: 500.ms),
               ],
             ),
           ),
