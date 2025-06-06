@@ -8,7 +8,6 @@ import 'package:frontend/website/screens/contact.dart';
 import 'dart:math';
 
 import 'package:frontend/website/screens/join_waitlist.dart';
-import 'package:frontend/website/screens/pricing.dart';
 import 'package:frontend/website/screens/privacy_policy.dart';
 import 'package:frontend/website/screens/terms_policy.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -193,13 +192,10 @@ class HeroSection extends StatelessWidget {
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => PricingPage(),
-                                  ),
-                                );
-                              },
+                                onPressed: () async {
+                                final url = Uri.parse('https://zesty-tulumba-65e5fa.netlify.app/');
+                                await launchUrl(url, mode: LaunchMode.externalApplication);
+                                },
                               glowColor: kAccentBlue.withOpacity(0.32),
                             ),
                           ],
