@@ -197,30 +197,51 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final mq = MediaQuery.of(context);
+    final width = mq.size.width;
+    final height = mq.size.height;
 
-    // Responsive card sizing
-    double cardWidth = screenWidth < 600
-        ? screenWidth * 0.92
-        : screenWidth < 900
-            ? screenWidth * 0.85 / 3
-            : screenWidth * 0.72 / 3;
-    double cardHeight = screenHeight < 900
-        ? screenHeight * 1
-        : screenHeight * 0.7;
+    // Helper for percent with min/max clamp
+    double percent(double v, {double min = 0, double? max}) {
+      final val = v;
+      if (max != null) return val.clamp(min, max);
+      return val < min ? min : val;
+    }
 
-    double middleCardWidth = cardWidth * 1.13;
-    double middleCardHeight = cardHeight * 1.07;
+    // --- Sizing logic for 4 breakpoints: mobile, tablet, laptop, desktop ---
+    final isMobile = width < 600;
+    final isTablet = width >= 600 && width < 900;
+    final isLaptop = width >= 900 && width < 1400;
+    // final isDesktop = width >= 1400;
 
-    // Clamp min/max for usability
-    cardWidth = cardWidth.clamp(260.0, 480.0);
-    cardHeight = cardHeight.clamp(420.0, 860.0);
-    middleCardWidth = middleCardWidth.clamp(300.0, 540.0);
-    middleCardHeight = middleCardHeight.clamp(480.0, 920.0);
+    double cardWidth, cardHeight, middleCardWidth, middleCardHeight, spacing;
 
-    final isMobile = screenWidth < 900;
-    final double spacing = isMobile ? 10 : 32;
+    if (isMobile) {
+      cardWidth = percent(width * 0.92, min: 220, max: 480);
+      cardHeight = percent(height * 0.38, min: 340, max: 540);
+      middleCardWidth = percent(cardWidth * 1.13, min: 240, max: 520);
+      middleCardHeight = percent(cardHeight * 1.07, min: 360, max: 600);
+      spacing = percent(height * 0.025, min: 10, max: 32);
+    } else if (isTablet) {
+      cardWidth = percent(width * 0.28, min: 220, max: 340);
+      cardHeight = percent(height * 0.48, min: 380, max: 600);
+      middleCardWidth = percent(cardWidth * 1.13, min: 260, max: 400);
+      middleCardHeight = percent(cardHeight * 1.07, min: 420, max: 660);
+      spacing = percent(width * 0.03, min: 16, max: 36);
+    } else if (isLaptop) {
+      cardWidth = percent(width * 0.22, min: 260, max: 420);
+      cardHeight = percent(height * 0.68, min: 420, max: 1200);
+      middleCardWidth = percent(cardWidth * 1.13, min: 320, max: 480);
+      middleCardHeight = percent(cardHeight * 1.07, min: 480, max: 860);
+      spacing = percent(width * 0.04, min: 24, max: 48);
+    } else {
+      // isDesktop
+      cardWidth = percent(width * 0.18, min: 320, max: 480);
+      cardHeight = percent(height * 0.68, min: 480, max: 1200);
+      middleCardWidth = percent(cardWidth * 1.13, min: 360, max: 540);
+      middleCardHeight = percent(cardHeight * 1.07, min: 520, max: 920);
+      spacing = percent(width * 0.05, min: 32, max: 64);
+    }
 
     return Center(
       child: LayoutBuilder(
@@ -366,7 +387,7 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
               ],
             );
           } else {
-            // Row for desktop/tablet
+            // Row for tablet/laptop/desktop
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
