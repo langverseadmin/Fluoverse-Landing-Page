@@ -3512,7 +3512,8 @@ class _SpaceCodeLineState extends State<_SpaceCodeLine>
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < 600;
     final isLaptop = width >= 900 && width < 1400;
-    final lines = isMobile ? 2 : 1;
+    // 2 lines for laptop, 2 for mobile, 1 for others
+    final lines = (isMobile || isLaptop) ? 2 : 1;
     // Show only a third of the words on mobile and laptop
     final visibleWords = (isMobile || isLaptop) ? (_words.length / 3).ceil() : _words.length;
     final wordsToShow = _words.take(visibleWords).toList();
