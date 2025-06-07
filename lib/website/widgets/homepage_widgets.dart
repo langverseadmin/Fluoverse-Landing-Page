@@ -2056,7 +2056,7 @@ class LearningCycleSection extends StatelessWidget {
     final double laptopTitleFontSize = percent(width * 0.06, min: 32, max: 44);
     final double laptopSubtitleFontSize = percent(width * 0.032, min: 16, max: 20);
     final double laptopStepCardWidth = percent(width * 0.21, min: 180, max: 220);
-    final double laptopStepCardHeight = percent(height * 0.20, min: 120, max: 260);
+    final double laptopStepCardHeight = percent(height * 0.21, min: 120, max: 300);
     final double laptopStepIconSize = percent(width * 0.03, min: 22, max: 34);
     final double laptopStepIconBgSize = percent(width * 0.09, min: 38, max: 60);
     final double laptopStepSpacing = percent(width * 0.04, min: 24, max: 48);
