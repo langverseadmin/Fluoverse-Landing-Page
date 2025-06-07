@@ -193,7 +193,7 @@ class HeroSection extends StatelessWidget {
                                 end: Alignment.bottomRight,
                               ),
                                 onPressed: () async {
-                                final url = Uri.parse('https://zesty-tulumba-65e5fa.netlify.app/');
+                                final url = Uri.parse('https://fluoverseapp.netlify.app/');
                                 await launchUrl(url, mode: LaunchMode.externalApplication);
                                 },
                               glowColor: kAccentBlue.withOpacity(0.32),
