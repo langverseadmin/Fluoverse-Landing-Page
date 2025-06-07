@@ -2163,7 +2163,7 @@ class LearningCycleSection extends StatelessWidget {
     final double tabletTitleFontSize = percent(width * 0.055, min: 26, max: 38);
     final double tabletSubtitleFontSize = percent(width * 0.028, min: 15, max: 18);
     final double tabletStepCardWidth = percent(width * 0.32, min: 160, max: 320);
-    final double tabletStepCardHeight = percent(height * 0.19, min: 110, max: 160);
+    final double tabletStepCardHeight = percent(height * 0.22, min: 110, max: 320);
     final double tabletStepIconSize = percent(width * 0.065, min: 20, max: 32);
     final double tabletStepIconBgSize = percent(width * 0.13, min: 32, max: 54);
     final double tabletStepSpacing = percent(width * 0.03, min: 16, max: 32);
