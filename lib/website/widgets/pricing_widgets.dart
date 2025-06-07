@@ -224,7 +224,7 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
       spacing = percent(height * 0.025, min: 10, max: 32);
     } else if (isTablet) {
       cardWidth = percent(width * 0.28, min: 220, max: 340);
-      cardHeight = percent(height * 0.48, min: 380, max: 600);
+      cardHeight = percent(height * 0.68, min: 380, max: 1000);
       middleCardWidth = percent(cardWidth * 1.13, min: 260, max: 400);
       middleCardHeight = percent(cardHeight * 1.07, min: 420, max: 660);
       spacing = percent(width * 0.03, min: 16, max: 36);
