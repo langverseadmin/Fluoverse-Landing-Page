@@ -2011,7 +2011,9 @@ class LearningCycleSection extends StatelessWidget {
     final width = mq.size.width;
     final height = mq.size.height;
     final isMobile = width < 600;
-    final isTablet = width >= 600 && width < 1000; // New: tablet/laptop/small desktop
+    final isTablet = width >= 600 && width < 900;
+    final isLaptop = width >= 900 && width < 1400;
+    final isDesktop = width >= 1400;
 
     // Helper for percent with min/max clamp
     double percent(double v, {double min = 0, double? max}) {
@@ -2020,98 +2022,123 @@ class LearningCycleSection extends StatelessWidget {
       return val < min ? min : val;
     }
 
-    // --- Sizing logic ---
-    // Mobile: <600, Tablet: 600-999, Desktop: >=1000
-    // Keep mobile and desktop sizes EXACT, only add tablet/laptop branch
+    // --- Sizing logic for 4 breakpoints: mobile, tablet, laptop, desktop ---
 
     // Mobile
-    final double mobileVerticalpadding = percent(height * 0.06, min: 32, max: 60);
-    final double mobileHorizontalpadding = percent(width * 0.03, min: 8, max: 18);
-    final double mobileTitlefontsize = percent(width * 0.045, min: 22, max: 32);
-    final double mobileSubtitlefontsize = percent(width * 0.022, min: 13, max: 16);
-    final double mobileStepcardwidth = percent(width * 0.82, min: 120, max: 510);
-    final double mobileStepcardheight = percent(height * 0.23, min: 90, max: 180);
-    final double mobileStepiconsize = percent(width * 0.055, min: 16, max: 28);
-    final double mobileStepiconbgsize = percent(width * 0.16, min: 24, max: 44);
-    final double mobileStepspacing = percent(height * 0.018, min: 10, max: 24);
-    final double mobileSteptitlefontsize = percent(width * 0.088, min: 11, max: 20);
-    final double mobileStepsubtitlefontsize = percent(width * 0.082, min: 10, max: 14);
+    final double mobileVerticalPadding = percent(height * 0.06, min: 32, max: 60);
+    final double mobileHorizontalPadding = percent(width * 0.03, min: 8, max: 18);
+    final double mobileTitleFontSize = percent(width * 0.045, min: 22, max: 32);
+    final double mobileSubtitleFontSize = percent(width * 0.022, min: 13, max: 16);
+    final double mobileStepCardWidth = percent(width * 0.82, min: 120, max: 510);
+    final double mobileStepCardHeight = percent(height * 0.23, min: 90, max: 180);
+    final double mobileStepIconSize = percent(width * 0.055, min: 16, max: 28);
+    final double mobileStepIconBgSize = percent(width * 0.16, min: 24, max: 44);
+    final double mobileStepSpacing = percent(height * 0.018, min: 10, max: 24);
+    final double mobileStepTitleFontSize = percent(width * 0.088, min: 11, max: 20);
+    final double mobileStepSubtitleFontSize = percent(width * 0.082, min: 10, max: 14);
 
-    // Desktop
-    final double desktopVerticalpadding = percent(height * 0.06, min: 32, max: 120);
-    final double desktopHorizontalpadding = percent(width * 0.03, min: 8, max: 32);
-    final double desktopTitlefontsize = percent(width * 0.045, min: 22, max: 54);
-    final double desktopSubtitlefontsize = percent(width * 0.022, min: 13, max: 22);
-    final double desktopStepcardwidth = percent(width * 0.19, min: 120, max: 220);
-    final double desktopStepcardheight = percent(height * 0.16, min: 120, max: 220);
-    final double desktopStepiconsize = percent(width * 0.025, min: 18, max: 32);
-    final double desktopStepiconbgsize = percent(width * 0.08, min: 32, max: 56);
-    final double desktopStepspacing = percent(width * 0.04, min: 24, max: 64);
-    final double desktopSteptitlefontsize = percent(width * 0.018, min: 13, max: 22);
-    final double desktopStepsubtitlefontsize = percent(width * 0.014, min: 11, max: 16);
+    // Tablet
+    final double tabletVerticalPadding = percent(height * 0.08, min: 48, max: 80);
+    final double tabletHorizontalPadding = percent(width * 0.04, min: 12, max: 24);
+    final double tabletTitleFontSize = percent(width * 0.055, min: 26, max: 38);
+    final double tabletSubtitleFontSize = percent(width * 0.028, min: 15, max: 18);
+    final double tabletStepCardWidth = percent(width * 0.32, min: 160, max: 320);
+    final double tabletStepCardHeight = percent(height * 0.19, min: 110, max: 160);
+    final double tabletStepIconSize = percent(width * 0.065, min: 20, max: 32);
+    final double tabletStepIconBgSize = percent(width * 0.13, min: 32, max: 54);
+    final double tabletStepSpacing = percent(width * 0.03, min: 16, max: 32);
+    final double tabletStepTitleFontSize = percent(width * 0.045, min: 14, max: 20);
+    final double tabletStepSubtitleFontSize = percent(width * 0.032, min: 12, max: 16);
 
-    // Tablet/laptop: interpolate between mobile and desktop for smooth scaling
-    double lerp(double a, double b) {
-      // 600..1000
-      final t = ((width - 600) / 400).clamp(0.0, 1.0);
-      return a + (b - a) * t;
+    // Laptop
+    final double laptopVerticalPadding = percent(height * 0.09, min: 64, max: 100);
+    final double laptopHorizontalPadding = percent(width * 0.05, min: 16, max: 32);
+    final double laptopTitleFontSize = percent(width * 0.06, min: 32, max: 44);
+    final double laptopSubtitleFontSize = percent(width * 0.032, min: 16, max: 20);
+    final double laptopStepCardWidth = percent(width * 0.21, min: 180, max: 220);
+    final double laptopStepCardHeight = percent(height * 0.17, min: 120, max: 200);
+    final double laptopStepIconSize = percent(width * 0.03, min: 22, max: 34);
+    final double laptopStepIconBgSize = percent(width * 0.09, min: 38, max: 60);
+    final double laptopStepSpacing = percent(width * 0.04, min: 24, max: 48);
+    final double laptopStepTitleFontSize = percent(width * 0.022, min: 15, max: 22);
+    final double laptopStepSubtitleFontSize = percent(width * 0.018, min: 13, max: 18);
+
+    // Desktop (big monitor)
+    final double desktopVerticalPadding = percent(height * 0.11, min: 80, max: 120);
+    final double desktopHorizontalPadding = percent(width * 0.06, min: 18, max: 40);
+    final double desktopTitleFontSize = percent(width * 0.07, min: 38, max: 54);
+    final double desktopSubtitleFontSize = percent(width * 0.038, min: 18, max: 22);
+    final double desktopStepCardWidth = percent(width * 0.19, min: 200, max: 260);
+    final double desktopStepCardHeight = percent(height * 0.22, min: 140, max: 320);
+    final double desktopStepIconSize = percent(width * 0.035, min: 26, max: 38);
+    final double desktopStepIconBgSize = percent(width * 0.11, min: 44, max: 68);
+    final double desktopStepSpacing = percent(width * 0.05, min: 32, max: 64);
+    final double desktopStepTitleFontSize = percent(width * 0.025, min: 16, max: 24);
+    final double desktopStepSubtitleFontSize = percent(width * 0.02, min: 14, max: 20);
+
+    // Select sizes based on breakpoint
+    double verticalPadding,
+        horizontalPadding,
+        titleFontSize,
+        subtitleFontSize,
+        stepCardWidth,
+        stepCardHeight,
+        stepIconSize,
+        stepIconBgSize,
+        stepSpacing,
+        stepTitleFontSize,
+        stepSubtitleFontSize;
+
+    if (isDesktop) {
+      verticalPadding = desktopVerticalPadding;
+      horizontalPadding = desktopHorizontalPadding;
+      titleFontSize = desktopTitleFontSize;
+      subtitleFontSize = desktopSubtitleFontSize;
+      stepCardWidth = desktopStepCardWidth;
+      stepCardHeight = desktopStepCardHeight;
+      stepIconSize = desktopStepIconSize;
+      stepIconBgSize = desktopStepIconBgSize;
+      stepSpacing = desktopStepSpacing;
+      stepTitleFontSize = desktopStepTitleFontSize;
+      stepSubtitleFontSize = desktopStepSubtitleFontSize;
+    } else if (isLaptop) {
+      verticalPadding = laptopVerticalPadding;
+      horizontalPadding = laptopHorizontalPadding;
+      titleFontSize = laptopTitleFontSize;
+      subtitleFontSize = laptopSubtitleFontSize;
+      stepCardWidth = laptopStepCardWidth;
+      stepCardHeight = laptopStepCardHeight;
+      stepIconSize = laptopStepIconSize;
+      stepIconBgSize = laptopStepIconBgSize;
+      stepSpacing = laptopStepSpacing;
+      stepTitleFontSize = laptopStepTitleFontSize;
+      stepSubtitleFontSize = laptopStepSubtitleFontSize;
+    } else if (isTablet) {
+      verticalPadding = tabletVerticalPadding;
+      horizontalPadding = tabletHorizontalPadding;
+      titleFontSize = tabletTitleFontSize;
+      subtitleFontSize = tabletSubtitleFontSize;
+      stepCardWidth = tabletStepCardWidth;
+      stepCardHeight = tabletStepCardHeight;
+      stepIconSize = tabletStepIconSize;
+      stepIconBgSize = tabletStepIconBgSize;
+      stepSpacing = tabletStepSpacing;
+      stepTitleFontSize = tabletStepTitleFontSize;
+      stepSubtitleFontSize = tabletStepSubtitleFontSize;
+    } else {
+      // Mobile
+      verticalPadding = mobileVerticalPadding;
+      horizontalPadding = mobileHorizontalPadding;
+      titleFontSize = mobileTitleFontSize;
+      subtitleFontSize = mobileSubtitleFontSize;
+      stepCardWidth = mobileStepCardWidth;
+      stepCardHeight = mobileStepCardHeight;
+      stepIconSize = mobileStepIconSize;
+      stepIconBgSize = mobileStepIconBgSize;
+      stepSpacing = mobileStepSpacing;
+      stepTitleFontSize = mobileStepTitleFontSize;
+      stepSubtitleFontSize = mobileStepSubtitleFontSize;
     }
-
-    final double verticalPadding = isMobile
-        ? mobileVerticalpadding
-        : isTablet
-            ? lerp(mobileVerticalpadding, desktopVerticalpadding)
-            : desktopVerticalpadding;
-    final double horizontalPadding = isMobile
-        ? mobileHorizontalpadding
-        : isTablet
-            ? lerp(mobileHorizontalpadding, desktopHorizontalpadding)
-            : desktopHorizontalpadding;
-    final double titleFontSize = isMobile
-        ? mobileTitlefontsize
-        : isTablet
-            ? lerp(mobileTitlefontsize, desktopTitlefontsize)
-            : desktopTitlefontsize;
-    final double subtitleFontSize = isMobile
-        ? mobileSubtitlefontsize
-        : isTablet
-            ? lerp(mobileSubtitlefontsize, desktopSubtitlefontsize)
-            : desktopSubtitlefontsize;
-    final double stepCardWidth = isMobile
-        ? mobileStepcardwidth
-        : isTablet
-            ? lerp(mobileStepcardwidth, desktopStepcardwidth)
-            : desktopStepcardwidth;
-    final double stepCardHeight = isMobile
-        ? mobileStepcardheight
-        : isTablet
-            ? lerp(mobileStepcardheight, desktopStepcardheight)
-            : desktopStepcardheight;
-    final double stepIconSize = isMobile
-        ? mobileStepiconsize
-        : isTablet
-            ? lerp(mobileStepiconsize, desktopStepiconsize)
-            : desktopStepiconsize;
-    final double stepIconBgSize = isMobile
-        ? mobileStepiconbgsize
-        : isTablet
-            ? lerp(mobileStepiconbgsize, desktopStepiconbgsize)
-            : desktopStepiconbgsize;
-    final double stepSpacing = isMobile
-        ? mobileStepspacing
-        : isTablet
-            ? lerp(mobileStepspacing, desktopStepspacing)
-            : desktopStepspacing;
-    final double stepTitleFontSize = isMobile
-        ? mobileSteptitlefontsize
-        : isTablet
-            ? lerp(mobileSteptitlefontsize, desktopSteptitlefontsize)
-            : desktopSteptitlefontsize;
-    final double stepSubtitleFontSize = isMobile
-        ? mobileStepsubtitlefontsize
-        : isTablet
-            ? lerp(mobileStepsubtitlefontsize, desktopStepsubtitlefontsize)
-            : desktopStepsubtitlefontsize;
 
     return Container(
       width: double.infinity,
@@ -2151,7 +2178,7 @@ class LearningCycleSection extends StatelessWidget {
                   ),
             ),
           ).animate().fadeIn(duration: 600.ms),
-          SizedBox(height: isMobile ? 10 : 18),
+          SizedBox(height: isMobile ? 10 : isTablet ? 16 : isLaptop ? 18 : 22),
           Text(
             'Four steps to fluency, one cycle at a time',
             textAlign: TextAlign.center,
@@ -2162,7 +2189,7 @@ class LearningCycleSection extends StatelessWidget {
                   letterSpacing: 0.7,
                 ),
           ).animate().fadeIn(duration: 900.ms),
-          SizedBox(height: isMobile ? 32 : 64),
+          SizedBox(height: isMobile ? 32 : isTablet ? 40 : isLaptop ? 54 : 64),
           // Steps with premium glass and connectors
           isMobile
               ? Column(
@@ -2250,7 +2277,7 @@ class LearningCycleSection extends StatelessWidget {
                   ],
                 )
               : SizedBox(
-                  height: 270,
+                  height: stepCardHeight + 50,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
