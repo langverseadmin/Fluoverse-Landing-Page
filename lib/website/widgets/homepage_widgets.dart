@@ -2776,12 +2776,12 @@ class VisionSection extends StatelessWidget {
     final double chipIconSize = isMobile
         ? mobileChipIconSize
         : isTablet
-            ? 26 // bigger icon for laptops
+            ? 18 // bigger icon for laptops
             : desktopChipIconSize;
     final double chipFontSize = isMobile
         ? mobileChipFontSize
         : isTablet
-            ? 13 // bigger font for laptops
+            ? 10 // bigger font for laptops
             : desktopChipFontSize;
     final double spaceCodeHeight = isMobile
         ? mobileSpaceCodeHeight
