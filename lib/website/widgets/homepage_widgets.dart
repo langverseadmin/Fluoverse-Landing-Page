@@ -2751,36 +2751,37 @@ class VisionSection extends StatelessWidget {
             ? lerp(mobileCardRadius, desktopCardRadius)
             : desktopCardRadius;
 
-    // --- CHIP SIZING FIX FOR TABLET ---
+    // --- CHIP SIZING FIX FOR TABLET/LAPTOP ---
+    // For laptops (isTablet), increase chip width/height/font size to prevent cutoff
     final double chipSpacing = isMobile
         ? mobileChipSpacing
         : isTablet
-            ? lerp(mobileChipSpacing, 32) // force more spacing on tablet
+            ? 36 // more spacing for laptops
             : desktopChipSpacing;
     final double chipRunSpacing = isMobile
         ? mobileChipRunSpacing
         : isTablet
-            ? lerp(mobileChipRunSpacing, 24)
+            ? 18 // more run spacing for laptops
             : desktopChipRunSpacing;
     final double chipWidth = isMobile
         ? mobileChipWidth
         : isTablet
-            ? lerp(mobileChipWidth, 170) // wider for tablet
+            ? 150 // wider for laptops
             : desktopChipWidth;
     final double chipHeight = isMobile
         ? mobileChipHeight
         : isTablet
-            ? lerp(mobileChipHeight, 74) // taller for tablet
+            ? 80 // taller for laptops
             : desktopChipHeight;
     final double chipIconSize = isMobile
         ? mobileChipIconSize
         : isTablet
-            ? lerp(mobileChipIconSize, 28) // bigger icon for tablet
+            ? 26 // bigger icon for laptops
             : desktopChipIconSize;
     final double chipFontSize = isMobile
         ? mobileChipFontSize
         : isTablet
-            ? lerp(mobileChipFontSize, 15) // bigger font for tablet
+            ? 13 // bigger font for laptops
             : desktopChipFontSize;
     final double spaceCodeHeight = isMobile
         ? mobileSpaceCodeHeight
