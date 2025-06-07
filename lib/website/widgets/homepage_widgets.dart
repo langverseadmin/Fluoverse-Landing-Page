@@ -2132,8 +2132,8 @@ class LearningCycleSection extends StatelessWidget {
     final height = mq.size.height;
     final isMobile = width < 600;
     final isTablet = width >= 600 && width < 900;
-    final isLaptop = width >= 700 && width < 1400;
-    final isDesktop = width >= 1400;
+    final isLaptop = width >= 700 && width < 2000;
+    final isDesktop = width >= 2000;
 
     // Helper for percent with min/max clamp
     double percent(double v, {double min = 0, double? max}) {
