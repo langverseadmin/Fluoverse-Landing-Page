@@ -518,418 +518,538 @@ class ComingSoonStrip extends StatefulWidget {
 }
 
 class _ComingSoonStripState extends State<ComingSoonStrip>
-  with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final List<_BorderStar> _stars;
 
   @override
   void initState() {
-  super.initState();
-  _controller = AnimationController(
-    vsync: this,
-    duration: const Duration(seconds: 12),
-  )..repeat();
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 12),
+    )..repeat();
 
-  // Generate a few (6-10) stars at random border positions
-  final random = Random(2025);
-  _stars = List.generate(8, (i) {
-    // t: 0..1, position along border
-    final t = random.nextDouble();
-    // Gold or white
-    final isGold = random.nextBool();
-    // Each star animates in/out at a random phase
-    final phase = random.nextDouble();
-    // Size
-    final size = 18.0 + random.nextDouble() * 10.0;
-    return _BorderStar(
-    t: t,
-    isGold: isGold,
-    phase: phase,
-    size: size,
-    );
-  });
+    // Generate a few (6-10) stars at random border positions
+    final random = Random(2025);
+    _stars = List.generate(8, (i) {
+      final t = random.nextDouble();
+      final isGold = random.nextBool();
+      final phase = random.nextDouble();
+      final size = 18.0 + random.nextDouble() * 10.0;
+      return _BorderStar(
+        t: t,
+        isGold: isGold,
+        phase: phase,
+        size: size,
+      );
+    });
   }
 
   @override
   void dispose() {
-  _controller.dispose();
-  super.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-  final mq = MediaQuery.of(context);
-  final isMobile = mq.size.width < 600;
-  final width = mq.size.width;
-  final height = mq.size.height;
+    final mq = MediaQuery.of(context);
+    final width = mq.size.width;
+    final height = mq.size.height;
+    final isMobile = width < 600;
+    final isTablet = width >= 600 && width < 900;
+    final isLaptop = width >= 900 && width < 1400;
+    final isDesktop = width >= 1400;
 
-  // Use screen percentage for sizing, but clamp to original look
-  double percent(double v, {double min = 0, double? max}) {
-    final val = v;
-    if (max != null) return val.clamp(min, max);
-    return val < min ? min : val;
-  }
+    // Helper for percent with min/max clamp
+    double percent(double v, {double min = 0, double? max}) {
+      final val = v;
+      if (max != null) return val.clamp(min, max);
+      return val < min ? min : val;
+    }
 
-  final double horizontalPadding = percent(width * 0.04, min: 12, max: 48);
-  final double verticalPadding = percent(height * 0.03, min: 18, max: 44);
-  final double borderRadius = percent(width * 0.03, min: 14, max: isMobile ? 18 : 36);
-  final double iconSize = percent(width * 0.06, min: 32, max: isMobile ? 38 : 64);
-  final double iconPadding = percent(iconSize * 0.11, min: 3, max: isMobile ? 4 : 8);
-  final double titleFontSize = percent(width * 0.045, min: 22, max: isMobile ? 28 : 54);
-  final double titleLetterSpacing = isMobile ? 1.1 : 2.2;
-  final double maxWidth = isMobile ? percent(width * 0.96, min: 220, max: 380) : percent(width * 0.8, min: 320, max: 840);
-  final double textFontSize = percent(width * 0.022, min: 13, max: isMobile ? 15 : 18);
-  final double buttonHeight = percent(height * 0.06, min: 38, max: isMobile ? 48 : 62);
-  final double gap1 = percent(height * 0.015, min: 10, max: isMobile ? 16 : 32);
-  final double gap2 = percent(height * 0.018, min: 12, max: isMobile ? 18 : 40);
-  final double gap3 = percent(height * 0.018, min: 12, max: isMobile ? 18 : 40);
+    // --- Sizing logic for 4 breakpoints: mobile, tablet, laptop, desktop ---
 
-  return Padding(
-    padding: EdgeInsets.symmetric(vertical: isMobile ? percent(height * 0.045, min: 24, max: 72) : percent(height * 0.09, min: 36, max: 72)),
-    child: Stack(
-    alignment: Alignment.center,
-    children: [
-      // Stronger glowing animated background
-      Positioned.fill(
-      child: AnimatedContainer(
-        duration: 1200.ms,
-        decoration: BoxDecoration(
-        gradient: RadialGradient(
-          colors: [
-          kPremiumPurple.withOpacity(0.22),
-          kAccentBlue.withOpacity(0.16),
-          Colors.transparent,
-          ],
-          radius: 1.6,
-          center: Alignment.topCenter,
-        ),
-        ),
-      ),
-      ),
-      // More animated floating particles
-      Positioned.fill(
-      child: IgnorePointer(
-        child: _AnimatedParticles(
-        count: isMobile ? 12 : 28,
-        maxSize: isMobile ? 18 : 32,
-        minOpacity: 0.18,
-        maxOpacity: 0.28,
-        ),
-      ),
-      ),
-      // Main content with smaller, more premium glassmorphic card
-      ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: maxWidth,
-      ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-        return Stack(
-          children: [
-          Container(
-            padding: EdgeInsets.symmetric(
-            horizontal: horizontalPadding,
-            vertical: verticalPadding,
-            ),
-            decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadius),
-            color: Colors.white.withOpacity(isMobile ? 0.65 : 0.38),
-            border: Border.all(
-              color: Colors.white.withOpacity(0.55),
-              width: isMobile ? 1.6 : 2.6,
-            ),
-            boxShadow: [
-              BoxShadow(
-              color: kPremiumPurple.withOpacity(isMobile ? 0.13 : 0.23),
-              blurRadius: isMobile ? 32 : 72,
-              spreadRadius: isMobile ? 6 : 16,
-              offset: Offset(0, isMobile ? 12 : 36),
-              ),
-              BoxShadow(
-              color: kAccentBlue.withOpacity(isMobile ? 0.09 : 0.13),
-              blurRadius: isMobile ? 18 : 40,
-              spreadRadius: isMobile ? 3 : 10,
-              offset: Offset(0, isMobile ? 4 : 10),
-              ),
-            ],
-            backgroundBlendMode: BlendMode.srcOver,
-            ),
-            child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              isMobile
-                ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                  // Icon
-                  Container(
-                    decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                      color: kPremiumPurple.withOpacity(0.45),
-                      blurRadius: 18,
-                      spreadRadius: 1,
-                      ),
-                      BoxShadow(
-                      color: Colors.white.withOpacity(0.35),
-                      blurRadius: 4,
-                      spreadRadius: 1,
-                      ),
-                    ],
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.85),
-                      width: 2,
-                    ),
-                    gradient: const LinearGradient(
-                      colors: [kPremiumPurple, kAccentBlue],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    ),
-                    padding: EdgeInsets.all(iconPadding),
-                    child: ShaderMask(
-                    shaderCallback: (Rect bounds) {
-                      return const LinearGradient(
-                      colors: [Colors.white, Colors.white70],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      ).createShader(bounds);
-                    },
-                    child: Icon(
-                      Icons.rocket_launch_rounded,
-                      color: Colors.white,
-                      size: iconSize,
-                      shadows: [
-                      Shadow(
-                        color: kPremiumPurple.withOpacity(0.7),
-                        blurRadius: 12,
-                      ),
-                      Shadow(
-                        color: Colors.black.withOpacity(0.18),
-                        blurRadius: 4,
-                      ),
-                      ],
-                    ),
-                    ),
-                  )
-                    .animate()
-                    .fadeIn(duration: 600.ms)
-                    .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                  SizedBox(height: gap1),
-                  // Title
-                  Stack(
-                    children: [
-                    // Stroke effect
-                    Text(
-                      'Coming Soon',
-                      style: TextStyle(
-                      fontSize: titleFontSize,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: titleLetterSpacing,
-                      foreground: Paint()
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 1.2
-                        ..color = Colors.black.withOpacity(0.18),
-                      ),
-                    ),
-                    ShaderMask(
-                      shaderCallback: (Rect bounds) {
-                      return const LinearGradient(
-                        colors: [kPremiumPurple, kAccentBlue],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ).createShader(bounds);
-                      },
-                      child: Text(
-                      'Coming Soon',
-                      style: TextStyle(
-                        fontSize: titleFontSize,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: titleLetterSpacing,
-                        color: Colors.white,
-                      ),
-                      ),
-                    ),
-                    ],
-                  )
-                    .animate()
-                    .fadeIn(duration: 800.ms)
-                    .slideY(begin: -0.2, end: 0, duration: 800.ms),
+    // Mobile
+    final double mobileVerticalPadding = percent(height * 0.045, min: 24, max: 72);
+    final double mobileHorizontalPadding = percent(width * 0.04, min: 12, max: 48);
+    final double mobileBorderRadius = percent(width * 0.03, min: 14, max: 18);
+    final double mobileIconSize = percent(width * 0.06, min: 32, max: 38);
+    final double mobileIconPadding = percent(mobileIconSize * 0.11, min: 3, max: 4);
+    final double mobileTitleFontSize = percent(width * 0.045, min: 22, max: 28);
+    final double mobileTitleLetterSpacing = 1.1;
+    final double mobileMaxWidth = percent(width * 0.96, min: 220, max: 380);
+    final double mobileTextFontSize = percent(width * 0.022, min: 13, max: 15);
+    final double mobileButtonHeight = percent(height * 0.06, min: 38, max: 48);
+    final double mobileGap1 = percent(height * 0.015, min: 10, max: 16);
+    final double mobileGap2 = percent(height * 0.018, min: 12, max: 18);
+    final double mobileGap3 = percent(height * 0.018, min: 12, max: 18);
+
+    // Tablet
+    final double tabletVerticalPadding = percent(height * 0.055, min: 32, max: 80);
+    final double tabletHorizontalPadding = percent(width * 0.05, min: 16, max: 56);
+    final double tabletBorderRadius = percent(width * 0.035, min: 18, max: 28);
+    final double tabletIconSize = percent(width * 0.07, min: 36, max: 48);
+    final double tabletIconPadding = percent(tabletIconSize * 0.11, min: 4, max: 6);
+    final double tabletTitleFontSize = percent(width * 0.055, min: 26, max: 36);
+    final double tabletTitleLetterSpacing = 1.5;
+    final double tabletMaxWidth = percent(width * 0.9, min: 320, max: 600);
+    final double tabletTextFontSize = percent(width * 0.028, min: 15, max: 18);
+    final double tabletButtonHeight = percent(height * 0.07, min: 44, max: 54);
+    final double tabletGap1 = percent(height * 0.018, min: 12, max: 22);
+    final double tabletGap2 = percent(height * 0.022, min: 14, max: 24);
+    final double tabletGap3 = percent(height * 0.022, min: 14, max: 24);
+
+    // Laptop
+    final double laptopVerticalPadding = percent(height * 0.07, min: 36, max: 90);
+    final double laptopHorizontalPadding = percent(width * 0.06, min: 18, max: 64);
+    final double laptopBorderRadius = percent(width * 0.04, min: 22, max: 36);
+    final double laptopIconSize = percent(width * 0.08, min: 44, max: 56);
+    final double laptopIconPadding = percent(laptopIconSize * 0.11, min: 6, max: 8);
+    final double laptopTitleFontSize = percent(width * 0.065, min: 32, max: 44);
+    final double laptopTitleLetterSpacing = 1.8;
+    final double laptopMaxWidth = percent(width * 0.8, min: 420, max: 720);
+    final double laptopTextFontSize = percent(width * 0.032, min: 16, max: 20);
+    final double laptopButtonHeight = percent(height * 0.08, min: 48, max: 62);
+    final double laptopGap1 = percent(height * 0.022, min: 14, max: 28);
+    final double laptopGap2 = percent(height * 0.025, min: 16, max: 32);
+    final double laptopGap3 = percent(height * 0.025, min: 16, max: 32);
+
+    // Desktop
+    final double desktopVerticalPadding = percent(height * 0.09, min: 44, max: 120);
+    final double desktopHorizontalPadding = percent(width * 0.07, min: 24, max: 80);
+    final double desktopBorderRadius = percent(width * 0.05, min: 28, max: 48);
+    final double desktopIconSize = percent(width * 0.09, min: 54, max: 64);
+    final double desktopIconPadding = percent(desktopIconSize * 0.11, min: 8, max: 12);
+    final double desktopTitleFontSize = percent(width * 0.08, min: 38, max: 54);
+    final double desktopTitleLetterSpacing = 2.2;
+    final double desktopMaxWidth = percent(width * 1, min: 520, max: 1200);
+    final double desktopTextFontSize = percent(width * 0.038, min: 18, max: 24);
+    final double desktopButtonHeight = percent(height * 0.09, min: 54, max: 72);
+    final double desktopGap1 = percent(height * 0.028, min: 18, max: 36);
+    final double desktopGap2 = percent(height * 0.032, min: 20, max: 40);
+    final double desktopGap3 = percent(height * 0.032, min: 20, max: 40);
+
+    // Select sizes based on breakpoint
+    double verticalPadding,
+        horizontalPadding,
+        borderRadius,
+        iconSize,
+        iconPadding,
+        titleFontSize,
+        titleLetterSpacing,
+        maxWidth,
+        textFontSize,
+        buttonHeight,
+        gap1,
+        gap2,
+        gap3;
+
+    if (isDesktop) {
+      verticalPadding = desktopVerticalPadding;
+      horizontalPadding = desktopHorizontalPadding;
+      borderRadius = desktopBorderRadius;
+      iconSize = desktopIconSize;
+      iconPadding = desktopIconPadding;
+      titleFontSize = desktopTitleFontSize;
+      titleLetterSpacing = desktopTitleLetterSpacing;
+      maxWidth = desktopMaxWidth;
+      textFontSize = desktopTextFontSize;
+      buttonHeight = desktopButtonHeight;
+      gap1 = desktopGap1;
+      gap2 = desktopGap2;
+      gap3 = desktopGap3;
+    } else if (isLaptop) {
+      verticalPadding = laptopVerticalPadding;
+      horizontalPadding = laptopHorizontalPadding;
+      borderRadius = laptopBorderRadius;
+      iconSize = laptopIconSize;
+      iconPadding = laptopIconPadding;
+      titleFontSize = laptopTitleFontSize;
+      titleLetterSpacing = laptopTitleLetterSpacing;
+      maxWidth = laptopMaxWidth;
+      textFontSize = laptopTextFontSize;
+      buttonHeight = laptopButtonHeight;
+      gap1 = laptopGap1;
+      gap2 = laptopGap2;
+      gap3 = laptopGap3;
+    } else if (isTablet) {
+      verticalPadding = tabletVerticalPadding;
+      horizontalPadding = tabletHorizontalPadding;
+      borderRadius = tabletBorderRadius;
+      iconSize = tabletIconSize;
+      iconPadding = tabletIconPadding;
+      titleFontSize = tabletTitleFontSize;
+      titleLetterSpacing = tabletTitleLetterSpacing;
+      maxWidth = tabletMaxWidth;
+      textFontSize = tabletTextFontSize;
+      buttonHeight = tabletButtonHeight;
+      gap1 = tabletGap1;
+      gap2 = tabletGap2;
+      gap3 = tabletGap3;
+    } else {
+      verticalPadding = mobileVerticalPadding;
+      horizontalPadding = mobileHorizontalPadding;
+      borderRadius = mobileBorderRadius;
+      iconSize = mobileIconSize;
+      iconPadding = mobileIconPadding;
+      titleFontSize = mobileTitleFontSize;
+      titleLetterSpacing = mobileTitleLetterSpacing;
+      maxWidth = mobileMaxWidth;
+      textFontSize = mobileTextFontSize;
+      buttonHeight = mobileButtonHeight;
+      gap1 = mobileGap1;
+      gap2 = mobileGap2;
+      gap3 = mobileGap3;
+    }
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: verticalPadding),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Stronger glowing animated background
+          Positioned.fill(
+            child: AnimatedContainer(
+              duration: 1200.ms,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    kPremiumPurple.withOpacity(0.22),
+                    kAccentBlue.withOpacity(0.16),
+                    Colors.transparent,
                   ],
-                )
-                : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                  // Icon with glow and border for pop
-                  Container(
-                    decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                      color: kPremiumPurple.withOpacity(0.45),
-                      blurRadius: 32,
-                      spreadRadius: 2,
-                      ),
-                      BoxShadow(
-                      color: Colors.white.withOpacity(0.35),
-                      blurRadius: 8,
-                      spreadRadius: 1,
-                      ),
-                    ],
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.85),
-                      width: 3,
-                    ),
-                    gradient: const LinearGradient(
-                      colors: [kPremiumPurple, kAccentBlue],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    ),
-                    padding: EdgeInsets.all(iconPadding),
-                    child: ShaderMask(
-                    shaderCallback: (Rect bounds) {
-                      return const LinearGradient(
-                      colors: [Colors.white, Colors.white70],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      ).createShader(bounds);
-                    },
-                    child: Icon(
-                      Icons.rocket_launch_rounded,
-                      color: Colors.white,
-                      size: iconSize,
-                      shadows: [
-                      Shadow(
-                        color: kPremiumPurple.withOpacity(0.7),
-                        blurRadius: 24,
-                      ),
-                      Shadow(
-                        color: Colors.black.withOpacity(0.18),
-                        blurRadius: 8,
-                      ),
-                      ],
-                    ),
-                    ),
-                  )
-                    .animate()
-                    .fadeIn(duration: 600.ms)
-                    .slideY(begin: 0.3, end: 0, duration: 600.ms),
-                  SizedBox(width: gap1),
-                  // Text with strong shadow and stroke for pop
-                  Stack(
-                    children: [
-                    // Stroke effect
-                    Text(
-                      'Coming Soon',
-                      style: TextStyle(
-                      fontSize: titleFontSize,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: titleLetterSpacing,
-                      foreground: Paint()
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 2
-                        ..color = Colors.black.withOpacity(0.18),
-                      ),
-                    ),
-                    ShaderMask(
-                      shaderCallback: (Rect bounds) {
-                      return const LinearGradient(
-                        colors: [kPremiumPurple, kAccentBlue],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ).createShader(bounds);
-                      },
-                      child: Text(
-                      'Coming Soon',
-                      style: TextStyle(
-                        fontSize: titleFontSize,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: titleLetterSpacing,
-                        color: Colors.white,
-                      ),
-                      ),
-                    ),
-                    ],
-                  )
-                    .animate()
-                    .fadeIn(duration: 800.ms)
-                    .slideY(begin: -0.2, end: 0, duration: 800.ms),
-                  ],
+                  radius: 1.6,
+                  center: Alignment.topCenter,
                 ),
-              SizedBox(height: gap2),
-              Text(
-              'Fluoverse is almost here — a bold new way to learn by speaking.\n\nJoin early and shape the future of language learning.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.92),
-                fontSize: textFontSize,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.6,
-                shadows: [
-                Shadow(
-                  color: Colors.white.withOpacity(0.7),
-                  blurRadius: 8,
-                ),
-                Shadow(
-                  color: kAccentBlue.withOpacity(0.18),
-                  blurRadius: 8,
-                ),
-                ],
               ),
-              ).animate().fadeIn(duration: 1200.ms),
-              SizedBox(height: gap3),
-              SizedBox(
-              height: buttonHeight,
-              child: Center(
-                child: _PremiumButton(
-                text: 'Join Waitlist',
-                icon: Icons.star_rounded,
-                background: const LinearGradient(
-                  colors: [kAccentBlue, kPremiumPurple],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => JoinWaitlist(),
-                  ),
-                  );
-                },
-                glowColor: kPremiumPurple.withOpacity(0.38),
-                ).animate().fadeIn(duration: 1400.ms),
-              ),
-              ),
-            ],
             ),
           ),
-          // Shiny border stars
+          // More animated floating particles
           Positioned.fill(
             child: IgnorePointer(
-            child: AnimatedBuilder(
-              animation: _controller,
-              builder: (context, _) {
-              return CustomPaint(
-                painter: _BorderStarsPainter(
-                stars: _stars,
-                progress: _controller.value,
-                borderRadius: borderRadius,
-                ),
-              );
-              },
-            ),
+              child: _AnimatedParticles(
+                count: isMobile ? 12 : 28,
+                maxSize: isMobile ? 18 : 32,
+                minOpacity: 0.18,
+                maxOpacity: 0.28,
+              ),
             ),
           ),
-          ],
-        );
-        },
+          // Main content with smaller, more premium glassmorphic card
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: maxWidth,
+            ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: horizontalPadding,
+                        vertical: verticalPadding,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(borderRadius),
+                        color: Colors.white.withOpacity(isMobile ? 0.65 : 0.38),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.55),
+                          width: isMobile ? 1.6 : 2.6,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: kPremiumPurple.withOpacity(isMobile ? 0.13 : 0.23),
+                            blurRadius: isMobile ? 32 : 72,
+                            spreadRadius: isMobile ? 6 : 16,
+                            offset: Offset(0, isMobile ? 12 : 36),
+                          ),
+                          BoxShadow(
+                            color: kAccentBlue.withOpacity(isMobile ? 0.09 : 0.13),
+                            blurRadius: isMobile ? 18 : 40,
+                            spreadRadius: isMobile ? 3 : 10,
+                            offset: Offset(0, isMobile ? 4 : 10),
+                          ),
+                        ],
+                        backgroundBlendMode: BlendMode.srcOver,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          isMobile
+                              ? Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Icon
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: kPremiumPurple.withOpacity(0.45),
+                                            blurRadius: 18,
+                                            spreadRadius: 1,
+                                          ),
+                                          BoxShadow(
+                                            color: Colors.white.withOpacity(0.35),
+                                            blurRadius: 4,
+                                            spreadRadius: 1,
+                                          ),
+                                        ],
+                                        border: Border.all(
+                                          color: Colors.white.withOpacity(0.85),
+                                          width: 2,
+                                        ),
+                                        gradient: const LinearGradient(
+                                          colors: [kPremiumPurple, kAccentBlue],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.all(iconPadding),
+                                      child: ShaderMask(
+                                        shaderCallback: (Rect bounds) {
+                                          return const LinearGradient(
+                                            colors: [Colors.white, Colors.white70],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ).createShader(bounds);
+                                        },
+                                        child: Icon(
+                                          Icons.rocket_launch_rounded,
+                                          color: Colors.white,
+                                          size: iconSize,
+                                          shadows: [
+                                            Shadow(
+                                              color: kPremiumPurple.withOpacity(0.7),
+                                              blurRadius: 12,
+                                            ),
+                                            Shadow(
+                                              color: Colors.black.withOpacity(0.18),
+                                              blurRadius: 4,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                        .animate()
+                                        .fadeIn(duration: 600.ms)
+                                        .slideY(begin: 0.3, end: 0, duration: 600.ms),
+                                    SizedBox(height: gap1),
+                                    // Title
+                                    Stack(
+                                      children: [
+                                        // Stroke effect
+                                        Text(
+                                          'Coming Soon',
+                                          style: TextStyle(
+                                            fontSize: titleFontSize,
+                                            fontWeight: FontWeight.w900,
+                                            letterSpacing: titleLetterSpacing,
+                                            foreground: Paint()
+                                              ..style = PaintingStyle.stroke
+                                              ..strokeWidth = 1.2
+                                              ..color = Colors.black.withOpacity(0.18),
+                                          ),
+                                        ),
+                                        ShaderMask(
+                                          shaderCallback: (Rect bounds) {
+                                            return const LinearGradient(
+                                              colors: [kPremiumPurple, kAccentBlue],
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                            ).createShader(bounds);
+                                          },
+                                          child: Text(
+                                            'Coming Soon',
+                                            style: TextStyle(
+                                              fontSize: titleFontSize,
+                                              fontWeight: FontWeight.w900,
+                                              letterSpacing: titleLetterSpacing,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                        .animate()
+                                        .fadeIn(duration: 800.ms)
+                                        .slideY(begin: -0.2, end: 0, duration: 800.ms),
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // Icon with glow and border for pop
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: kPremiumPurple.withOpacity(0.45),
+                                            blurRadius: 32,
+                                            spreadRadius: 2,
+                                          ),
+                                          BoxShadow(
+                                            color: Colors.white.withOpacity(0.35),
+                                            blurRadius: 8,
+                                            spreadRadius: 1,
+                                          ),
+                                        ],
+                                        border: Border.all(
+                                          color: Colors.white.withOpacity(0.85),
+                                          width: 3,
+                                        ),
+                                        gradient: const LinearGradient(
+                                          colors: [kPremiumPurple, kAccentBlue],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.all(iconPadding),
+                                      child: ShaderMask(
+                                        shaderCallback: (Rect bounds) {
+                                          return const LinearGradient(
+                                            colors: [Colors.white, Colors.white70],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ).createShader(bounds);
+                                        },
+                                        child: Icon(
+                                          Icons.rocket_launch_rounded,
+                                          color: Colors.white,
+                                          size: iconSize,
+                                          shadows: [
+                                            Shadow(
+                                              color: kPremiumPurple.withOpacity(0.7),
+                                              blurRadius: 24,
+                                            ),
+                                            Shadow(
+                                              color: Colors.black.withOpacity(0.18),
+                                              blurRadius: 8,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                        .animate()
+                                        .fadeIn(duration: 600.ms)
+                                        .slideY(begin: 0.3, end: 0, duration: 600.ms),
+                                    SizedBox(width: gap1),
+                                    // Text with strong shadow and stroke for pop
+                                    Stack(
+                                      children: [
+                                        // Stroke effect
+                                        Text(
+                                          'Coming Soon',
+                                          style: TextStyle(
+                                            fontSize: titleFontSize,
+                                            fontWeight: FontWeight.w900,
+                                            letterSpacing: titleLetterSpacing,
+                                            foreground: Paint()
+                                              ..style = PaintingStyle.stroke
+                                              ..strokeWidth = 2
+                                              ..color = Colors.black.withOpacity(0.18),
+                                          ),
+                                        ),
+                                        ShaderMask(
+                                          shaderCallback: (Rect bounds) {
+                                            return const LinearGradient(
+                                              colors: [kPremiumPurple, kAccentBlue],
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                            ).createShader(bounds);
+                                          },
+                                          child: Text(
+                                            'Coming Soon',
+                                            style: TextStyle(
+                                              fontSize: titleFontSize,
+                                              fontWeight: FontWeight.w900,
+                                              letterSpacing: titleLetterSpacing,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                        .animate()
+                                        .fadeIn(duration: 800.ms)
+                                        .slideY(begin: -0.2, end: 0, duration: 800.ms),
+                                  ],
+                                ),
+                          SizedBox(height: gap2),
+                          Text(
+                            'Fluoverse is almost here — a bold new way to learn by speaking.\n\nJoin early and shape the future of language learning.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.92),
+                              fontSize: textFontSize,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.6,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.white.withOpacity(0.7),
+                                  blurRadius: 8,
+                                ),
+                                Shadow(
+                                  color: kAccentBlue.withOpacity(0.18),
+                                  blurRadius: 8,
+                                ),
+                              ],
+                            ),
+                          ).animate().fadeIn(duration: 1200.ms),
+                          SizedBox(height: gap3),
+                          SizedBox(
+                            height: buttonHeight,
+                            child: Center(
+                              child: _PremiumButton(
+                                text: 'Join Waitlist',
+                                icon: Icons.star_rounded,
+                                background: const LinearGradient(
+                                  colors: [kAccentBlue, kPremiumPurple],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => JoinWaitlist(),
+                                    ),
+                                  );
+                                },
+                                glowColor: kPremiumPurple.withOpacity(0.38),
+                              ).animate().fadeIn(duration: 1400.ms),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Shiny border stars
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: AnimatedBuilder(
+                          animation: _controller,
+                          builder: (context, _) {
+                            return CustomPaint(
+                              painter: _BorderStarsPainter(
+                                stars: _stars,
+                                progress: _controller.value,
+                                borderRadius: borderRadius,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
       ),
-      ),
-    ],
-    ),
-  );
+    );
   }
 }
 // Only 4 corner stars, well-defined and ultra-shiny, appear even more rarely (1-2 at a time)
