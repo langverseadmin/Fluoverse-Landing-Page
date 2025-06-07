@@ -2639,10 +2639,12 @@ class VisionSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    final isMobile = mq.size.width < 600;
-    final isTablet = mq.size.width >= 600 && mq.size.width < 1000;
     final width = mq.size.width;
     final height = mq.size.height;
+    final isMobile = width < 600;
+    final isTablet = width >= 600 && width < 900;
+    final isLaptop = width >= 900 && width < 1400;
+    final isDesktop = width >= 1400;
 
     // Helper for percent with min/max clamp
     double percent(double v, {double min = 0, double? max}) {
@@ -2651,8 +2653,7 @@ class VisionSection extends StatelessWidget {
       return val < min ? min : val;
     }
 
-    // --- Sizing logic ---
-    // Mobile: <600, Tablet: 600-999, Desktop: >=1000
+    // --- Sizing logic for 4 breakpoints: mobile, tablet, laptop, desktop ---
 
     // Mobile
     final double mobileVerticalPadding = percent(height * 0.09, min: 60, max: 80);
@@ -2673,121 +2674,142 @@ class VisionSection extends StatelessWidget {
     final double mobileChipFontSize = 11;
     final double mobileSpaceCodeHeight = percent(height * 0.04, min: 24, max: 32);
 
-    // Desktop
-    final double desktopVerticalPadding = percent(height * 0.09, min: 60, max: 140);
-    final double desktopPlanetHeight = percent(height * 0.13, min: 80, max: 180);
-    final double desktopTitleFontSize = percent(width * 0.045, min: 28, max: 54);
+    // Tablet
+    final double tabletVerticalPadding = percent(height * 0.1, min: 70, max: 100);
+    final double tabletPlanetHeight = percent(height * 0.15, min: 100, max: 130);
+    final double tabletTitleFontSize = percent(width * 0.05, min: 32, max: 38);
+    final double tabletTitleSpacing = 1.6;
+    final double tabletDividerHeight = percent(height * 0.003, min: 3, max: 3.5);
+    final double tabletDividerWidth = percent(width * 0.15, min: 80, max: 100);
+    final double tabletCardPaddingV = percent(height * 0.045, min: 32, max: 44);
+    final double tabletCardPaddingH = percent(width * 0.03, min: 18, max: 32);
+    final double tabletCardFontSize = percent(width * 0.032, min: 20, max: 26);
+    final double tabletCardRadius = percent(width * 0.035, min: 22, max: 28);
+    final double tabletChipSpacing = 18;
+    final double tabletChipRunSpacing = 14;
+    final double tabletChipWidth = 140;
+    final double tabletChipHeight = 74;
+    final double tabletChipIconSize = 22;
+    final double tabletChipFontSize = 13;
+    final double tabletSpaceCodeHeight = percent(height * 0.045, min: 28, max: 38);
+
+    // Laptop
+    final double laptopVerticalPadding = percent(height * 0.11, min: 90, max: 120);
+    final double laptopPlanetHeight = percent(height * 0.16, min: 120, max: 150);
+    final double laptopTitleFontSize = percent(width * 0.055, min: 36, max: 44);
+    final double laptopTitleSpacing = 2.0;
+    final double laptopDividerHeight = percent(height * 0.003, min: 3.5, max: 4);
+    final double laptopDividerWidth = percent(width * 0.17, min: 100, max: 120);
+    final double laptopCardPaddingV = percent(height * 0.05, min: 40, max: 54);
+    final double laptopCardPaddingH = percent(width * 0.035, min: 24, max: 40);
+    final double laptopCardFontSize = percent(width * 0.035, min: 24, max: 32);
+    final double laptopCardRadius = percent(width * 0.04, min: 28, max: 34);
+    final double laptopChipSpacing = 32;
+    final double laptopChipRunSpacing = 18;
+    final double laptopChipWidth = 180;
+    final double laptopChipHeight = 80;
+    final double laptopChipIconSize = 28;
+    final double laptopChipFontSize = 15;
+    final double laptopSpaceCodeHeight = percent(height * 0.05, min: 36, max: 48);
+
+    // Desktop (big monitor)
+    final double desktopVerticalPadding = percent(height * 0.13, min: 120, max: 160);
+    final double desktopPlanetHeight = percent(height * 0.18, min: 140, max: 180);
+    final double desktopTitleFontSize = percent(width * 0.06, min: 44, max: 54);
     final double desktopTitleSpacing = 2.8;
-    final double desktopDividerHeight = percent(height * 0.003, min: 2.5, max: 4);
-    final double desktopDividerWidth = percent(width * 0.13, min: 60, max: 120);
-    final double desktopCardPaddingV = percent(height * 0.04, min: 28, max: 60);
-    final double desktopCardPaddingH = percent(width * 0.025, min: 14, max: 48);
-    final double desktopCardFontSize = percent(width * 0.028, min: 18, max: 38);
-    final double desktopCardRadius = percent(width * 0.03, min: 18, max: 40);
-    final double desktopChipSpacing = percent(width * 0.04, min: 18, max: 54);
-    final double desktopChipRunSpacing = percent(height * 0.018, min: 14, max: 38);
-    final double desktopChipWidth = percent(width * 0.18, min: 90, max: 210);
-    final double desktopChipHeight = percent(height * 0.06, min: 32, max: 80);
-    final double desktopChipIconSize = percent(width * 0.03, min: 16, max: 34);
-    final double desktopChipFontSize = percent(width * 0.015, min: 10, max: 18);
-    final double desktopSpaceCodeHeight = percent(height * 0.04, min: 24, max: 60);
+    final double desktopDividerHeight = percent(height * 0.003, min: 4, max: 5);
+    final double desktopDividerWidth = percent(width * 0.2, min: 120, max: 160);
+    final double desktopCardPaddingV = percent(height * 0.06, min: 54, max: 70);
+    final double desktopCardPaddingH = percent(width * 0.045, min: 32, max: 48);
+    final double desktopCardFontSize = percent(width * 0.04, min: 32, max: 38);
+    final double desktopCardRadius = percent(width * 0.05, min: 34, max: 40);
+    final double desktopChipSpacing = 54;
+    final double desktopChipRunSpacing = 38;
+    final double desktopChipWidth = 210;
+    final double desktopChipHeight = 90;
+    final double desktopChipIconSize = 34;
+    final double desktopChipFontSize = 18;
+    final double desktopSpaceCodeHeight = percent(height * 0.06, min: 48, max: 60);
 
-    // Tablet/laptop: interpolate between mobile and desktop for smooth scaling
-    double lerp(double a, double b) {
-      // 600..1000
-      final t = ((width - 600) / 400).clamp(0.0, 1.0);
-      return a + (b - a) * t;
+    // Select sizes based on breakpoint
+    double verticalPadding, planetHeight, titleFontSize, titleSpacing, dividerHeight, dividerWidth;
+    double cardPaddingV, cardPaddingH, cardFontSize, cardRadius;
+    double chipSpacing, chipRunSpacing, chipWidth, chipHeight, chipIconSize, chipFontSize, spaceCodeHeight;
+
+    if (isDesktop) {
+      verticalPadding = desktopVerticalPadding;
+      planetHeight = desktopPlanetHeight;
+      titleFontSize = desktopTitleFontSize;
+      titleSpacing = desktopTitleSpacing;
+      dividerHeight = desktopDividerHeight;
+      dividerWidth = desktopDividerWidth;
+      cardPaddingV = desktopCardPaddingV;
+      cardPaddingH = desktopCardPaddingH;
+      cardFontSize = desktopCardFontSize;
+      cardRadius = desktopCardRadius;
+      chipSpacing = desktopChipSpacing;
+      chipRunSpacing = desktopChipRunSpacing;
+      chipWidth = desktopChipWidth;
+      chipHeight = desktopChipHeight;
+      chipIconSize = desktopChipIconSize;
+      chipFontSize = desktopChipFontSize;
+      spaceCodeHeight = desktopSpaceCodeHeight;
+    } else if (isLaptop) {
+      verticalPadding = laptopVerticalPadding;
+      planetHeight = laptopPlanetHeight;
+      titleFontSize = laptopTitleFontSize;
+      titleSpacing = laptopTitleSpacing;
+      dividerHeight = laptopDividerHeight;
+      dividerWidth = laptopDividerWidth;
+      cardPaddingV = laptopCardPaddingV;
+      cardPaddingH = laptopCardPaddingH;
+      cardFontSize = laptopCardFontSize;
+      cardRadius = laptopCardRadius;
+      chipSpacing = laptopChipSpacing;
+      chipRunSpacing = laptopChipRunSpacing;
+      chipWidth = laptopChipWidth;
+      chipHeight = laptopChipHeight;
+      chipIconSize = laptopChipIconSize;
+      chipFontSize = laptopChipFontSize;
+      spaceCodeHeight = laptopSpaceCodeHeight;
+    } else if (isTablet) {
+      verticalPadding = tabletVerticalPadding;
+      planetHeight = tabletPlanetHeight;
+      titleFontSize = tabletTitleFontSize;
+      titleSpacing = tabletTitleSpacing;
+      dividerHeight = tabletDividerHeight;
+      dividerWidth = tabletDividerWidth;
+      cardPaddingV = tabletCardPaddingV;
+      cardPaddingH = tabletCardPaddingH;
+      cardFontSize = tabletCardFontSize;
+      cardRadius = tabletCardRadius;
+      chipSpacing = tabletChipSpacing;
+      chipRunSpacing = tabletChipRunSpacing;
+      chipWidth = tabletChipWidth;
+      chipHeight = tabletChipHeight;
+      chipIconSize = tabletChipIconSize;
+      chipFontSize = tabletChipFontSize;
+      spaceCodeHeight = tabletSpaceCodeHeight;
+    } else {
+      // Mobile
+      verticalPadding = mobileVerticalPadding;
+      planetHeight = mobilePlanetHeight;
+      titleFontSize = mobileTitleFontSize;
+      titleSpacing = mobileTitleSpacing;
+      dividerHeight = mobileDividerHeight;
+      dividerWidth = mobileDividerWidth;
+      cardPaddingV = mobileCardPaddingV;
+      cardPaddingH = mobileCardPaddingH;
+      cardFontSize = mobileCardFontSize;
+      cardRadius = mobileCardRadius;
+      chipSpacing = mobileChipSpacing;
+      chipRunSpacing = mobileChipRunSpacing;
+      chipWidth = mobileChipWidth;
+      chipHeight = mobileChipHeight;
+      chipIconSize = mobileChipIconSize;
+      chipFontSize = mobileChipFontSize;
+      spaceCodeHeight = mobileSpaceCodeHeight;
     }
-
-    // --- Fix: For tablet, use more generous chip sizing and font ---
-    final double verticalPadding = isMobile
-        ? mobileVerticalPadding
-        : isTablet
-            ? lerp(mobileVerticalPadding, desktopVerticalPadding)
-            : desktopVerticalPadding;
-    final double planetHeight = isMobile
-        ? mobilePlanetHeight
-        : isTablet
-            ? lerp(mobilePlanetHeight, desktopPlanetHeight)
-            : desktopPlanetHeight;
-    final double titleFontSize = isMobile
-        ? mobileTitleFontSize
-        : isTablet
-            ? lerp(mobileTitleFontSize, desktopTitleFontSize)
-            : desktopTitleFontSize;
-    final double titleSpacing = isMobile
-        ? mobileTitleSpacing
-        : isTablet
-            ? lerp(mobileTitleSpacing, desktopTitleSpacing)
-            : desktopTitleSpacing;
-    final double dividerHeight = isMobile
-        ? mobileDividerHeight
-        : isTablet
-            ? lerp(mobileDividerHeight, desktopDividerHeight)
-            : desktopDividerHeight;
-    final double dividerWidth = isMobile
-        ? mobileDividerWidth
-        : isTablet
-            ? lerp(mobileDividerWidth, desktopDividerWidth)
-            : desktopDividerWidth;
-    final double cardPaddingV = isMobile
-        ? mobileCardPaddingV
-        : isTablet
-            ? lerp(mobileCardPaddingV, desktopCardPaddingV)
-            : desktopCardPaddingV;
-    final double cardPaddingH = isMobile
-        ? mobileCardPaddingH
-        : isTablet
-            ? lerp(mobileCardPaddingH, desktopCardPaddingH)
-            : desktopCardPaddingH;
-    final double cardFontSize = isMobile
-        ? mobileCardFontSize
-        : isTablet
-            ? lerp(mobileCardFontSize, desktopCardFontSize)
-            : desktopCardFontSize;
-    final double cardRadius = isMobile
-        ? mobileCardRadius
-        : isTablet
-            ? lerp(mobileCardRadius, desktopCardRadius)
-            : desktopCardRadius;
-
-    // --- CHIP SIZING FIX FOR TABLET/LAPTOP ---
-    // For laptops (isTablet), increase chip width/height/font size to prevent cutoff
-    final double chipSpacing = isMobile
-        ? mobileChipSpacing
-        : isTablet
-            ? 36 // more spacing for laptops
-            : desktopChipSpacing;
-    final double chipRunSpacing = isMobile
-        ? mobileChipRunSpacing
-        : isTablet
-            ? 18 // more run spacing for laptops
-            : desktopChipRunSpacing;
-    final double chipWidth = isMobile
-        ? mobileChipWidth
-        : isTablet
-            ? 150 // wider for laptops
-            : desktopChipWidth;
-    final double chipHeight = isMobile
-        ? mobileChipHeight
-        : isTablet
-            ? 80 // taller for laptops
-            : desktopChipHeight;
-    final double chipIconSize = isMobile
-        ? mobileChipIconSize
-        : isTablet
-            ? 18 // bigger icon for laptops
-            : desktopChipIconSize;
-    final double chipFontSize = isMobile
-        ? mobileChipFontSize
-        : isTablet
-            ? 10 // bigger font for laptops
-            : desktopChipFontSize;
-    final double spaceCodeHeight = isMobile
-        ? mobileSpaceCodeHeight
-        : isTablet
-            ? lerp(mobileSpaceCodeHeight, desktopSpaceCodeHeight)
-            : desktopSpaceCodeHeight;
 
     return Container(
       width: double.infinity,
@@ -2833,25 +2855,13 @@ class VisionSection extends StatelessWidget {
                     height: planetHeight,
                     child: Center(
                       child: _AnimatedGlassPlanet(
-                        size: isMobile
-                            ? percent(width * 0.13, min: 60, max: 80)
-                            : isTablet
-                                ? lerp(percent(width * 0.13, min: 60, max: 80), percent(width * 0.13, min: 120, max: 160))
-                                : percent(width * 0.13, min: 120, max: 160),
-                        iconSize: isMobile
-                            ? percent(width * 0.06, min: 24, max: 36)
-                            : isTablet
-                                ? lerp(percent(width * 0.06, min: 24, max: 36), percent(width * 0.06, min: 40, max: 70))
-                                : percent(width * 0.06, min: 40, max: 70),
-                        ringSize: isMobile
-                            ? percent(width * 0.16, min: 70, max: 100)
-                            : isTablet
-                                ? lerp(percent(width * 0.16, min: 70, max: 100), percent(width * 0.16, min: 120, max: 200))
-                                : percent(width * 0.16, min: 120, max: 200),
+                        size: planetHeight,
+                        iconSize: chipIconSize + 12,
+                        ringSize: planetHeight * 1.25,
                       ),
                     ),
                   ),
-                  SizedBox(height: isMobile ? 10 : isTablet ? lerp(10, 24) : 24),
+                  SizedBox(height: isMobile ? 10 : isTablet ? 18 : isLaptop ? 24 : 32),
                   // Title
                   TweenAnimationBuilder<double>(
                     tween: Tween(begin: 1.0, end: 1.18),
@@ -2881,16 +2891,20 @@ class VisionSection extends StatelessWidget {
                                 blurRadius: isMobile
                                     ? 8
                                     : isTablet
-                                        ? lerp(8, 24)
-                                        : 24,
+                                        ? 16
+                                        : isLaptop
+                                            ? 24
+                                            : 32,
                               ),
                               Shadow(
                                 color: kPremiumPurple.withOpacity(0.18),
                                 blurRadius: isMobile
                                     ? 4
                                     : isTablet
-                                        ? lerp(4, 12)
-                                        : 12,
+                                        ? 8
+                                        : isLaptop
+                                            ? 12
+                                            : 18,
                               ),
                             ],
                           ),
@@ -2898,7 +2912,7 @@ class VisionSection extends StatelessWidget {
                       );
                     },
                   ),
-                  SizedBox(height: isMobile ? 18 : isTablet ? lerp(18, 54) : 54),
+                  SizedBox(height: isMobile ? 18 : isTablet ? 32 : isLaptop ? 54 : 64),
                   // Divider
                   Container(
                     height: dividerHeight,
@@ -2916,18 +2930,22 @@ class VisionSection extends StatelessWidget {
                           blurRadius: isMobile
                               ? 6
                               : isTablet
-                                  ? lerp(6, 18)
-                                  : 18,
+                                  ? 12
+                                  : isLaptop
+                                      ? 18
+                                      : 24,
                           spreadRadius: isMobile
                               ? 1
                               : isTablet
-                                  ? lerp(1, 2)
-                                  : 2,
+                                  ? 1.5
+                                  : isLaptop
+                                      ? 2
+                                      : 2.5,
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: isMobile ? 24 : isTablet ? lerp(24, 64) : 64),
+                  SizedBox(height: isMobile ? 24 : isTablet ? 36 : isLaptop ? 54 : 64),
                   // Vision statement card
                   Container(
                     padding: EdgeInsets.symmetric(vertical: cardPaddingV, horizontal: cardPaddingH),
@@ -2939,8 +2957,10 @@ class VisionSection extends StatelessWidget {
                         width: isMobile
                             ? 1.2
                             : isTablet
-                                ? lerp(1.2, 2.2)
-                                : 2.2,
+                                ? 1.6
+                                : isLaptop
+                                    ? 2.0
+                                    : 2.2,
                       ),
                       backgroundBlendMode: BlendMode.srcOver,
                     ),
@@ -2962,8 +2982,10 @@ class VisionSection extends StatelessWidget {
                               letterSpacing: isMobile
                                   ? 0.7
                                   : isTablet
-                                      ? lerp(0.7, 2.2)
-                                      : 2.2,
+                                      ? 1.2
+                                      : isLaptop
+                                          ? 1.7
+                                          : 2.2,
                               fontFamily: 'Orbitron',
                               height: 1.32,
                               shadows: [
@@ -2972,15 +2994,17 @@ class VisionSection extends StatelessWidget {
                                   blurRadius: isMobile
                                       ? 8
                                       : isTablet
-                                          ? lerp(8, 24)
-                                          : 24,
+                                          ? 16
+                                          : isLaptop
+                                              ? 24
+                                              : 32,
                                 ),
                               ],
                             ),
                       ),
                     ),
                   ),
-                  SizedBox(height: isMobile ? 24 : isTablet ? lerp(24, 64) : 64),
+                  SizedBox(height: isMobile ? 24 : isTablet ? 36 : isLaptop ? 54 : 64),
                   // Vision chips
                   Wrap(
                     spacing: chipSpacing,
@@ -3016,21 +3040,19 @@ class VisionSection extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: isMobile ? 24 : isTablet ? lerp(24, 64) : 64),
+                  SizedBox(height: isMobile ? 24 : isTablet ? 36 : isLaptop ? 54 : 64),
                   // Space code line
                   SizedBox(
                     height: spaceCodeHeight,
                     child: _SpaceCodeLine(
-                      fontSize: isMobile
-                          ? percent(width * 0.025, min: 9, max: 11.5)
-                          : isTablet
-                              ? lerp(percent(width * 0.025, min: 9, max: 11.5), percent(width * 0.014, min: 14, max: 18))
-                              : percent(width * 0.014, min: 14, max: 18),
+                      fontSize: chipFontSize.toDouble() + (isMobile ? 0 : 4),
                       padding: isMobile
                           ? percent(width * 0.012, min: 3, max: 6)
                           : isTablet
-                              ? lerp(percent(width * 0.012, min: 3, max: 6), percent(width * 0.01, min: 8, max: 14))
-                              : percent(width * 0.01, min: 8, max: 14),
+                              ? 8
+                              : isLaptop
+                                  ? 12
+                                  : 14,
                     ),
                   ),
                 ],
