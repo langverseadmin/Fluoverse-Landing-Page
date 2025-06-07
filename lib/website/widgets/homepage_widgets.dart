@@ -2653,7 +2653,6 @@ class VisionSection extends StatelessWidget {
 
     // --- Sizing logic ---
     // Mobile: <600, Tablet: 600-999, Desktop: >=1000
-    // Keep mobile and desktop sizes EXACT, only add tablet/laptop branch
 
     // Mobile
     final double mobileVerticalPadding = percent(height * 0.09, min: 60, max: 80);
@@ -2700,6 +2699,7 @@ class VisionSection extends StatelessWidget {
       return a + (b - a) * t;
     }
 
+    // --- Fix: For tablet, use more generous chip sizing and font ---
     final double verticalPadding = isMobile
         ? mobileVerticalPadding
         : isTablet
@@ -2750,35 +2750,37 @@ class VisionSection extends StatelessWidget {
         : isTablet
             ? lerp(mobileCardRadius, desktopCardRadius)
             : desktopCardRadius;
+
+    // --- CHIP SIZING FIX FOR TABLET ---
     final double chipSpacing = isMobile
         ? mobileChipSpacing
         : isTablet
-            ? lerp(mobileChipSpacing, desktopChipSpacing)
+            ? lerp(mobileChipSpacing, 32) // force more spacing on tablet
             : desktopChipSpacing;
     final double chipRunSpacing = isMobile
         ? mobileChipRunSpacing
         : isTablet
-            ? lerp(mobileChipRunSpacing, desktopChipRunSpacing)
+            ? lerp(mobileChipRunSpacing, 24)
             : desktopChipRunSpacing;
     final double chipWidth = isMobile
         ? mobileChipWidth
         : isTablet
-            ? lerp(mobileChipWidth, desktopChipWidth)
+            ? lerp(mobileChipWidth, 170) // wider for tablet
             : desktopChipWidth;
     final double chipHeight = isMobile
         ? mobileChipHeight
         : isTablet
-            ? lerp(mobileChipHeight, desktopChipHeight)
+            ? lerp(mobileChipHeight, 74) // taller for tablet
             : desktopChipHeight;
     final double chipIconSize = isMobile
         ? mobileChipIconSize
         : isTablet
-            ? lerp(mobileChipIconSize, desktopChipIconSize)
+            ? lerp(mobileChipIconSize, 28) // bigger icon for tablet
             : desktopChipIconSize;
     final double chipFontSize = isMobile
         ? mobileChipFontSize
         : isTablet
-            ? lerp(mobileChipFontSize, desktopChipFontSize)
+            ? lerp(mobileChipFontSize, 15) // bigger font for tablet
             : desktopChipFontSize;
     final double spaceCodeHeight = isMobile
         ? mobileSpaceCodeHeight
