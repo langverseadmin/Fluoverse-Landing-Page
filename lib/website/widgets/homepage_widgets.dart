@@ -2176,7 +2176,7 @@ class LearningCycleSection extends StatelessWidget {
     final double laptopTitleFontSize = percent(width * 0.06, min: 32, max: 44);
     final double laptopSubtitleFontSize = percent(width * 0.032, min: 16, max: 20);
     final double laptopStepCardWidth = percent(width * 0.21, min: 180, max: 220);
-    final double laptopStepCardHeight = percent(height * 0.21, min: 120, max: 300);
+    final double laptopStepCardHeight = percent(height * 0.23, min: 120, max: 320);
     final double laptopStepIconSize = percent(width * 0.03, min: 22, max: 34);
     final double laptopStepIconBgSize = percent(width * 0.09, min: 38, max: 60);
     final double laptopStepSpacing = percent(width * 0.04, min: 24, max: 48);
@@ -3509,10 +3509,12 @@ class _SpaceCodeLineState extends State<_SpaceCodeLine>
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 600;
+    final width = MediaQuery.of(context).size.width;
+    final isMobile = width < 600;
+    final isLaptop = width >= 900 && width < 1400;
     final lines = isMobile ? 2 : 1;
-    // Show only half the words on mobile
-    final visibleWords = isMobile ? (_words.length / 3).ceil() : _words.length;
+    // Show only a third of the words on mobile and laptop
+    final visibleWords = (isMobile || isLaptop) ? (_words.length / 3).ceil() : _words.length;
     final wordsToShow = _words.take(visibleWords).toList();
     final wordsPerLine = (wordsToShow.length / lines).ceil();
 
