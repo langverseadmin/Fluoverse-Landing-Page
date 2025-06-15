@@ -273,7 +273,7 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        PriceWidget(price: '\$14.99'),
+                        PriceWidget(price: 'Free'),
                         const SizedBox(width: 6),
                         const Padding(
                           padding: EdgeInsets.only(bottom: 10),
@@ -300,7 +300,7 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                   isMiddle: true,
                   child: PricingCard(
                     title: 'Pro',
-                    price: widget.isAnnual ? '\$20.00' : '\$24.99',
+                    price: widget.isAnnual ? 'Free' : 'Free',
                     description: 'For serious Spanish learners',
                     features: [
                       '2 cycles per day',
@@ -318,7 +318,7 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         PriceWidget(
-                          price: widget.isAnnual ? '\$20.00' : '\$24.99',
+                          price: widget.isAnnual ? 'Free' : 'Free',
                           isGold: true,
                         ),
                         const SizedBox(width: 6),
@@ -346,7 +346,7 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                   height: cardHeight,
                   child: PricingCard(
                     title: 'Pro Annual',
-                    price: '\$240',
+                    price: 'Free',
                     description: 'Best value for committed learners',
                     features: [
                       '2 cycles per day',
@@ -359,13 +359,15 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                     icon: LucideIcons.star,
                     buttonText: 'Lock in Annual Savings',
                     isPopular: false,
-                    subPrice: '\$299',
-                    subPriceHighlight: 'Save \$59',
+                    subPrice: 'Free',
+                    subPriceHighlight: 'Free',
+                    //subPrice: '\$299',
+                    //subPriceHighlight: 'Save \$59',
                     priceWidget: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        PriceWidget(price: '\$240'),
+                        PriceWidget(price: 'Free'),
                         const SizedBox(width: 6),
                         const Padding(
                           padding: EdgeInsets.only(bottom: 10),
@@ -397,7 +399,7 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                   height: cardHeight,
                   child: PricingCard(
                     title: 'Explorer',
-                    price: '\$14.99',
+                    price: 'Free',
                     description: 'Perfect for curious beginners',
                     features: [
                       '1 cycle per day',
@@ -413,7 +415,7 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        PriceWidget(price: '\$14.99'),
+                        PriceWidget(price: 'Free'),
                         const SizedBox(width: 6),
                         const Padding(
                           padding: EdgeInsets.only(bottom: 10),
@@ -440,7 +442,7 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                   isMiddle: true,
                   child: PricingCard(
                     title: 'Pro',
-                    price: widget.isAnnual ? '\$20.00' : '\$24.99',
+                    price: widget.isAnnual ? 'Free' : 'Free',
                     description: 'For serious Spanish learners',
                     features: [
                       '2 cycles per day',
@@ -458,7 +460,7 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         PriceWidget(
-                          price: widget.isAnnual ? '\$20.00' : '\$24.99',
+                          price: widget.isAnnual ? 'Free' : 'Free',
                           isGold: true,
                         ),
                         const SizedBox(width: 6),
@@ -499,13 +501,13 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                     icon: LucideIcons.star,
                     buttonText: 'Lock in Annual Savings',
                     isPopular: false,
-                    subPrice: '\$299',
-                    subPriceHighlight: 'Save \$59',
+                    subPrice: 'Free',
+                    subPriceHighlight: 'Free',
                     priceWidget: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        PriceWidget(price: '\$240'),
+                        PriceWidget(price: 'Free'),
                         const SizedBox(width: 6),
                         const Padding(
                           padding: EdgeInsets.only(bottom: 10),
