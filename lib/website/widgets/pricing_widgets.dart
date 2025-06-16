@@ -195,11 +195,73 @@ class PricingCardsRow extends StatefulWidget {
 class _PricingCardsRowState extends State<PricingCardsRow> {
   int? hoveredIndex;
 
+  // --- Centralized font and icon sizes for each screen type ---
+  static const _mobileSizes = {
+    'icon': 20.0,
+    'titleFont': 12.0,
+    'priceFont': 14.0,
+    'priceSubFont': 10.0,
+    'subPriceFont': 10.0,
+    'descFont': 10.0,
+    'featureFont': 10.0,
+    'featureIcon': 10.0,
+    'buttonFont': 10.0,
+    'badgeFont': 10.0,
+    'badgeIcon': 10.0,
+  };
+  static const _tabletSizes = {
+    'icon': 38.0,
+    'titleFont': 16.0,
+    'priceFont': 26.0,
+    'priceSubFont': 10.0,
+    'subPriceFont': 10.0,
+    'descFont': 10.0,
+    'featureFont': 10.0,
+    'featureIcon': 12.0,
+    'buttonFont': 10.0,
+    'badgeFont': 10.0,
+    'badgeIcon': 10.0,
+  };
+  static const _laptopSizes = {
+    'icon': 50.0,
+    'titleFont': 22.0,
+    'priceFont': 28.0,
+    'priceSubFont': 22.0,
+    'subPriceFont': 18.0,
+    'descFont': 20.0,
+    'featureFont': 20.0,
+    'featureIcon': 28.0,
+    'buttonFont': 20.0,
+    'badgeFont': 18.0,
+    'badgeIcon': 22.0,
+  };
+  static const _desktopSizes = {
+    'icon': 72.0,
+    'titleFont': 36.0,
+    'priceFont': 56.0,
+    'priceSubFont': 24.0,
+    'subPriceFont': 20.0,
+    'descFont': 22.0,
+    'featureFont': 22.0,
+    'featureIcon': 32.0,
+    'buttonFont': 22.0,
+    'badgeFont': 20.0,
+    'badgeIcon': 24.0,
+  };
+
+  Map<String, double> _getSizes(double width) {
+    if (width < 600) return _mobileSizes;
+    if (width >= 600 && width < 900) return _tabletSizes;
+    if (width >= 900 && width < 2000) return _laptopSizes;
+    return _desktopSizes;
+  }
+
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
     final width = mq.size.width;
     final height = mq.size.height;
+    final sizes = _getSizes(width);
 
     // Helper for percent with min/max clamp
     double percent(double v, {double min = 0, double? max}) {
@@ -211,15 +273,14 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
     // --- Sizing logic for 4 breakpoints: mobile, tablet, laptop, desktop ---
     final isMobile = width < 600;
     final isTablet = width >= 600 && width < 900;
-    final isLaptop = width >= 700 && width < 2000;
-    // final isDesktop = width >= 1400;
+    final isLaptop = width >= 900 && width < 2000;
 
     double cardWidth, cardHeight, middleCardWidth, middleCardHeight, spacing;
 
     if (isMobile) {
-      cardWidth = percent(width * 0.92, min: 220, max: 480);
-      cardHeight = percent(height * 0.38, min: 340, max: 540);
-      middleCardWidth = percent(cardWidth * 1.13, min: 240, max: 520);
+      cardWidth = percent(width * 0.92, min: 220, max: 280);
+      cardHeight = percent(height * 0.58, min: 340, max: 540);
+      middleCardWidth = percent(cardWidth * 1.13, min: 240, max: 280);
       middleCardHeight = percent(cardHeight * 1.07, min: 360, max: 600);
       spacing = percent(height * 0.025, min: 10, max: 32);
     } else if (isTablet) {
@@ -275,12 +336,12 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                       children: [
                         PriceWidget(price: 'Free'),
                         const SizedBox(width: 6),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
                           child: Text(
                             '/per month',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: sizes['priceSubFont'],
                               color: Colors.white70,
                               fontWeight: FontWeight.w500,
                               letterSpacing: 0.2,
@@ -326,8 +387,8 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                           padding: const EdgeInsets.only(bottom: 10),
                           child: Text(
                             widget.isAnnual ? '/per month' : '/per month',
-                            style: const TextStyle(
-                              fontSize: 18,
+                            style: TextStyle(
+                              fontSize: sizes['priceSubFont'],
                               color: Colors.white70,
                               fontWeight: FontWeight.w500,
                               letterSpacing: 0.2,
@@ -361,20 +422,18 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                     isPopular: false,
                     subPrice: 'Free',
                     subPriceHighlight: 'Free',
-                    //subPrice: '\$299',
-                    //subPriceHighlight: 'Save \$59',
                     priceWidget: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         PriceWidget(price: 'Free'),
                         const SizedBox(width: 6),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
                           child: Text(
                             '/per year',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: sizes['priceSubFont'],
                               color: Colors.white70,
                               fontWeight: FontWeight.w500,
                               letterSpacing: 0.2,
@@ -417,12 +476,12 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                       children: [
                         PriceWidget(price: 'Free'),
                         const SizedBox(width: 6),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
                           child: Text(
                             '/per month',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: sizes['priceSubFont'],
                               color: Colors.white70,
                               fontWeight: FontWeight.w500,
                               letterSpacing: 0.2,
@@ -468,8 +527,8 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                           padding: const EdgeInsets.only(bottom: 10),
                           child: Text(
                             widget.isAnnual ? '/per month' : '/per month',
-                            style: const TextStyle(
-                              fontSize: 18,
+                            style: TextStyle(
+                              fontSize: sizes['priceSubFont'],
                               color: Colors.white70,
                               fontWeight: FontWeight.w500,
                               letterSpacing: 0.2,
@@ -509,12 +568,12 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
                       children: [
                         PriceWidget(price: 'Free'),
                         const SizedBox(width: 6),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
                           child: Text(
                             '/per year',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: sizes['priceSubFont'],
                               color: Colors.white70,
                               fontWeight: FontWeight.w500,
                               letterSpacing: 0.2,
@@ -1132,9 +1191,9 @@ class FeatureItemBig extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     // Responsive icon and font size based on screen width
-    double iconSize = width < 600 ? width * 0.07 : width < 900 ? width * 0.045 : 28;
+    double iconSize = width < 600 ? width * 0.05 : width < 900 ? width * 0.035 : 28;
     iconSize = iconSize.clamp(20.0, 32.0);
-    double fontSize = width < 600 ? width * 0.045 : width < 900 ? width * 0.032 : 20;
+    double fontSize = width < 600 ? width * 0.025 : width < 900 ? width * 0.022 : 20;
     fontSize = fontSize.clamp(15.0, 22.0);
     double spacing = width < 600 ? width * 0.04 : width < 900 ? width * 0.025 : 16;
     spacing = spacing.clamp(8.0, 20.0);
