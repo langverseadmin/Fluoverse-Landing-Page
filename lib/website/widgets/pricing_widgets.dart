@@ -195,65 +195,193 @@ class PricingCardsRow extends StatefulWidget {
 class _PricingCardsRowState extends State<PricingCardsRow> {
   int? hoveredIndex;
 
-  // --- Centralized font and icon sizes for each screen type ---
-  static const _mobileSizes = {
-    'icon': 20.0,
-    'titleFont': 12.0,
-    'priceFont': 14.0,
-    'priceSubFont': 10.0,
-    'subPriceFont': 10.0,
-    'descFont': 10.0,
-    'featureFont': 10.0,
-    'featureIcon': 10.0,
-    'buttonFont': 10.0,
-    'badgeFont': 10.0,
-    'badgeIcon': 10.0,
-  };
-  static const _tabletSizes = {
-    'icon': 38.0,
-    'titleFont': 16.0,
-    'priceFont': 26.0,
-    'priceSubFont': 10.0,
-    'subPriceFont': 10.0,
-    'descFont': 10.0,
-    'featureFont': 10.0,
-    'featureIcon': 12.0,
-    'buttonFont': 10.0,
-    'badgeFont': 10.0,
-    'badgeIcon': 10.0,
-  };
-  static const _laptopSizes = {
-    'icon': 50.0,
-    'titleFont': 22.0,
-    'priceFont': 28.0,
-    'priceSubFont': 22.0,
-    'subPriceFont': 18.0,
-    'descFont': 20.0,
-    'featureFont': 20.0,
-    'featureIcon': 28.0,
-    'buttonFont': 20.0,
-    'badgeFont': 18.0,
-    'badgeIcon': 22.0,
-  };
-  static const _desktopSizes = {
-    'icon': 72.0,
-    'titleFont': 36.0,
-    'priceFont': 56.0,
-    'priceSubFont': 24.0,
-    'subPriceFont': 20.0,
-    'descFont': 22.0,
-    'featureFont': 22.0,
-    'featureIcon': 32.0,
-    'buttonFont': 22.0,
-    'badgeFont': 20.0,
-    'badgeIcon': 24.0,
-  };
+  // --- Centralized sizing config (now includes height breakpoints) ---
+  static const _breakpointsW = [600, 1200, 2000];
+  static const _breakpointsH = [700, 900, 1200];
+  static const _sizes = [
+    // Mobile
+    {
+      'cardWidth': 0.92,
+      'cardHeight': 0.78,
+      'middleCardScale': 1.13,
+      'middleCardHeightScale': 1.07,
+      'spacing': 0.025,
+      'icon': 40.0,
+      'iconPadding': 18.0,
+      'titleFont': 20.0,
+      'priceFont': 28.0,
+      'priceSubFont': 13.0,
+      'subPriceFont': 13.0,
+      'descFont': 13.0,
+      'featureFont': 13.0,
+      'featureIcon': 16.0,
+      'featureSpacing': 6.0,
+      'buttonFont': 15.0,
+      'buttonPaddingV': 12.0,
+      'cardPaddingV': 18.0,
+      'cardPaddingH': 12.0,
+      'badgeMarginB': 8.0,
+      'badgeFont': 12.0,
+      'badgeIcon': 14.0,
+      'cardRadius': 16.0,
+      'minCardWidth': 220.0,
+      'maxCardWidth': 280.0,
+      'minCardHeight': 340.0,
+      'maxCardHeight': 800.0,
+    },
+    // Tablet
+    {
+      'cardWidth': 0.28,
+      'cardHeight': 0.78,
+      'middleCardScale': 1.13,
+      'middleCardHeightScale': 1.07,
+      'spacing': 0.03,
+      'icon': 30.0,
+      'iconPadding': 18.0,
+      'titleFont': 22.0,
+      'priceFont': 28.0,
+      'priceSubFont': 22.0,
+      'subPriceFont': 18.0,
+      'descFont': 20.0,
+      'featureFont': 16.0,
+      'featureIcon': 20.0,
+      'featureSpacing': 12.0,
+      'buttonFont': 20.0,
+      'buttonPaddingV': 22.0,
+      'cardPaddingV': 36.0,
+      'cardPaddingH': 32.0,
+      'badgeMarginB': 18.0,
+      'badgeFont': 18.0,
+      'badgeIcon': 22.0,
+      'cardRadius': 28.0,
+      'minCardWidth': 220.0,
+      'maxCardWidth': 340.0,
+      'minCardHeight': 380.0,
+      'maxCardHeight': 1000.0,
+    },
+    // Laptop
+    {
+      'cardWidth': 0.22,
+      'cardHeight': 0.98,
+      'middleCardScale': 1.13,
+      'middleCardHeightScale': 1.07,
+      'spacing': 0.04,
+      'icon': 30.0,
+      'iconPadding': 18.0,
+      'titleFont': 22.0,
+      'priceFont': 38.0,
+      'priceSubFont': 12.0,
+      'subPriceFont': 12.0,
+      'descFont': 10.0,
+      'featureFont': 16.0,
+      'featureIcon': 20.0,
+      'featureSpacing': 2.0,
+      'buttonFont': 14.0,
+      'buttonPaddingV': 12.0,
+      'cardPaddingV': 36.0,
+      'cardPaddingH': 12.0,
+      'badgeMarginB': 18.0,
+      'badgeFont': 18.0,
+      'badgeIcon': 22.0,
+      'cardRadius': 28.0,
+      'minCardWidth': 260.0,
+      'maxCardWidth': 420.0,
+      'minCardHeight': 420.0,
+      'maxCardHeight': 1200.0,
+    },
+    // Desktop
+    {
+      'cardWidth': 0.18,
+      'cardHeight': 0.68,
+      'middleCardScale': 1.13,
+      'middleCardHeightScale': 1.07,
+      'spacing': 0.05,
+      'icon': 72.0,
+      'iconPadding': 36.0,
+      'titleFont': 36.0,
+      'priceFont': 68.0,
+      'priceSubFont': 24.0,
+      'subPriceFont': 20.0,
+      'descFont': 22.0,
+      'featureFont': 20.0,
+      'featureIcon': 28.0,
+      'featureSpacing': 16.0,
+      'buttonFont': 22.0,
+      'buttonPaddingV': 28.0,
+      'cardPaddingV': 48.0,
+      'cardPaddingH': 40.0,
+      'badgeMarginB': 24.0,
+      'badgeFont': 22.0,
+      'badgeIcon': 26.0,
+      'cardRadius': 36.0,
+      'minCardWidth': 320.0,
+      'maxCardWidth': 480.0,
+      'minCardHeight': 480.0,
+      'maxCardHeight': 1200.0,
+    },
+  ];
 
-  Map<String, double> _getSizes(double width) {
-    if (width < 600) return _mobileSizes;
-    if (width >= 600 && width < 900) return _tabletSizes;
-    if (width >= 900 && width < 2000) return _laptopSizes;
-    return _desktopSizes;
+  // Height-based scaling factors for all size keys
+  static const _heightScales = [
+    // Short screens
+    0.75,
+    // Medium
+    1.0,
+    // Tall
+    1.0,
+    // Extra tall
+    0.90,
+  ];
+
+  Map<String, double> _getSizes(double width, double height) {
+    // Pick width config
+    int idxW = 0;
+    if (width < _breakpointsW[0]) {
+      idxW = 0;
+    } else if (width < _breakpointsW[1]) {
+      idxW = 1;
+    } else if (width < _breakpointsW[2]) {
+      idxW = 2;
+    } else {
+      idxW = 3;
+    }
+    // Pick height scale
+    int idxH = 0;
+    if (height < _breakpointsH[0]) {
+      idxH = 0;
+    } else if (height < _breakpointsH[1]) {
+      idxH = 1;
+    } else if (height < _breakpointsH[2]) {
+      idxH = 2;
+    } else {
+      idxH = 3;
+    }
+    final s = _sizes[idxW];
+    final hScale = _heightScales[idxH];
+
+    // Calculate card sizes (width is still based on width, height on height)
+    double cardWidth = (width * s['cardWidth']!).clamp(s['minCardWidth']!, s['maxCardWidth']!);
+    double cardHeight = (height * s['cardHeight']! * hScale).clamp(s['minCardHeight']! * hScale, s['maxCardHeight']! * hScale);
+    double middleCardWidth = (cardWidth * s['middleCardScale']!).clamp(s['minCardWidth']! + 20, s['maxCardWidth']! + 60);
+    double middleCardHeight = (cardHeight * s['middleCardHeightScale']!).clamp(s['minCardHeight']! * hScale + 20, s['maxCardHeight']! * hScale + 200);
+    double spacing = (width * s['spacing']! * hScale).clamp(10.0, 64.0);
+
+    // All other sizes are also scaled by hScale
+    Map<String, double> scaled = {};
+    for (final k in s.keys) {
+      if (k == 'cardWidth' || k == 'cardHeight' || k == 'middleCardScale' || k == 'middleCardHeightScale' || k == 'spacing' || k.startsWith('min') || k.startsWith('max')) continue;
+      scaled[k] = (s[k]! * hScale);
+    }
+
+    return {
+      ...s,
+      ...scaled,
+      'cardWidth': cardWidth,
+      'cardHeight': cardHeight,
+      'middleCardWidth': middleCardWidth,
+      'middleCardHeight': middleCardHeight,
+      'spacing': spacing,
+    };
   }
 
   @override
@@ -261,336 +389,280 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
     final mq = MediaQuery.of(context);
     final width = mq.size.width;
     final height = mq.size.height;
-    final sizes = _getSizes(width);
+    final sizes = _getSizes(width, height);
 
-    // Helper for percent with min/max clamp
-    double percent(double v, {double min = 0, double? max}) {
-      final val = v;
-      if (max != null) return val.clamp(min, max);
-      return val < min ? min : val;
+    final isMobile = width < _breakpointsW[0];
+
+    Widget buildPriceCard({
+      required int index,
+      required String title,
+      required String price,
+      required String description,
+      required List<String> features,
+      required Color startColor,
+      required Color endColor,
+      required IconData icon,
+      required String buttonText,
+      required bool isPopular,
+      String? subPrice,
+      String? subPriceHighlight,
+      Widget? priceWidget,
+      bool isHovered = false,
+    }) {
+      return PricingCard(
+        title: title,
+        price: price,
+        description: description,
+        features: features,
+        startColor: startColor,
+        endColor: endColor,
+        icon: icon,
+        buttonText: buttonText,
+        isPopular: isPopular,
+        subPrice: subPrice,
+        subPriceHighlight: subPriceHighlight,
+        priceWidget: priceWidget,
+        isHovered: isHovered,
+      );
     }
 
-    // --- Sizing logic for 4 breakpoints: mobile, tablet, laptop, desktop ---
-    final isMobile = width < 600;
-    final isTablet = width >= 600 && width < 900;
-    final isLaptop = width >= 900 && width < 2000;
-
-    double cardWidth, cardHeight, middleCardWidth, middleCardHeight, spacing;
+    Widget buildPriceWidget(String price, {bool isGold = false, String? suffix}) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          ShaderMask(
+            shaderCallback: (Rect bounds) => isGold
+                ? const LinearGradient(
+                    colors: [
+                      Color(0xFFFFF9D2),
+                      Color(0xFFFFE066),
+                      Color(0xFFFFD700),
+                      Color(0xFFFFF6C3),
+                      Color(0xFFFFC700),
+                      Color(0xFFFFE066),
+                      Color(0xFFFFF9D2),
+                    ],
+                    stops: [0.0, 0.18, 0.32, 0.5, 0.68, 0.85, 1.0],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds)
+                : const LinearGradient(
+                    colors: [
+                      Color(0xFFF5F6FA),
+                      Color(0xFFD7D7E0),
+                      Color(0xFFBFC6D1),
+                      Color(0xFFFFFFFF),
+                      Color(0xFFBFC6D1),
+                      Color(0xFFD7D7E0),
+                      Color(0xFFF5F6FA),
+                    ],
+                    stops: [0.0, 0.15, 0.32, 0.5, 0.68, 0.85, 1.0],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds),
+            child: Text(
+              price,
+              style: TextStyle(
+                fontSize: sizes['priceFont'],
+                fontWeight: FontWeight.w900,
+                letterSpacing: -2,
+                color: Colors.white,
+                shadows: const [
+                  Shadow(
+                    color: Colors.black26,
+                    blurRadius: 8,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 6),
+          if (suffix != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Text(
+                suffix,
+                style: TextStyle(
+                  fontSize: sizes['priceSubFont'],
+                  color: Colors.white70,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.2,
+                ),
+              ),
+            ),
+        ],
+      );
+    }
 
     if (isMobile) {
-      cardWidth = percent(width * 0.92, min: 220, max: 280);
-      cardHeight = percent(height * 0.78, min: 340, max: 800);
-      middleCardWidth = percent(cardWidth * 1.13, min: 240, max: 280);
-      middleCardHeight = percent(cardHeight * 1.07, min: 360, max: 840);
-      spacing = percent(height * 0.025, min: 10, max: 32);
-    } else if (isTablet) {
-      cardWidth = percent(width * 0.28, min: 220, max: 340);
-      cardHeight = percent(height * 0.78, min: 380, max: 1000);
-      middleCardWidth = percent(cardWidth * 1.13, min: 260, max: 400);
-      middleCardHeight = percent(cardHeight * 1.07, min: 420, max: 660);
-      spacing = percent(width * 0.03, min: 16, max: 36);
-    } else if (isLaptop) {
-      cardWidth = percent(width * 0.22, min: 260, max: 420);
-      cardHeight = percent(height * 0.88, min: 420, max: 1200);
-      middleCardWidth = percent(cardWidth * 1.13, min: 320, max: 480);
-      middleCardHeight = percent(cardHeight * 1.07, min: 480, max: 1400);
-      spacing = percent(width * 0.04, min: 24, max: 48);
+      // Stack vertically on mobile
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildCard(
+            index: 0,
+            width: sizes['cardWidth']!,
+            height: sizes['cardHeight']!,
+            child: buildPriceCard(
+              index: 0,
+              title: 'Explorer',
+              price: 'Free',
+              description: 'Perfect for curious beginners',
+              features: [
+                '1 cycle per day',
+                'Fluoverse AI coaching',
+                'Personalized content',
+              ],
+              startColor: const Color(0xFF232946),
+              endColor: const Color(0xFF232946),
+              icon: LucideIcons.zap,
+              buttonText: 'Start Explorer Journey',
+              isPopular: false,
+              priceWidget: buildPriceWidget('Free', suffix: '/per month'),
+              isHovered: hoveredIndex == 0,
+            ),
+          ),
+          SizedBox(height: sizes['spacing']),
+          _buildCard(
+            index: 1,
+            width: sizes['middleCardWidth']!,
+            height: sizes['middleCardHeight']!,
+            isMiddle: true,
+            child: buildPriceCard(
+              index: 1,
+              title: 'Pro',
+              price: widget.isAnnual ? 'Free' : 'Free',
+              description: 'For serious Spanish learners',
+              features: [
+                '2 cycles per day',
+                'Fluoverse AI coaching',
+                'Priority support',
+                'Personalized content',
+              ],
+              startColor: const Color(0xFFB16CEA),
+              endColor: const Color(0xFFFF5E69),
+              icon: LucideIcons.crown,
+              buttonText: 'Become Pro Now',
+              isPopular: true,
+              priceWidget: buildPriceWidget(widget.isAnnual ? 'Free' : 'Free', isGold: true, suffix: '/per month'),
+              isHovered: hoveredIndex == 1,
+            ),
+          ),
+          SizedBox(height: sizes['spacing']),
+          _buildCard(
+            index: 2,
+            width: sizes['cardWidth']!,
+            height: sizes['cardHeight']!,
+            child: buildPriceCard(
+              index: 2,
+              title: 'Pro Annual',
+              price: 'Free',
+              description: 'Best value for committed learners',
+              features: [
+                '2 cycles per day',
+                'Fluoverse AI coaching',
+                'Priority support',
+                'Personalized content',
+              ],
+              startColor: const Color(0xFF009E8F),
+              endColor: const Color(0xFF00FFB2),
+              icon: LucideIcons.star,
+              buttonText: 'Lock in Annual Savings',
+              isPopular: false,
+              subPrice: 'Free',
+              subPriceHighlight: 'Free',
+              priceWidget: buildPriceWidget('Free', suffix: '/per year'),
+              isHovered: hoveredIndex == 2,
+            ),
+          ),
+        ],
+      );
     } else {
-      // isDesktop
-      cardWidth = percent(width * 0.18, min: 320, max: 480);
-      cardHeight = percent(height * 0.68, min: 480, max: 1200);
-      middleCardWidth = percent(cardWidth * 1.13, min: 360, max: 540);
-      middleCardHeight = percent(cardHeight * 1.07, min: 520, max: 920);
-      spacing = percent(width * 0.05, min: 32, max: 64);
+      // Row for tablet/laptop/desktop
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildCard(
+            index: 0,
+            width: sizes['cardWidth']!,
+            height: sizes['cardHeight']!,
+            child: buildPriceCard(
+              index: 0,
+              title: 'Explorer',
+              price: 'Free',
+              description: 'Perfect for curious beginners',
+              features: [
+                '1 cycle per day',
+                'Fluoverse AI coaching',
+                'Personalized content',
+              ],
+              startColor: const Color(0xFF232946),
+              endColor: const Color(0xFF232946),
+              icon: LucideIcons.zap,
+              buttonText: 'Start Explorer Journey',
+              isPopular: false,
+              priceWidget: buildPriceWidget('Free', suffix: '/per month'),
+              isHovered: hoveredIndex == 0,
+            ),
+          ),
+          SizedBox(width: sizes['spacing']),
+          _buildCard(
+            index: 1,
+            width: sizes['middleCardWidth']!,
+            height: sizes['middleCardHeight']!,
+            isMiddle: true,
+            child: buildPriceCard(
+              index: 1,
+              title: 'Pro',
+              price: widget.isAnnual ? 'Free' : 'Free',
+              description: 'For serious Spanish learners',
+              features: [
+                '2 cycles per day',
+                'Fluoverse AI coaching',
+                'Priority support',
+                'Personalized content',
+              ],
+              startColor: const Color(0xFFB16CEA),
+              endColor: const Color(0xFFFF5E69),
+              icon: LucideIcons.crown,
+              buttonText: 'Become Pro Now',
+              isPopular: true,
+              priceWidget: buildPriceWidget(widget.isAnnual ? 'Free' : 'Free', isGold: true, suffix: '/per month'),
+              isHovered: hoveredIndex == 1,
+            ),
+          ),
+          SizedBox(width: sizes['spacing']),
+          _buildCard(
+            index: 2,
+            width: sizes['cardWidth']!,
+            height: sizes['cardHeight']!,
+            child: buildPriceCard(
+              index: 2,
+              title: 'Pro Annual',
+              price: 'Free',
+              description: 'Best value for committed learners',
+              features: [
+                '2 cycles per day',
+                'Fluoverse AI coaching',
+                'Priority support',
+                'Personalized content',
+              ],
+              startColor: const Color(0xFF009E8F),
+              endColor: const Color(0xFF00FFB2),
+              icon: LucideIcons.star,
+              buttonText: 'Lock in Annual Savings',
+              isPopular: false,
+              subPrice: 'Free',
+              subPriceHighlight: 'Free',
+              priceWidget: buildPriceWidget('Free', suffix: '/per year'),
+              isHovered: hoveredIndex == 2,
+            ),
+          ),
+        ],
+      );
     }
-
-    return Center(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          if (isMobile) {
-            // Stack vertically on mobile
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildCard(
-                  index: 0,
-                  width: cardWidth,
-                  height: cardHeight,
-                  child: PricingCard(
-                    title: 'Explorer',
-                    price: '\$14.99',
-                    description: 'Perfect for curious beginners',
-                    features: [
-                      '1 cycle per day',
-                      'Fluoverse AI coaching',
-                      'Personalized content',
-                    ],
-                    startColor: const Color(0xFF232946),
-                    endColor: const Color(0xFF232946),
-                    icon: LucideIcons.zap,
-                    buttonText: 'Start Explorer Journey',
-                    isPopular: false,
-                    priceWidget: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        PriceWidget(price: 'Free'),
-                        const SizedBox(width: 6),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            '/per month',
-                            style: TextStyle(
-                              fontSize: sizes['priceSubFont'],
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 0.2,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    isHovered: hoveredIndex == 0,
-                  ),
-                ),
-                SizedBox(height: spacing),
-                _buildCard(
-                  index: 1,
-                  width: middleCardWidth,
-                  height: middleCardHeight,
-                  isMiddle: true,
-                  child: PricingCard(
-                    title: 'Pro',
-                    price: widget.isAnnual ? 'Free' : 'Free',
-                    description: 'For serious Spanish learners',
-                    features: [
-                      '2 cycles per day',
-                      'Fluoverse AI coaching',
-                      'Priority support',
-                      'Personalized content',
-                    ],
-                    startColor: const Color(0xFFB16CEA),
-                    endColor: const Color(0xFFFF5E69),
-                    icon: LucideIcons.crown,
-                    buttonText: 'Become Pro Now',
-                    isPopular: true,
-                    priceWidget: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        PriceWidget(
-                          price: widget.isAnnual ? 'Free' : 'Free',
-                          isGold: true,
-                        ),
-                        const SizedBox(width: 6),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            widget.isAnnual ? '/per month' : '/per month',
-                            style: TextStyle(
-                              fontSize: sizes['priceSubFont'],
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 0.2,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    isHovered: hoveredIndex == 1,
-                  ),
-                ),
-                SizedBox(height: spacing),
-                _buildCard(
-                  index: 2,
-                  width: cardWidth,
-                  height: cardHeight,
-                  child: PricingCard(
-                    title: 'Pro Annual',
-                    price: 'Free',
-                    description: 'Best value for committed learners',
-                    features: [
-                      '2 cycles per day',
-                      'Fluoverse AI coaching',
-                      'Priority support',
-                      'Personalized content',
-                    ],
-                    startColor: const Color(0xFF009E8F),
-                    endColor: const Color(0xFF00FFB2),
-                    icon: LucideIcons.star,
-                    buttonText: 'Lock in Annual Savings',
-                    isPopular: false,
-                    subPrice: 'Free',
-                    subPriceHighlight: 'Free',
-                    priceWidget: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        PriceWidget(price: 'Free'),
-                        const SizedBox(width: 6),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            '/per year',
-                            style: TextStyle(
-                              fontSize: sizes['priceSubFont'],
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 0.2,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    isHovered: hoveredIndex == 2,
-                  ),
-                ),
-              ],
-            );
-          } else {
-            // Row for tablet/laptop/desktop
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildCard(
-                  index: 0,
-                  width: cardWidth,
-                  height: cardHeight,
-                  child: PricingCard(
-                    title: 'Explorer',
-                    price: 'Free',
-                    description: 'Perfect for curious beginners',
-                    features: [
-                      '1 cycle per day',
-                      'Fluoverse AI coaching',
-                      'Personalized content',
-                    ],
-                    startColor: const Color(0xFF232946),
-                    endColor: const Color(0xFF232946),
-                    icon: LucideIcons.zap,
-                    buttonText: 'Start Explorer Journey',
-                    isPopular: false,
-                    priceWidget: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        PriceWidget(price: 'Free'),
-                        const SizedBox(width: 6),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            '/per month',
-                            style: TextStyle(
-                              fontSize: sizes['priceSubFont'],
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 0.2,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    isHovered: hoveredIndex == 0,
-                  ),
-                ),
-                SizedBox(width: spacing),
-                _buildCard(
-                  index: 1,
-                  width: middleCardWidth,
-                  height: middleCardHeight,
-                  isMiddle: true,
-                  child: PricingCard(
-                    title: 'Pro',
-                    price: widget.isAnnual ? 'Free' : 'Free',
-                    description: 'For serious Spanish learners',
-                    features: [
-                      '2 cycles per day',
-                      'Fluoverse AI coaching',
-                      'Priority support',
-                      'Personalized content',
-                    ],
-                    startColor: const Color(0xFFB16CEA),
-                    endColor: const Color(0xFFFF5E69),
-                    icon: LucideIcons.crown,
-                    buttonText: 'Become Pro Now',
-                    isPopular: true,
-                    priceWidget: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        PriceWidget(
-                          price: widget.isAnnual ? 'Free' : 'Free',
-                          isGold: true,
-                        ),
-                        const SizedBox(width: 6),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            widget.isAnnual ? '/per month' : '/per month',
-                            style: TextStyle(
-                              fontSize: sizes['priceSubFont'],
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 0.2,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    isHovered: hoveredIndex == 1,
-                  ),
-                ),
-                SizedBox(width: spacing),
-                _buildCard(
-                  index: 2,
-                  width: cardWidth,
-                  height: cardHeight,
-                  child: PricingCard(
-                    title: 'Pro Annual',
-                    price: '\$240',
-                    description: 'Best value for committed learners',
-                    features: [
-                      '2 cycles per day',
-                      'Fluoverse AI coaching',
-                      'Priority support',
-                      'Personalized content',
-                    ],
-                    startColor: const Color(0xFF009E8F),
-                    endColor: const Color(0xFF00FFB2),
-                    icon: LucideIcons.star,
-                    buttonText: 'Lock in Annual Savings',
-                    isPopular: false,
-                    subPrice: 'Free',
-                    subPriceHighlight: 'Free',
-                    priceWidget: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        PriceWidget(price: 'Free'),
-                        const SizedBox(width: 6),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            '/per year',
-                            style: TextStyle(
-                              fontSize: sizes['priceSubFont'],
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 0.2,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    isHovered: hoveredIndex == 2,
-                  ),
-                ),
-              ],
-            );
-          }
-        },
-      ),
-    );
   }
 
   Widget _buildCard({
@@ -670,7 +742,13 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         transform: transform,
         decoration: boxDecoration,
-        child: child,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(child: child),
+          ],
+        ),
       ),
     );
   }
@@ -715,13 +793,13 @@ class PricingCard extends StatelessWidget {
     final isMobile = width < 600;
 
     // Responsive sizes
-    double iconSize = isMobile ? 40 : (isHovered ? 72 : 60);
-    double iconPadding = isMobile ? 18 : (isHovered ? 36 : 28);
-    double titleFont = isMobile ? 20 : 32;
-    double priceFont = isMobile ? 28 : 48;
+    double iconSize = isMobile ? 30 : (isHovered ? 52 : 40);
+    double iconPadding = isMobile ? 18 : (isHovered ? 26 : 18);
+    double titleFont = isMobile ? 20 : 22;
+    double priceFont = isMobile ? 28 : 28;
     double priceSubFont = isMobile ? 13 : 22;
     double subPriceFont = isMobile ? 13 : 18;
-    double descFont = isMobile ? 13 : 20;
+    double descFont = isMobile ? 10 : 16;
     double featureSpacing = isMobile ? 6 : 12;
     double buttonFont = isMobile ? 15 : 20;
     double buttonPaddingV = isMobile ? 12 : 22;
@@ -921,9 +999,11 @@ class PricingCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: isMobile ? 16 : 32),
+          // Center features
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: features
                   .map((f) => Padding(
                         padding: EdgeInsets.symmetric(vertical: featureSpacing),
@@ -1192,11 +1272,11 @@ class FeatureItemBig extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     // Responsive icon and font size based on screen width
     double iconSize = width < 600 ? width * 0.05 : width < 900 ? width * 0.035 : 28;
-    iconSize = iconSize.clamp(20.0, 32.0);
-    double fontSize = width < 600 ? width * 0.025 : width < 900 ? width * 0.022 : 20;
-    fontSize = fontSize.clamp(15.0, 22.0);
+    iconSize = iconSize.clamp(10.0, 12.0);
+    double fontSize = width < 600 ? width * 0.025 : width < 2000 ? width * 0.010 : 20;
+    fontSize = fontSize.clamp(12.0, 22.0);
     double spacing = width < 600 ? width * 0.04 : width < 900 ? width * 0.025 : 16;
-    spacing = spacing.clamp(8.0, 20.0);
+    spacing = spacing.clamp(4.0, 4.0);
 
     return Row(
       children: [
