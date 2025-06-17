@@ -640,7 +640,7 @@ class WhyJoinWidget extends StatelessWidget {
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
                 ),
-                text: 'VIP perks, exclusive badges, and premium community invites.',
+                text: 'VIP perks, exclusive rewards, and premium community invites.',
                 isMobile: isMobile,
               ),
               SizedBox(height: isMobile ? 14 : 22),
