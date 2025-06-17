@@ -324,7 +324,7 @@ class _PricingCardsRowState extends State<PricingCardsRow> {
   // Height-based scaling factors for all size keys
   static const _heightScales = [
     // Short screens
-    0.75,
+    0.90,
     // Medium
     1.0,
     // Tall
