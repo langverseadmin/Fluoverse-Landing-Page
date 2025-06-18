@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:url_launcher/url_launcher.dart';
 
 class GetStartedTitle extends StatelessWidget {
   const GetStartedTitle({super.key});
@@ -347,21 +348,20 @@ class _SparklePainter extends CustomPainter {
 class GetStartedActionButton extends StatefulWidget {
   final String label;
   final IconData icon;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const GetStartedActionButton({
     super.key,
     required this.label,
     required this.icon,
-    required this.onPressed,
+    this.onPressed,
   });
 
   @override
   State<GetStartedActionButton> createState() => _GetStartedActionButtonState();
 }
 
-class _GetStartedActionButtonState extends State<GetStartedActionButton>
-    with SingleTickerProviderStateMixin {
+class _GetStartedActionButtonState extends State<GetStartedActionButton> with TickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -398,7 +398,10 @@ class _GetStartedActionButtonState extends State<GetStartedActionButton>
       onEnter: (_) => _onHover(true),
       onExit: (_) => _onHover(false),
       child: GestureDetector(
-        onTap: widget.onPressed,
+        onTap: () async {
+          final url = Uri.parse('https://fluoverseapp.netlify.app/');
+          await launchUrl(url, mode: LaunchMode.externalApplication);
+        },
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
