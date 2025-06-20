@@ -604,7 +604,7 @@ class _ContactFormSectionState extends State<ContactFormSection>
             _infoRow(
               icon: Icons.phone_outlined,
               label: 'Phone',
-              value: '+1 (555) 123-4567',
+              value: '-',
               isMobile: isMobile,
             ),
             SizedBox(
@@ -614,7 +614,7 @@ class _ContactFormSectionState extends State<ContactFormSection>
             _infoRow(
               icon: Icons.location_on_outlined,
               label: 'Location',
-              value: 'San Francisco, CA',
+              value: 'Athens, Greece',
               isMobile: isMobile,
             ),
             SizedBox(
