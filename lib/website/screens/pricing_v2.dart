@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, use_build_context_synchronously, library_private_types_in_public_api
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously, library_private_types_in_public_api, unused_import
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -9,7 +9,12 @@ import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:ui'; // Import for ImageFilter
 import 'dart:math';
+// Add for web postMessage
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 // Removed: import 'package:carousel_slider/carousel_slider.dart';
+import '../widgets/navigation_bar_widget.dart';
+import '../widgets/homepage_widgets.dart';
 
 // Define Plan class for clarity
 class Plan {
@@ -60,6 +65,8 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
   bool showComparison = false;
   bool isProcessing = false;
   bool paymentSuccess = false;
+  String? paymentStatus; // null, 'processing', 'success', 'error'
+  String debugInfo = '';
 
   late AnimationController _mainController;
   late AnimationController _cardsController;
@@ -110,6 +117,23 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
         if (mounted) _cardsController.forward();
       });
     });
+    // Check for payment param in URL (fragment or query)
+    final paymentParam = _extractPaymentParam();
+    if (paymentParam == 'success') {
+      setState(() {
+        paymentStatus = 'processing';
+        isProcessing = true;
+      });
+      final token = _extractTokenFromUrl();
+      if (token != null) {
+        _pollPremiumStatus(token);
+      }
+    } else if (paymentParam == 'cancel') {
+      setState(() {
+        paymentStatus = 'error';
+        isProcessing = false;
+      });
+    }
   }
 
   void _setupCardAnims(int count, {bool useCardsController = true}) {
@@ -136,6 +160,34 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
     super.dispose();
   }
 
+  // Helper to extract token from query or fragment
+  String? _extractTokenFromUrl() {
+    // Try normal query parameters first
+    final token = Uri.base.queryParameters['token'];
+    if (token != null && token.isNotEmpty) return token;
+
+    // Try parsing from fragment (for hash routing)
+    final fragment = Uri.base.fragment; // e.g. "pricing?token=..."
+    if (fragment.contains('token=')) {
+      final uri = Uri.parse('http://dummy/?${fragment.split('?').last}');
+      return uri.queryParameters['token'];
+    }
+    return null;
+  }
+
+  String? _extractPaymentParam() {
+    // Try query parameters first
+    final payment = Uri.base.queryParameters['payment'];
+    if (payment != null && payment.isNotEmpty) return payment;
+    // Try fragment (for hash routing)
+    final fragment = Uri.base.fragment; // e.g. "pricing?token=...&payment=success"
+    if (fragment.contains('payment=')) {
+      final uri = Uri.parse('http://dummy/?${fragment.split('?').last}');
+      return uri.queryParameters['payment'];
+    }
+    return null;
+  }
+
   Future<void> _startStripePayment() async {
     if (selectedPlan == -1) return;
     setState(() { isProcessing = true; });
@@ -144,7 +196,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
     final price = isYearly ? plan.yearly : plan.monthly;
     final planName = plan.name;
     final features = plan.features;
-    final token = Uri.base.queryParameters['token'];
+    final token = _extractTokenFromUrl();
     if (token == null) {
       _showError('Missing token. Please return to the app and try again.');
       setState(() { isProcessing = false; });
@@ -155,6 +207,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
         Uri.parse('http://localhost:9000/create-checkout-session'),
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
         },
         body: jsonEncode({
           'amount': price * 100, // Stripe expects cents
@@ -192,30 +245,61 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
   }
 
   Future<void> _pollPremiumStatus([String? token]) async {
-    token ??= Uri.base.queryParameters['token'];
+    token ??= _extractTokenFromUrl();
+    debugInfo = 'Polling with token: ${token ?? 'null'}\n';
     if (token == null) {
       _showError('Missing token. Please return to the app and try again.');
+      setState(() {
+        paymentStatus = 'error';
+        isProcessing = false;
+      });
       return;
     }
     for (int i = 0; i < 20; i++) { // Poll for up to 20 seconds
       await Future.delayed(const Duration(seconds: 1));
       try {
         final res = await http.get(
-          Uri.parse('http://localhost:9000/auth/status?token=$token'),
+          Uri.parse('http://localhost:9000/auth/status'),
+          headers: {'Authorization': 'Bearer $token'},
         );
+        debugInfo += 'Poll $i: status ${res.statusCode}, body: ${res.body}\n';
+        debugPrint('Poll $i: status ${res.statusCode}, body: ${res.body}');
         if (res.statusCode == 200) {
           final statusJson = jsonDecode(res.body);
           if (statusJson['is_premium'] == true) {
+            debugInfo += 'Success detected on poll $i.\n';
+            debugPrint('Success detected on poll $i.');
             if (mounted) {
-              setState(() { paymentSuccess = true; });
+              setState(() {
+                paymentSuccess = true;
+                paymentStatus = 'success';
+                isProcessing = false;
+              });
+              // Send signal to parent (web app) that payment succeeded
+              try {
+                html.window.parent?.postMessage('payment_success', '*');
+              } catch (_) {}
             }
             return;
+          } else {
+            debugInfo += 'is_premium not true on poll $i.\n';
           }
+        } else {
+          debugInfo += 'Non-200 status on poll $i.\n';
         }
-      } catch (_) {}
+      } catch (e, stack) {
+        debugInfo += 'Exception on poll $i: $e\n';
+        debugPrint('Exception on poll $i: $e\n$stack');
+      }
     }
     // If not premium after polling, show error
-    if (mounted) _showError('Payment not detected. Please try again or contact support.');
+    if (mounted) {
+      _showError('Payment not detected. Please try again or contact support.');
+      setState(() {
+        paymentStatus = 'error';
+        isProcessing = false;
+      });
+    }
   }
 
   void _showError(String message) {
@@ -238,16 +322,67 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
   Widget build(BuildContext context) {
     Theme.of(context);
 
+    final token = _extractTokenFromUrl();
+    // If no token, show login/signup prompt
+    if (token == null) {
+      // Listen for token from popup
+      html.window.onMessage.listen((event) {
+        try {
+          final data = event.data;
+          if (data is Map && data['token'] != null && data['token'].toString().isNotEmpty) {
+            final newToken = data['token'];
+            // Reload with token in URL
+            final uri = Uri.base.replace(queryParameters: {...Uri.base.queryParameters, 'token': newToken});
+            html.window.location.href = uri.toString();
+          }
+        } catch (_) {}
+      });
+      return Scaffold(
+        backgroundColor: const Color(0xFF181A2A),
+        body: Center(
+          child: Container(
+            padding: const EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.08),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: Colors.white.withOpacity(0.18), width: 1.5),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.lock_outline, color: Colors.white, size: 48),
+                const SizedBox(height: 18),
+                Text(
+                  'Please log in or sign up to view pricing and purchase premium.',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF7B2FF2),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  icon: const Icon(Icons.login),
+                  label: const Text('Login / Sign Up'),
+                  onPressed: () {
+                    html.window.location.href = 'http://localhost:62820/';
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: const SizedBox.shrink(),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-      ),
       body: Stack(
         children: [
           // --- Clean Professional Dark Gradient Background ---
@@ -271,6 +406,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
             controller: _scrollController,
             padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
             children: [
+              const NavigationBarWidget(),
               const SizedBox(height: 24),
               // --- Hero Area ---
               AnimatedBuilder(
@@ -634,24 +770,44 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
               ),
               const SizedBox(height: 80),
               FaqSection(),
+              const FooterSection(),
             ],
           ),
           // (No persistent checkout button)
           // --- Fancy Loader Overlay ---
-          if (isProcessing)
-            Positioned.fill(
-              child: _FancyLoader(),
-            ),
+         if (isProcessing || paymentStatus == 'processing')
+           Positioned.fill(
+             child: _FancyLoader(),
+           ),
           // --- Payment Success Modal ---
-          if (paymentSuccess)
-            Positioned.fill(
-              child: Container(
-                color: Colors.black.withOpacity(0.28),
-                child: Center(
-                  child: GlassmorphicSuccessPopup(),
-                ),
-              ),
-            ),
+         if (paymentStatus == 'success')
+           Positioned.fill(
+             child: Container(
+               color: Colors.black.withOpacity(0.28),
+               child: Center(
+                 child: GlassmorphicSuccessPopup(
+                   onContinue: () {
+                     // Send signal again just in case
+                     try { html.window.parent?.postMessage('payment_success', '*'); } catch (_) {}
+                     // Close the tab after sending the signal
+                     html.window.close();
+                   },
+                 ),
+               ),
+             ),
+           ),
+         if (paymentStatus == 'error')
+           Positioned.fill(
+             child: Container(
+               color: Colors.black.withOpacity(0.28),
+               child: Center(
+                 child: GlassmorphicErrorPopup(
+                   message: 'Payment not detected or was cancelled. Please try again or contact support.'
+                   '\n\nDebug info:\n$debugInfo',
+                 ),
+               ),
+             ),
+           ),
         ],
       ),
     );
@@ -1119,8 +1275,8 @@ class _SaasPricingCard extends StatelessWidget {
                   top: -22,
                   right: -22,
                   child: SizedBox(
-                    height: 54,
-                    width: 54,
+                    height: 64,
+                    width: 64,
                     child: Lottie.asset(
                       'Lottie/Sale.json',
                       repeat: true,
@@ -1133,8 +1289,8 @@ class _SaasPricingCard extends StatelessWidget {
                   top: -22,
                   right: 22,
                   child: SizedBox(
-                    height: 54,
-                    width: 54,
+                    height: 64,
+                    width: 64,
                     child: Lottie.asset(
                       'Lottie/Hot.json',
                       repeat: true,
@@ -1271,7 +1427,8 @@ class _Animated3DButtonState extends State<_Animated3DButton> {
 }
 
 class GlassmorphicSuccessPopup extends StatelessWidget {
-  const GlassmorphicSuccessPopup({super.key});
+  final VoidCallback? onContinue;
+  const GlassmorphicSuccessPopup({super.key, this.onContinue});
 
   @override
   Widget build(BuildContext context) {
@@ -1360,7 +1517,7 @@ class GlassmorphicSuccessPopup extends StatelessWidget {
                   label: 'Continue',
                   hoverColor: Color(0xFFF5D97A),
                   enabled: true,
-                  onTap: () {
+                  onTap: onContinue ?? () {
                     Navigator.of(context).pop();
                   },
                 ),
@@ -1583,51 +1740,57 @@ class _FaqCardState extends State<_FaqCard> {
     return MouseRegion(
       onEnter: (_) => setState(() => _hovering = true),
       onExit: (_) => setState(() => _hovering = false),
-      child: AnimatedContainer(
+      child: AnimatedScale(
+        scale: _hovering ? 1.01 : 1.0,
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeOutCubic,
-        width: cardWidth,
-        height: cardHeight,
-        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 28),
-        decoration: BoxDecoration(
-          color: _hovering
-              ? Colors.white.withOpacity(0.04)
-              : const Color(0xF0181A2A),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withOpacity(0.08), width: 1.5),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.13),
-              blurRadius: 24,
-              offset: const Offset(0, 8),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOutCubic,
+          width: cardWidth,
+          height: cardHeight,
+          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 28),
+          decoration: BoxDecoration(
+            color: const Color(0xF0181A2A),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: _hovering ? Colors.white.withOpacity(0.18) : Colors.white.withOpacity(0.08),
+              width: 1.5,
             ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(widget.faq.icon, color: widget.faq.iconColor, size: 28),
-            const SizedBox(height: 12),
-            Text(
-              widget.faq.question,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              widget.faq.answer,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withOpacity(0.85),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15,
-                  ),
-              maxLines: 4,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.13),
+                blurRadius: 24,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(widget.faq.icon, color: widget.faq.iconColor, size: 28),
+              const SizedBox(height: 12),
+              Text(
+                widget.faq.question,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                widget.faq.answer,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.white.withOpacity(0.85),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15,
+                    ),
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
       ),
     );

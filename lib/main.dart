@@ -2,7 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:go_router/go_router.dart';
 import '../website/screens/homepage.dart'; // 👈 Make sure this matches your file structure
+import '../website/screens/features.dart';
+import '../website/screens/contact.dart';
+import '../website/screens/get_started.dart';
+import '../website/screens/join_waitlist.dart';
+import '../website/screens/pricing_v2.dart';
+import '../website/screens/privacy_policy.dart';
+import '../website/screens/terms_policy.dart';
+import '../website/screens/how_it_works.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,12 +22,53 @@ Future<void> main() async {
   runApp(const FluoverseWebsiteApp());
 }
 
+final _router = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const HomePage(),
+    ),
+    GoRoute(
+      path: '/features',
+      builder: (context, state) => const FeaturesScreen(),
+    ),
+    GoRoute(
+      path: '/contact',
+      builder: (context, state) => const ContactScreen(),
+    ),
+    GoRoute(
+      path: '/get-started',
+      builder: (context, state) => const GetStartedScreen(),
+    ),
+    GoRoute(
+      path: '/join-waitlist',
+      builder: (context, state) => const JoinWaitlist(),
+    ),
+    GoRoute(
+      path: '/pricing',
+      builder: (context, state) => const PaymentScreen(),
+    ),
+    GoRoute(
+      path: '/privacy',
+      builder: (context, state) => const PrivacyPolicyScreen(),
+    ),
+    GoRoute(
+      path: '/terms',
+      builder: (context, state) => const TermsPolicyScreen(),
+    ),
+    GoRoute(
+      path: '/how-it-works',
+      builder: (context, state) => const HowItWorksScreen(),
+    ),
+  ],
+);
+
 class FluoverseWebsiteApp extends StatelessWidget {
   const FluoverseWebsiteApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Fluoverse – Speak-First AI Language Tutor',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -26,7 +76,7 @@ class FluoverseWebsiteApp extends StatelessWidget {
         useMaterial3: true,
         scaffoldBackgroundColor: Colors.transparent, // for gradient visibility
       ),
-      home: const HomePage(), // 👈 This now launches your full website homepage
+      routerConfig: _router,
     );
   }
 }

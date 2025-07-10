@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'dart:ui';
-import '../screens/join_waitlist.dart';
+import 'package:go_router/go_router.dart';
 
 
 
@@ -1640,9 +1640,7 @@ class FinalCtaSection extends StatelessWidget {
                       overlayColor: MaterialStateProperty.all(const Color(0xFF00FFB2).withOpacity(0.13)),
                     ),
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const JoinWaitlist()),
-                      );
+                      context.push('/join-waitlist');
                     },
                   ),
                 ),

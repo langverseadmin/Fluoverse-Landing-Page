@@ -1,8 +1,9 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, unused_import
 
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../screens/homepage.dart';
 import '../screens/how_it_works.dart';
 import '../screens/features.dart';
@@ -129,16 +130,10 @@ class _NavButtonBar extends StatelessWidget {
         _NavButton(
           label: 'Home',
           icon: Icons.home_outlined,
-          selected: isSelected('/home'),
+          selected: isSelected('/'),
           onTap: () {
-            if (!isSelected('/home')) {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                  settings: const RouteSettings(name: '/home'),
-                ),
-                (route) => false,
-              );
+            if (!isSelected('/')) {
+              context.go('/');
             }
           },
         ),
@@ -146,16 +141,10 @@ class _NavButtonBar extends StatelessWidget {
         _NavButton(
           label: 'How It Works',
           icon: Icons.info_outline,
-          selected: isSelected('/howitworks'),
+          selected: isSelected('/how-it-works'),
           onTap: () {
-            if (!isSelected('/howitworks')) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HowItWorksScreen(),
-                  settings: const RouteSettings(name: '/howitworks'),
-                ),
-              );
+            if (!isSelected('/how-it-works')) {
+              context.go('/how-it-works');
             }
           },
         ),
@@ -166,13 +155,7 @@ class _NavButtonBar extends StatelessWidget {
           selected: isSelected('/features'),
           onTap: () {
             if (!isSelected('/features')) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FeaturesScreen(),
-                  settings: const RouteSettings(name: '/features'),
-                ),
-              );
+              context.go('/features');
             }
           },
         ),
@@ -183,13 +166,7 @@ class _NavButtonBar extends StatelessWidget {
           selected: isSelected('/pricing'),
           onTap: () {
             if (!isSelected('/pricing')) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PricingPage(),
-                  settings: const RouteSettings(name: '/pricing'),
-                ),
-              );
+              context.go('/pricing');
             }
           },
         ),
@@ -200,13 +177,7 @@ class _NavButtonBar extends StatelessWidget {
           selected: isSelected('/contact'),
           onTap: () {
             if (!isSelected('/contact')) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ContactScreen(),
-                  settings: const RouteSettings(name: '/contact'),
-                ),
-              );
+              context.go('/contact');
             }
           },
         ),
@@ -408,9 +379,7 @@ class _PremiumButtonState extends State<_PremiumButton> {
             ),
           ),
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const GetStartedScreen()),
-            );
+            context.go('/get-started');
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -699,10 +668,7 @@ class _MobileMenuDialog extends StatelessWidget {
                         ),
                         onTap: () {
                           Navigator.pop(context);
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const HomePage()),
-                          );
+                          context.go('/');
                           onClose();
                         },
                       ),
@@ -716,10 +682,7 @@ class _MobileMenuDialog extends StatelessWidget {
                         ),
                         onTap: () {
                           Navigator.pop(context);
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const HowItWorksScreen()),
-                          );
+                          context.go('/how-it-works');
                           onClose();
                         },
                       ),
@@ -733,10 +696,7 @@ class _MobileMenuDialog extends StatelessWidget {
                         ),
                         onTap: () {
                           Navigator.pop(context);
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const FeaturesScreen()),
-                          );
+                          context.go('/features');
                           onClose();
                         },
                       ),
@@ -750,10 +710,7 @@ class _MobileMenuDialog extends StatelessWidget {
                         ),
                         onTap: () {
                           Navigator.pop(context);
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const PricingPage()),
-                          );
+                          context.go('/pricing');
                           onClose();
                         },
                       ),
@@ -767,10 +724,7 @@ class _MobileMenuDialog extends StatelessWidget {
                         ),
                         onTap: () {
                           Navigator.pop(context);
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const ContactScreen()),
-                          );
+                          context.go('/contact');
                           onClose();
                         },
                       ),
@@ -794,9 +748,7 @@ class _MobileMenuDialog extends StatelessWidget {
                           ),
                           onPressed: () {
                             Navigator.pop(context);
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => const GetStartedScreen()),
-                            );
+                            context.go('/get-started');
                             onClose();
                           },
                           icon: const Icon(Icons.rocket_launch_outlined, size: 22),

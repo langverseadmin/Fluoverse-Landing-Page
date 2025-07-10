@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/website/screens/join_waitlist.dart';
-import 'package:frontend/website/screens/pricing.dart';
+import 'package:go_router/go_router.dart';
 
 // Add this widget definition if it does not exist elsewhere
 class PremiumSpectacularButton extends StatefulWidget {
@@ -449,9 +449,7 @@ class UpcomingSpectacularFeature extends StatelessWidget {
                                   label: "Experience All Features",
                                   icon: Icons.star_rounded,
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) => PricingPage()),
-                                    );
+                                    context.push('/pricing');
                                   },
                                   gradient: const LinearGradient(
                                     colors: [Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255)],
@@ -484,9 +482,7 @@ class UpcomingSpectacularFeature extends StatelessWidget {
                                   label: "Experience All Features",
                                   icon: Icons.star_rounded,
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) => PricingPage()),
-                                    );
+                                    context.push('/pricing');
                                   },
                                   gradient: const LinearGradient(
                                     colors: [Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255)],

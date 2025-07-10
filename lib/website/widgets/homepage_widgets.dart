@@ -4,13 +4,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:frontend/website/screens/contact.dart';
 import 'dart:math';
 
-import 'package:frontend/website/screens/join_waitlist.dart';
-import 'package:frontend/website/screens/privacy_policy.dart';
-import 'package:frontend/website/screens/terms_policy.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:go_router/go_router.dart';
 
 const Color kAccentBlue = Color(0xFF6A82FB);
 const Color kPremiumPurple = Color(0xFFB721FF);
@@ -1012,11 +1009,7 @@ class _ComingSoonStripState extends State<ComingSoonStrip>
                                   end: Alignment.bottomRight,
                                 ),
                                 onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => JoinWaitlist(),
-                                    ),
-                                  );
+                                  context.push('/join-waitlist');
                                 },
                                 glowColor: kPremiumPurple.withOpacity(0.38),
                               ).animate().fadeIn(duration: 1400.ms),
@@ -1552,33 +1545,21 @@ class FooterSection extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                        builder: (context) => PrivacyPolicyScreen(),
-                        ),
-                      );
+                      context.go('/privacy');
                       },
                       child: _FooterLink('Privacy'),
                     ),
                     _FooterDot(),
                     GestureDetector(
                       onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                        builder: (context) => TermsPolicyScreen(),
-                        ),
-                      );
+                      context.go('/terms');
                       },
                       child: _FooterLink('Terms'),
                     ),
                     _FooterDot(),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ContactScreen(),
-                          ),
-                        );
+                        context.go('/contact');
                       },
                       child: _FooterLink('Support'),
                     ),
