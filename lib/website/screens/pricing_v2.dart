@@ -67,6 +67,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
   bool paymentSuccess = false;
   String? paymentStatus; // null, 'processing', 'success', 'error'
   String debugInfo = '';
+  bool showLoginPrompt = false;
 
   late AnimationController _mainController;
   late AnimationController _cardsController;
@@ -323,63 +324,6 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
     Theme.of(context);
 
     final token = _extractTokenFromUrl();
-    // If no token, show login/signup prompt
-    if (token == null) {
-      // Listen for token from popup
-      html.window.onMessage.listen((event) {
-        try {
-          final data = event.data;
-          if (data is Map && data['token'] != null && data['token'].toString().isNotEmpty) {
-            final newToken = data['token'];
-            // Reload with token in URL
-            final uri = Uri.base.replace(queryParameters: {...Uri.base.queryParameters, 'token': newToken});
-            html.window.location.href = uri.toString();
-          }
-        } catch (_) {}
-      });
-      return Scaffold(
-        backgroundColor: const Color(0xFF181A2A),
-        body: Center(
-          child: Container(
-            padding: const EdgeInsets.all(32),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.white.withOpacity(0.18), width: 1.5),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.lock_outline, color: Colors.white, size: 48),
-                const SizedBox(height: 18),
-                Text(
-                  'Please log in or sign up to view pricing and purchase premium.',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF7B2FF2),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                  icon: const Icon(Icons.login),
-                  label: const Text('Login / Sign Up'),
-                  onPressed: () {
-                    html.window.location.href = 'http://localhost:62820/';
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -808,6 +752,58 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
                ),
              ),
            ),
+         if (showLoginPrompt)
+           Positioned.fill(
+             child: Container(
+               color: Colors.black.withOpacity(0.55),
+               child: Center(
+                 child: Container(
+                   padding: const EdgeInsets.all(32),
+                   decoration: BoxDecoration(
+                     color: Colors.white.withOpacity(0.10),
+                     borderRadius: BorderRadius.circular(24),
+                     border: Border.all(color: Colors.white.withOpacity(0.18), width: 1.5),
+                   ),
+                   child: Column(
+                     mainAxisSize: MainAxisSize.min,
+                     children: [
+                       Icon(Icons.lock_outline, color: Colors.white, size: 48),
+                       const SizedBox(height: 18),
+                       Text(
+                         'You need to log in or sign up to join Fluoverse Premium.',
+                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                           color: Colors.white,
+                           fontWeight: FontWeight.bold,
+                         ),
+                         textAlign: TextAlign.center,
+                       ),
+                       const SizedBox(height: 24),
+                       ElevatedButton.icon(
+                         style: ElevatedButton.styleFrom(
+                           backgroundColor: const Color(0xFF7B2FF2),
+                           foregroundColor: Colors.white,
+                           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                         ),
+                         icon: const Icon(Icons.login),
+                         label: const Text('Login / Sign Up'),
+                         onPressed: () {
+                           html.window.location.href = 'http://localhost:51715/';
+                         },
+                       ),
+                       const SizedBox(height: 16),
+                       TextButton(
+                         onPressed: () {
+                           setState(() { showLoginPrompt = false; });
+                         },
+                         child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
+                       ),
+                     ],
+                   ),
+                 ),
+               ),
+             ),
+           ),
         ],
       ),
     );
@@ -1219,11 +1215,19 @@ class _SaasPricingCard extends StatelessWidget {
                           enabled: isSelected,
                           onTap: () {
                             final planIndex = plans.indexWhere((p) => p.name == plan.name);
-                            if (planIndex != -1) {
-                              final paymentScreenState = context.findAncestorStateOfType<_PaymentScreenState>();
+                            final paymentScreenState = context.findAncestorStateOfType<_PaymentScreenState>();
+                            final token = paymentScreenState?._extractTokenFromUrl();
+                            if (token == null) {
+                              // Show login/signup modal instead of redirecting immediately
                               if (paymentScreenState != null) {
-                                paymentScreenState._startStripePaymentFor(planIndex, isYearly);
+                                paymentScreenState.setState(() {
+                                  paymentScreenState.showLoginPrompt = true;
+                                });
                               }
+                              return;
+                            }
+                            if (planIndex != -1 && paymentScreenState != null) {
+                              paymentScreenState._startStripePaymentFor(planIndex, isYearly);
                             }
                           },
                         ),
