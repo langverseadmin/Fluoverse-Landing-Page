@@ -34,7 +34,7 @@ final List<Plan> plans = [
   Plan('Fluoversian', 17.99, 170, [
     'One Cycle per day',
     '45 minutes of daily agent usage',
-    'Fluency Battle Rooms',
+    'Fluency Battle Rooms (early access)',
     'Exclusive Rewards',
 
   ], badge: 'Most popular'),
