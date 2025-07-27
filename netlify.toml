@@ -1,5 +1,5 @@
 [build]
-  command = "bash build-web.sh"
+  command = "flutter build web --release --web-renderer html"
   publish = "build/web"
 
 [[plugins]]
