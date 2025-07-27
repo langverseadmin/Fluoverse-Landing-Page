@@ -31,16 +31,12 @@ final List<Plan> plans = [
   //   'Basic AI tutor',
   //   'Community support',
   // ]),
-  Plan('Fluoversian', 35.29, 170, [
-    'Unlimited daily lessons',
-    'Basic AI tutor',
-    'Community support',
+  Plan('Fluoversian', 17.99, 170, [
+    'One Cycle per day',
+    '45 minutes of daily agent usage',
     'Fluency Battle Rooms',
-    'Personalized AI tutor',
-    'Priority support',
-    '1:1 Live Coaching',
-    'Early access to new features',
-    'Exclusive webinars',
+    'Exclusive Rewards',
+
   ], badge: 'Most popular'),
   // Plan('Fluoversian', 35.29, 180, [
   //   'Unlimited daily lessons',
@@ -1063,17 +1059,23 @@ class _SaasPricingCard extends StatelessWidget {
     badgeColor = goldBadge;
     hoverColor = richGold;
     final subText = ""; // Remove 'Billed monthly' and 'Billed yearly'
-    // For demo: all features in the list, mark as included or not
-    final allFeatures = [
-      'Unlimited daily lessons',
-      'Basic AI tutor',
-      'Community support',
+    // Features list - monthly features plus additional yearly perks
+    final monthlyFeatures = [
+      'One Cycle per day',
+      '45 minutes of daily agent usage',
       'Fluency Battle Rooms',
-      'Personalized AI tutor',
+      'Exclusive Rewards',
+    ];
+    
+    final yearlyAdditionalFeatures = [
       'Priority support',
       'Early access to new features',
-      'Exclusive webinars',
+      '1-on-1 feedback calls',
     ];
+    
+    final allFeatures = isYearly 
+        ? [...monthlyFeatures, ...yearlyAdditionalFeatures]
+        : monthlyFeatures;
     final bool isMainPlan = true; // Always true since we only have one plan
     return MouseRegion(
       cursor: SystemMouseCursors.click,
