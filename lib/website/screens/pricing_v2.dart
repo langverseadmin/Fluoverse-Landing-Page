@@ -205,7 +205,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
     }
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:9000/create-checkout-session'),
+        Uri.parse('https://fluoverse-lv4t.onrender.com/create-checkout-session'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
