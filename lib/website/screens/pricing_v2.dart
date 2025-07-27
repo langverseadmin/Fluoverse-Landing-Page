@@ -216,6 +216,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
           'features': features,
           'period': period,
           'token': token,
+          'plan_name': planName,
         }),
       );
       if (response.statusCode == 200) {
