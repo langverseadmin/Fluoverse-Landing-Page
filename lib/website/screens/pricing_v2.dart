@@ -31,7 +31,7 @@ final List<Plan> plans = [
   //   'Basic AI tutor',
   //   'Community support',
   // ]),
-  Plan('Fluoversian', 17.99, 170, [
+  Plan('Fluoversian', 17.99, 169.99, [
     'One Cycle per day',
     '45 minutes of daily agent usage',
     'Fluency Battle Rooms (early access)',
