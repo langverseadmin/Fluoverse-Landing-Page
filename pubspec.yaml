@@ -73,12 +73,12 @@ flutter:
     - web/assets/Fluoverse_Logo.png
     - web/assets/android-chrome-192x192.png
     - web/assets/Privacy.txt
+    - web/assets/Hot.json
+    - web/assets/Paid.json
+    - web/assets/Premium.json
+    - web/assets/Sale.json
     - assets/Privacy.md
     - assets/Terms.md
-    - assets/Lottie/Hot.json
-    - assets/Lottie/Paid.json
-    - assets/Lottie/Premium.json
-    - assets/Lottie/Sale.json
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

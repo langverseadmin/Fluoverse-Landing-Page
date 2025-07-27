@@ -871,7 +871,7 @@ class PaymentHero extends StatelessWidget {
                 SizedBox(
                   height: 180,
                   child: Lottie.asset(
-                    'Lottie/Premium.json',
+                    'assets/Lottie/Premium.json',
                     fit: BoxFit.contain,
                     repeat: true,
                   ),
@@ -1359,7 +1359,7 @@ class _SaasPricingCard extends StatelessWidget {
                     height: 64,
                     width: 64,
                     child: Lottie.asset(
-                      'Lottie/Sale.json',
+                      'assets/Lottie/Sale.json',
                       repeat: true,
                       fit: BoxFit.contain,
                     ),
@@ -1373,7 +1373,7 @@ class _SaasPricingCard extends StatelessWidget {
                     height: 64,
                     width: 64,
                     child: Lottie.asset(
-                      'Lottie/Hot.json',
+                      'assets/Lottie/Hot.json',
                       repeat: true,
                       fit: BoxFit.contain,
                     ),
