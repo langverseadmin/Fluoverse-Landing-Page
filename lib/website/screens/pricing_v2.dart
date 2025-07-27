@@ -788,7 +788,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
                          icon: const Icon(Icons.login),
                          label: const Text('Login / Sign Up'),
                          onPressed: () {
-                           html.window.location.href = 'http://localhost:51715/';
+                           html.window.location.href = 'https://webapppaymets.netlify.app/';
                          },
                        ),
                        const SizedBox(height: 16),
