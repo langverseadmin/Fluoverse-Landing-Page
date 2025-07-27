@@ -487,7 +487,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
                     // Determine visible cards
                     final visibleEntries = [
                       for (final entry in plans.asMap().entries)
-                        if (!isYearly || entry.key == 1) entry
+                        if (!isYearly || entry.key == 0) entry
                     ];
                     if (_visibleCardCount != visibleEntries.length) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
