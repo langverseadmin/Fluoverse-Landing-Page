@@ -648,9 +648,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
                   child: MouseRegion(
                     cursor: isYearly ? SystemMouseCursors.basic : SystemMouseCursors.click,
                     child: GestureDetector(
-                      onTap: isYearly
-                          ? null
-                          : () async {
+                      onTap: () async {
                               setState(() => showComparison = !showComparison);
                               if (!showComparison) return;
                               await Future.delayed(const Duration(milliseconds: 100));
@@ -688,13 +686,13 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
                         children: [
                           Icon(
                             showComparison ? Icons.expand_less : Icons.expand_more,
-                            color: isYearly ? Colors.grey.shade700 : const Color.fromARGB(255, 255, 255, 255),
+                            color: const Color.fromARGB(255, 255, 255, 255),
                           ),
                           const SizedBox(width: 6),
                           Text(
                             'Compare all features',
-                            style: TextStyle(
-                              color: isYearly ? Colors.grey.shade700 : const Color.fromARGB(255, 255, 255, 255),
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 255, 255, 255),
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -706,9 +704,9 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
               ),
               // Comparison table with key for scroll
               AnimatedCrossFade(
-                crossFadeState: (!isYearly && showComparison) ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                crossFadeState: showComparison ? CrossFadeState.showFirst : CrossFadeState.showSecond,
                 duration: const Duration(milliseconds: 250),
-                firstChild: _PlanComparisonTable(key: _comparisonTableKey, plans: plans),
+                firstChild: _MonthlyYearlyComparisonTable(key: _comparisonTableKey, isYearly: isYearly),
                 secondChild: const SizedBox.shrink(),
               ),
               const SizedBox(height: 80),
@@ -904,17 +902,35 @@ class PaymentHero extends StatelessWidget {
   }
 }
 
-class _PlanComparisonTable extends StatelessWidget {
-  final List<Plan> plans;
-  const _PlanComparisonTable({super.key, required this.plans});
+class _MonthlyYearlyComparisonTable extends StatelessWidget {
+  final bool isYearly;
+  const _MonthlyYearlyComparisonTable({super.key, required this.isYearly});
 
   @override
   Widget build(BuildContext context) {
-    final features = <String>{};
-    for (final plan in plans) {
-      features.addAll(List<String>.from(plan.features));
-    }
-    final featuresList = features.toList();
+    // Define monthly and yearly features
+    final monthlyFeatures = [
+      'One Cycle per day',
+      '45 minutes of daily agent usage',
+      'Fluency Battle Rooms',
+      'Exclusive Rewards',
+    ];
+    
+    final yearlyFeatures = [
+      'One Cycle per day',
+      '45 minutes of daily agent usage',
+      'Fluency Battle Rooms',
+      'Exclusive Rewards',
+      'Priority support',
+      'Early access to new features',
+      '1-on-1 feedback calls',
+    ];
+    
+    final allFeatures = <String>{};
+    allFeatures.addAll(monthlyFeatures);
+    allFeatures.addAll(yearlyFeatures);
+    final featuresList = allFeatures.toList();
+    
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 18),
       decoration: BoxDecoration(
@@ -944,9 +960,9 @@ class _PlanComparisonTable extends StatelessWidget {
             Row(
               children: [
                 const SizedBox(width: 120),
-                ...plans.map((p) => Expanded(
+                Expanded(
                   child: Text(
-                    p.name,
+                    'Fluoversian',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
@@ -955,7 +971,19 @@ class _PlanComparisonTable extends StatelessWidget {
                       letterSpacing: 0.2,
                     ),
                   ),
-                )),
+                ),
+                Expanded(
+                  child: Text(
+                    'Mr Fluoverse',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 16,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                ),
               ],
             ),
             Padding(
@@ -966,10 +994,78 @@ class _PlanComparisonTable extends StatelessWidget {
                 height: 1,
               ),
             ),
-            ...featuresList.map((feature) => _ComparisonRow(
+            ...featuresList.map((feature) => _MonthlyYearlyComparisonRow(
               feature: feature,
-              plans: plans,
+              monthlyFeatures: monthlyFeatures,
+              yearlyFeatures: yearlyFeatures,
             )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MonthlyYearlyComparisonRow extends StatefulWidget {
+  final String feature;
+  final List<String> monthlyFeatures;
+  final List<String> yearlyFeatures;
+  const _MonthlyYearlyComparisonRow({
+    required this.feature, 
+    required this.monthlyFeatures, 
+    required this.yearlyFeatures
+  });
+
+  @override
+  State<_MonthlyYearlyComparisonRow> createState() => _MonthlyYearlyComparisonRowState();
+}
+
+class _MonthlyYearlyComparisonRowState extends State<_MonthlyYearlyComparisonRow> {
+  bool _hovering = false;
+  @override
+  Widget build(BuildContext context) {
+    final hasMonthly = widget.monthlyFeatures.contains(widget.feature);
+    final hasYearly = widget.yearlyFeatures.contains(widget.feature);
+    
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovering = true),
+      onExit: (_) => setState(() => _hovering = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+        decoration: BoxDecoration(
+          color: _hovering ? Colors.white.withOpacity(0.06) : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 0),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 120,
+              child: Text(
+                widget.feature,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white.withOpacity(0.96),
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.13,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Icon(
+                hasMonthly ? Icons.check_circle_rounded : Icons.remove_circle_outline,
+                color: hasMonthly ? Color(0xFF4ADE80) : Colors.white.withOpacity(0.13),
+                size: 26,
+              ),
+            ),
+            Expanded(
+              child: Icon(
+                hasYearly ? Icons.check_circle_rounded : Icons.remove_circle_outline,
+                color: hasYearly ? Color(0xFF4ADE80) : Colors.white.withOpacity(0.13),
+                size: 26,
+              ),
+            ),
           ],
         ),
       ),
@@ -1224,10 +1320,8 @@ class _SaasPricingCard extends StatelessWidget {
                           },
                         ),
                         const SizedBox(height: 18),
-                        ...allFeatures.where((feature) {
-                          // Show all features for the single plan
-                          return plan.features.contains(feature);
-                        }).map((feature) {
+                        ...allFeatures.map((feature) {
+                          // Show all features for the current billing period
                           // All features in this list are included
                           return Padding(
                             padding: EdgeInsets.symmetric(vertical: isMobile ? 2 : 3),
