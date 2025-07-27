@@ -204,7 +204,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
     }
     try {
       final response = await http.post(
-        Uri.parse('https://fluoverse-lv4t.onrender.com/create-checkout-session'),
+        Uri.parse('https://fluoverse.onrender.com/create-checkout-session'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -260,7 +260,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
       await Future.delayed(const Duration(seconds: 1));
       try {
         final res = await http.get(
-          Uri.parse('https://fluoverse-lv4t.onrender.com/auth/status'),
+          Uri.parse('https://fluoverse.onrender.com/auth/status'),
           headers: {'Authorization': 'Bearer $token'},
         );
         debugInfo += 'Poll $i: status ${res.statusCode}, body: ${res.body}\n';
@@ -786,7 +786,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
                          icon: const Icon(Icons.login),
                          label: const Text('Login / Sign Up'),
                          onPressed: () {
-                           html.window.location.href = 'https://webapppaymets.netlify.app/';
+                           html.window.location.href = 'https://fluoverseapp.netlify.app/';
                          },
                        ),
                        const SizedBox(height: 16),
