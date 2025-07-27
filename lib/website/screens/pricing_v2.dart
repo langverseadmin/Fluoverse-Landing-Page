@@ -975,7 +975,7 @@ class _MonthlyYearlyComparisonTable extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    'Mr Fluoverse',
+                    'Fluoversian',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
@@ -1224,7 +1224,7 @@ class _SaasPricingCard extends StatelessWidget {
                         // (No plan label here)
                         Center(
                           child: Text(
-                            isYearly ? 'Mr Fluoverse' : plan.name,
+                            isYearly ? 'Fluoversian' : plan.name,
                             style: theme.textTheme.titleLarge?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
