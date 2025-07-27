@@ -26,20 +26,12 @@ class Plan {
 }
 
 final List<Plan> plans = [
-  Plan('Explorer', 5, 48, [
-    'Unlimited daily lessons',
-    'Basic AI tutor',
-    'Community support',
-  ]),
-  Plan('Pro', 9, 86, [
-    'Unlimited daily lessons',
-    'Basic AI tutor',
-    'Community support',
-    'Fluency Battle Rooms',
-    'Personalized AI tutor',
-    'Priority support',
-  ], badge: 'Most popular'),
-  Plan('Fluoversian', 19, 180, [
+  // Plan('Explorer', 13.99, 48, [
+  //   'Unlimited daily lessons',
+  //   'Basic AI tutor',
+  //   'Community support',
+  // ]),
+  Plan('Fluoversian', 35.29, 170, [
     'Unlimited daily lessons',
     'Basic AI tutor',
     'Community support',
@@ -49,7 +41,18 @@ final List<Plan> plans = [
     '1:1 Live Coaching',
     'Early access to new features',
     'Exclusive webinars',
-  ]),
+  ], badge: 'Most popular'),
+  // Plan('Fluoversian', 35.29, 180, [
+  //   'Unlimited daily lessons',
+  //   'Basic AI tutor',
+  //   'Community support',
+  //   'Fluency Battle Rooms',
+  //   'Personalized AI tutor',
+  //   'Priority support',
+  //   '1:1 Live Coaching',
+  //   'Early access to new features',
+  //   'Exclusive webinars',
+  // ]),
 ];
 
 class PaymentScreen extends StatefulWidget {
@@ -61,7 +64,7 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateMixin {
   bool isYearly = false;
-  int selectedPlan = 1; // Default to Pro (center card)
+  int selectedPlan = 0; // Default to Fluoversian (only plan)
   bool showComparison = false;
   bool isProcessing = false;
   bool paymentSuccess = false;
@@ -1050,29 +1053,15 @@ class _SaasPricingCard extends StatelessWidget {
     final priceText = '\$${price.toStringAsFixed(2)}';
     final ctaText = 'Join Fluoverse';
     Color ctaColor, accentColor, badgeColor, hoverColor;
-    // Gold color for Pro: use a rich, deep gold
+    // Gold color for Fluoversian/Mr Fluoverse: use a rich, deep gold
     const Color richGold = Colors.amber; // deep gold
     const Color goldAccent = Color(0xFFF5D97A); // lighter gold accent
     const Color goldBadge = Color(0xFFFFF8E1);
-    if (plan.name == 'Pro') {
-      // Gold theme (rich gold)
-      ctaColor = richGold;
-      accentColor = goldAccent;
-      badgeColor = goldBadge;
-      hoverColor = richGold;
-    } else if (plan.name == 'Explorer') {
-      // Purple theme
-      ctaColor = Colors.deepPurple;
-      accentColor = Colors.deepPurple.shade400;
-      badgeColor = Colors.deepPurple.shade100;
-      hoverColor = Colors.deepPurple;
-    } else {
-      // Fluoversian: Blue theme
-      ctaColor = Colors.blueAccent.shade700;
-      accentColor = Colors.blueAccent;
-      badgeColor = Colors.blue.shade100;
-      hoverColor = Colors.blueAccent.shade700;
-    }
+    // Fluoversian/Mr Fluoverse: Gold theme (rich gold)
+    ctaColor = richGold;
+    accentColor = goldAccent;
+    badgeColor = goldBadge;
+    hoverColor = richGold;
     final subText = ""; // Remove 'Billed monthly' and 'Billed yearly'
     // For demo: all features in the list, mark as included or not
     final allFeatures = [
@@ -1085,13 +1074,13 @@ class _SaasPricingCard extends StatelessWidget {
       'Early access to new features',
       'Exclusive webinars',
     ];
-    final bool isPro = plan.name == 'Pro';
+    final bool isMainPlan = true; // Always true since we only have one plan
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: onSelect,
         child: AnimatedScale(
-          scale: isPro ? 1.12 : 1.0, // Always larger for Pro
+          scale: isMainPlan ? 1.12 : 1.0, // Always larger for main plan
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOutCubic,
           child: Stack(
@@ -1116,7 +1105,7 @@ class _SaasPricingCard extends StatelessWidget {
                             blurRadius: 32,
                             offset: Offset(0, 12),
                           ),
-                        if (isPro)
+                        if (isMainPlan)
                           BoxShadow(
                             color: Colors.amberAccent.withOpacity(0.85), // Stronger gold glow
                             blurRadius: 6,
@@ -1126,7 +1115,7 @@ class _SaasPricingCard extends StatelessWidget {
                       ],
                       border: Border.all(
                         color: isSelected ? ctaColor : Colors.white.withOpacity(0.08),
-                        width: isPro ? 4.5 : (isSelected ? 3.0 : 1.2),
+                        width: isMainPlan ? 4.5 : (isSelected ? 3.0 : 1.2),
                       ),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
@@ -1185,7 +1174,7 @@ class _SaasPricingCard extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 2, bottom: 0),
                           child: Opacity(
-                            opacity: plan.name != 'Explorer' ? 1.0 : 0.0,
+                            opacity: 1.0, // Always show for the main plan
                             child: Center(
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -1208,7 +1197,7 @@ class _SaasPricingCard extends StatelessWidget {
                         const SizedBox(height: 12),
                         _Animated3DButton(
                           color: isSelected ? ctaColor : ctaColor.withOpacity(0.7),
-                          textColor: plan.name == 'Pro' ? Colors.black : Colors.white,
+                          textColor: Colors.black, // Gold background with black text
                           label: ctaText,
                           borderColor: accentColor.withOpacity(0.5),
                           hoverColor: hoverColor,
@@ -1233,18 +1222,8 @@ class _SaasPricingCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 18),
                         ...allFeatures.where((feature) {
-                          if (plan.name == 'Fluoversian') {
-                            return true;
-                          } else if (plan.name == 'Pro') {
-                            final firstThree = [
-                              'Unlimited daily lessons',
-                              'Basic AI tutor',
-                              'Community support',
-                            ];
-                            return plan.features.contains(feature) || firstThree.contains(feature);
-                          } else {
-                            return plan.features.contains(feature);
-                          }
+                          // Show all features for the single plan
+                          return plan.features.contains(feature);
                         }).map((feature) {
                           // All features in this list are included
                           return Padding(
@@ -1274,7 +1253,7 @@ class _SaasPricingCard extends StatelessWidget {
                   );
                 },
               ),
-              if (isPro && isYearly)
+              if (isMainPlan && isYearly)
                 Positioned(
                   top: -22,
                   right: -22,
@@ -1288,7 +1267,7 @@ class _SaasPricingCard extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (isPro && !isYearly)
+              if (isMainPlan && !isYearly)
                 Positioned(
                   top: -22,
                   right: 22,
