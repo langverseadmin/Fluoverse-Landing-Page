@@ -1205,7 +1205,8 @@ class _SaasPricingCard extends StatelessWidget {
                           hoverColor: hoverColor,
                           enabled: isSelected,
                           onTap: () {
-                            final planIndex = plans.indexWhere((p) => p.name == plan.name);
+                            // Since we only have one plan, use index 0
+                            final planIndex = 0;
                             final paymentScreenState = context.findAncestorStateOfType<_PaymentScreenState>();
                             final token = paymentScreenState?._extractTokenFromUrl();
                             if (token == null) {
@@ -1217,7 +1218,7 @@ class _SaasPricingCard extends StatelessWidget {
                               }
                               return;
                             }
-                            if (planIndex != -1 && paymentScreenState != null) {
+                            if (paymentScreenState != null) {
                               paymentScreenState._startStripePaymentFor(planIndex, isYearly);
                             }
                           },
