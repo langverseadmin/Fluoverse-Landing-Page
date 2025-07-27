@@ -260,7 +260,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
       await Future.delayed(const Duration(seconds: 1));
       try {
         final res = await http.get(
-          Uri.parse('http://localhost:9000/auth/status'),
+          Uri.parse('https://fluoverse-lv4t.onrender.com/auth/status'),
           headers: {'Authorization': 'Bearer $token'},
         );
         debugInfo += 'Poll $i: status ${res.statusCode}, body: ${res.body}\n';
