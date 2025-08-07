@@ -67,6 +67,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
   String? paymentStatus; // null, 'processing', 'success', 'error'
   String debugInfo = '';
   bool showLoginPrompt = false;
+  bool isRetrying = false;
 
   late AnimationController _mainController;
   late AnimationController _cardsController;
@@ -247,7 +248,8 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
 
   Future<void> _pollPremiumStatus([String? token]) async {
     token ??= _extractTokenFromUrl();
-    debugInfo = 'Polling with token: ${token ?? 'null'}\n';
+    // Remove token exposure from debugInfo - only log for debugging, not user display
+    debugPrint('Polling with token: ${token ?? 'null'}');
     if (token == null) {
       _showError('Missing token. Please return to the app and try again.');
       setState(() {
@@ -263,12 +265,11 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
           Uri.parse('https://fluoverse.onrender.com/auth/status'),
           headers: {'Authorization': 'Bearer $token'},
         );
-        debugInfo += 'Poll $i: status ${res.statusCode}, body: ${res.body}\n';
+        // Only log to debugPrint, not to debugInfo for user display
         debugPrint('Poll $i: status ${res.statusCode}, body: ${res.body}');
         if (res.statusCode == 200) {
           final statusJson = jsonDecode(res.body);
           if (statusJson['is_premium'] == true) {
-            debugInfo += 'Success detected on poll $i.\n';
             debugPrint('Success detected on poll $i.');
             if (mounted) {
               setState(() {
@@ -282,23 +283,32 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
               } catch (_) {}
             }
             return;
-          } else {
-            debugInfo += 'is_premium not true on poll $i.\n';
           }
-        } else {
-          debugInfo += 'Non-200 status on poll $i.\n';
         }
       } catch (e, stack) {
-        debugInfo += 'Exception on poll $i: $e\n';
         debugPrint('Exception on poll $i: $e\n$stack');
       }
     }
-    // If not premium after polling, show error
+    // If not premium after polling, show error with retry option
     if (mounted) {
-      _showError('Payment not detected. Please try again or contact support.');
+      _showError('Payment not detected. The payment may still be processing. You can retry the check or contact support if the issue persists.');
       setState(() {
         paymentStatus = 'error';
         isProcessing = false;
+      });
+    }
+  }
+
+  Future<void> _retryPaymentCheck() async {
+    setState(() {
+      isRetrying = true;
+    });
+    
+    try {
+      await _pollPremiumStatus();
+    } finally {
+      setState(() {
+        isRetrying = false;
       });
     }
   }
@@ -307,7 +317,12 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
     showDialog(
       context: context,
       barrierDismissible: true,
-      builder: (ctx) => GlassmorphicErrorPopup(message: message),
+      builder: (ctx) => GlassmorphicErrorPopup(
+        message: message,
+        showRetryButton: true,
+        onRetry: _retryPaymentCheck,
+        isRetrying: isRetrying,
+      ),
     );
   }
 
@@ -744,8 +759,10 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
                color: Colors.black.withOpacity(0.28),
                child: Center(
                  child: GlassmorphicErrorPopup(
-                   message: 'Payment not detected or was cancelled. Please try again or contact support.'
-                   '\n\nDebug info:\n$debugInfo',
+                   message: 'Payment not detected or was cancelled. The payment may still be processing. You can retry the check or contact support if the issue persists.',
+                   showRetryButton: true,
+                   onRetry: _retryPaymentCheck,
+                   isRetrying: isRetrying,
                  ),
                ),
              ),
@@ -1613,7 +1630,17 @@ class GlassmorphicSuccessPopup extends StatelessWidget {
 
 class GlassmorphicErrorPopup extends StatelessWidget {
   final String message;
-  const GlassmorphicErrorPopup({super.key, required this.message});
+  final bool showRetryButton;
+  final void Function()? onRetry;
+  final bool isRetrying;
+  
+  const GlassmorphicErrorPopup({
+    super.key, 
+    required this.message,
+    this.showRetryButton = false,
+    this.onRetry,
+    this.isRetrying = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1687,12 +1714,29 @@ class GlassmorphicErrorPopup extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 32),
+                if (showRetryButton && onRetry != null) ...[
+                  SizedBox(
+                    width: double.infinity,
+                    child: _Animated3DButton(
+                      color: Color(0xFF7B2FF2),
+                      textColor: Colors.white,
+                      label: isRetrying ? 'Checking...' : 'Retry Payment Check',
+                      hoverColor: Color(0xFFE53935),
+                      enabled: !isRetrying,
+                      onTap: isRetrying ? () {} : () {
+                        Navigator.of(context).pop();
+                        onRetry!();
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 SizedBox(
                   width: double.infinity,
                   child: _Animated3DButton(
                     color: Color(0xFFE53935),
                     textColor: Colors.white,
-                    label: 'Try Again',
+                    label: 'Close',
                     hoverColor: Color(0xFF7B2FF2),
                     enabled: true,
                     onTap: () {
