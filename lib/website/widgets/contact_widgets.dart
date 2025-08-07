@@ -594,7 +594,7 @@ class _ContactFormSectionState extends State<ContactFormSection>
             _infoRow(
               icon: Icons.email_outlined,
               label: 'Email',
-              value: 'lingovrse@gmail.com',
+              value: 'fluoverse@gmail.com',
               isMobile: isMobile,
             ),
             SizedBox(
