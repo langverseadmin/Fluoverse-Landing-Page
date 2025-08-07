@@ -210,7 +210,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode({
-          'amount': price * 100, // Stripe expects cents
+          'amount': (price * 100).round(),  // Stripe expects cents
           'currency': 'usd',
           'product_name': 'Fluoverse $planName ($period)',
           'features': features,
