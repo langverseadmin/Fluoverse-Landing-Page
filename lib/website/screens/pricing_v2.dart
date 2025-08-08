@@ -22,7 +22,9 @@ class Plan {
   final double monthly, yearly;
   final List<String> features;
   final String? badge;
-  Plan(this.name, this.monthly, this.yearly, this.features, {this.badge});
+  final String monthlyPriceId;
+  final String yearlyPriceId;
+  Plan(this.name, this.monthly, this.yearly, this.features, {this.badge, required this.monthlyPriceId, required this.yearlyPriceId});
 }
 
 final List<Plan> plans = [
@@ -37,7 +39,7 @@ final List<Plan> plans = [
     'Fluency Battle Rooms (early access)',
     'Exclusive Rewards',
 
-  ], badge: 'Most popular'),
+  ], badge: 'Most popular', monthlyPriceId: 'price_1RtuFxJlDbRIIvhYgzGfHeZC', yearlyPriceId: 'price_1Rpc2PJlDbRIIvhYNamSUptB'),
   // Plan('Fluoversian', 35.29, 180, [
   //   'Unlimited daily lessons',
   //   'Basic AI tutor',
@@ -204,6 +206,9 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
       return;
     }
     try {
+      // Get the price_id based on the selected plan and period
+      final priceId = isYearly ? plan.yearlyPriceId : plan.monthlyPriceId;
+      
       final response = await http.post(
         Uri.parse('https://fluoverse.onrender.com/create-checkout-session'),
         headers: {
@@ -211,8 +216,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode({
-          'amount': (price * 100).round(),  // Stripe expects cents
-          'currency': 'usd',
+          'price_id': priceId,  // Use Stripe's product catalog price_id
           'product_name': 'Fluoverse $planName ($period)',
           'features': features,
           'period': period,
