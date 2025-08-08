@@ -31,7 +31,7 @@ final List<Plan> plans = [
   //   'Basic AI tutor',
   //   'Community support',
   // ]),
-  Plan('Fluoversian', 17.99, 169.99, [
+  Plan('Fluoversian', 16.0, 154.0, [
     'One Cycle per day',
     '45 minutes of daily agent usage',
     'Fluency Battle Rooms (early access)',
@@ -1160,7 +1160,7 @@ class _SaasPricingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final price = isYearly ? plan.yearly : plan.monthly;
-    final priceText = '\$${price.toStringAsFixed(2)}';
+    final priceText = '€${price.toStringAsFixed(2)}';
     final ctaText = 'Join Fluoverse';
     Color ctaColor, accentColor, badgeColor, hoverColor;
     // Gold color for Fluoversian/Mr Fluoverse: use a rich, deep gold
