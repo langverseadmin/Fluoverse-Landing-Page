@@ -1303,7 +1303,7 @@ class _SaasPricingCard extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Text(
-                                  '1 day free trial',
+                                  '14-day free trial',
                                   style: TextStyle(
                                     color: accentColor,
                                     fontWeight: FontWeight.bold,

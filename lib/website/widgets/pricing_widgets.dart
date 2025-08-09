@@ -1653,7 +1653,7 @@ class FinalCtaSection extends StatelessWidget {
                 Icon(LucideIcons.shieldCheck, color: const Color(0xFF00FFB2), size: width < 600 ? width * 0.045 : 18),
                 SizedBox(width: width < 600 ? width * 0.02 : 8),
                 Text(
-                  '7 - day free trial included',
+                  '14-day free trial included',
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.80),
                     fontWeight: FontWeight.w500,
