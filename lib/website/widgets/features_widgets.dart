@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:frontend/website/screens/join_waitlist.dart';
+// import 'package:frontend/website/screens/join_waitlist.dart'; // Disconnected waitlist page
 import 'package:go_router/go_router.dart';
 
 // Add this widget definition if it does not exist elsewhere
@@ -457,22 +457,22 @@ class UpcomingSpectacularFeature extends StatelessWidget {
                                     end: Alignment.bottomRight,
                                   ),
                                 ),
-                                const SizedBox(height: 16),
-                                PremiumSpectacularButton(
-                                  label: "Stay Informed for Upcoming Features",
-                                  icon: Icons.notifications_active_rounded,
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => const JoinWaitlist(),
-                                    );
-                                  },
-                                  gradient: const LinearGradient(
-                                    colors: [Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255)],
-                                    begin: Alignment.topRight,
-                                    end: Alignment.bottomLeft,
-                                  ),
-                                ),
+                                // const SizedBox(height: 16),
+                                // PremiumSpectacularButton(
+                                //   label: "Stay Informed for Upcoming Features",
+                                //   icon: Icons.notifications_active_rounded,
+                                //   onPressed: () {
+                                //     showDialog(
+                                //       context: context,
+                                //       builder: (context) => const JoinWaitlist(),
+                                //     );
+                                //   },
+                                //   gradient: const LinearGradient(
+                                //     colors: [Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255)],
+                                //     begin: Alignment.topRight,
+                                //     end: Alignment.bottomLeft,
+                                //   ),
+                                // ),
                               ],
                             )
                           : Row(
@@ -490,22 +490,22 @@ class UpcomingSpectacularFeature extends StatelessWidget {
                                     end: Alignment.bottomRight,
                                   ),
                                 ),
-                                const SizedBox(width: 32),
-                                PremiumSpectacularButton(
-                                  label: "Stay Informed for Upcoming Features",
-                                  icon: Icons.notifications_active_rounded,
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => const JoinWaitlist(),
-                                    );
-                                  },
-                                  gradient: const LinearGradient(
-                                    colors: [Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255)],
-                                    begin: Alignment.topRight,
-                                    end: Alignment.bottomLeft,
-                                  ),
-                                ),
+                                // const SizedBox(width: 32),
+                                // PremiumSpectacularButton(
+                                //   label: "Stay Informed for Upcoming Features",
+                                //   icon: Icons.notifications_active_rounded,
+                                //   onPressed: () {
+                                //     showDialog(
+                                //       context: context,
+                                //       builder: (context) => const JoinWaitlist(),
+                                //     );
+                                //   },
+                                //   gradient: const LinearGradient(
+                                //     colors: [Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255), Color.fromARGB(255, 183, 0, 255)],
+                                //     begin: Alignment.topRight,
+                                //     end: Alignment.bottomLeft,
+                                //   ),
+                                // ),
                               ],
                             ),
                     ),

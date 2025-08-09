@@ -1001,7 +1001,7 @@ class _ComingSoonStripState extends State<ComingSoonStrip>
                             height: buttonHeight,
                             child: Center(
                               child: _PremiumButton(
-                                text: 'Join Waitlist',
+                                text: 'Coming Soon',
                                 icon: Icons.star_rounded,
                                 background: const LinearGradient(
                                   colors: [kAccentBlue, kPremiumPurple],
@@ -1009,7 +1009,7 @@ class _ComingSoonStripState extends State<ComingSoonStrip>
                                   end: Alignment.bottomRight,
                                 ),
                                 onPressed: () {
-                                  context.push('/join-waitlist');
+                                  // context.push('/join-waitlist'); // Disconnected waitlist page
                                 },
                                 glowColor: kPremiumPurple.withOpacity(0.38),
                               ).animate().fadeIn(duration: 1400.ms),

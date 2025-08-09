@@ -7,7 +7,7 @@ import '../website/screens/homepage.dart'; // 👈 Make sure this matches your f
 import '../website/screens/features.dart';
 import '../website/screens/contact.dart';
 import '../website/screens/get_started.dart';
-import '../website/screens/join_waitlist.dart';
+// import '../website/screens/join_waitlist.dart'; // Disconnected waitlist page
 import '../website/screens/pricing_v2.dart';
 import '../website/screens/privacy_policy.dart';
 import '../website/screens/terms_policy.dart';
@@ -40,10 +40,10 @@ final _router = GoRouter(
       path: '/get-started',
       builder: (context, state) => const GetStartedScreen(),
     ),
-    GoRoute(
-      path: '/join-waitlist',
-      builder: (context, state) => const JoinWaitlist(),
-    ),
+    // GoRoute(
+    //   path: '/join-waitlist',
+    //   builder: (context, state) => const JoinWaitlist(),
+    // ),
     GoRoute(
       path: '/pricing',
       builder: (context, state) => const PaymentScreen(),

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../widgets/get_started_widgets.dart';
-import '../screens/join_waitlist.dart';
+// import '../screens/join_waitlist.dart'; // Disconnected waitlist page
 import '../widgets/homepage_widgets.dart'; // Import for FooterSection
 import '../widgets/navigation_bar_widget.dart'; // Import for NavigationBarWidget
 import 'package:go_router/go_router.dart';
@@ -56,7 +56,7 @@ class GetStartedScreen extends StatelessWidget {
                         label: 'Create Account',
                         icon: LucideIcons.userPlus,
                         onPressed: () {
-                          context.push('/join-waitlist');
+                          // context.push('/join-waitlist'); // Disconnected waitlist page
                         },
                       ),
                       GetStartedActionButton(

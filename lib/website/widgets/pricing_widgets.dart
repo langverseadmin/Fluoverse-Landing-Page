@@ -1616,7 +1616,7 @@ class FinalCtaSection extends StatelessWidget {
                         end: Alignment.bottomRight,
                       ).createShader(bounds),
                       child: Text(
-                        'Join Waitlist',
+                        'Coming Soon',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: buttonFont,
@@ -1640,7 +1640,7 @@ class FinalCtaSection extends StatelessWidget {
                       overlayColor: MaterialStateProperty.all(const Color(0xFF00FFB2).withOpacity(0.13)),
                     ),
                     onPressed: () {
-                      context.push('/join-waitlist');
+                      // context.push('/join-waitlist'); // Disconnected waitlist page
                     },
                   ),
                 ),
