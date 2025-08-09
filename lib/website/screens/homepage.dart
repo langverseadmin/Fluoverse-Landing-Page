@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
 
                     // ✅ Only animate child widgets internally
                     HeroSection(),               // animations INSIDE
-                    ComingSoonStrip(),
+                    // ComingSoonStrip(), // Disconnected coming soon section
                     ValuePropsSection(),
                     LearningCycleSection(),
                     VisionSection(),
