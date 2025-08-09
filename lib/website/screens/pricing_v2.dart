@@ -35,7 +35,7 @@ final List<Plan> plans = [
   // ]),
   Plan('Fluoversian', 16.0, 154.0, [
     'One Cycle per day',
-    '45 minutes of daily agent usage',
+    'Unlimited daily agent usage',
     'Fluency Battle Rooms (early access)',
     'Exclusive Rewards',
 
@@ -933,14 +933,14 @@ class _MonthlyYearlyComparisonTable extends StatelessWidget {
     // Define monthly and yearly features
     final monthlyFeatures = [
       'One Cycle per day',
-      '45 minutes of daily agent usage',
+      'Unlimited daily agent usage',
       'Fluency Battle Rooms',
       'Exclusive Rewards',
     ];
     
     final yearlyFeatures = [
       'One Cycle per day',
-      '45 minutes of daily agent usage',
+      'Unlimited daily agent usage',
       'Fluency Battle Rooms',
       'Exclusive Rewards',
       'Priority support',
@@ -1180,7 +1180,7 @@ class _SaasPricingCard extends StatelessWidget {
     // Features list - monthly features plus additional yearly perks
     final monthlyFeatures = [
       'One Cycle per day',
-      '45 minutes of daily agent usage',
+      'Unlimited daily agent usage',
       'Fluency Battle Rooms',
       'Exclusive Rewards',
     ];
