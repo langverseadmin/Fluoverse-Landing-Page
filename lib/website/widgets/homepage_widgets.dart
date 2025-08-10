@@ -25,9 +25,13 @@ class Background extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF232347), Color(0xFF3B4A6B)], // subtle blue shades
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFF3EAFE), // light lila / purple
+                Color(0xFFF6F8FE),
+                Colors.white,
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
           ),
         ),
@@ -116,17 +120,6 @@ class HeroSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFFF3EAFE), // light lila / purple
-            Color(0xFFF6F8FE),
-            Colors.white,
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -169,33 +162,37 @@ class HeroSection extends StatelessWidget {
                         ).animate().fadeIn(duration: 800.ms),
                         SizedBox(height: isMobile ? 14 : 24),
                         Text(
-                          'Build fluency through conversation, not just study. \n\nSpeak, listen, and interact as if you are truly there. 🌍✨',
+                          'Ready to start speaking Spanish? Click the button below to launch the app and begin your journey!',
                           textAlign: isWide ? TextAlign.left : TextAlign.center,
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                 color: kAccentBlue.withOpacity(0.85),
-                                fontSize: isMobile ? 15 : 18,
+                                fontSize: isMobile ? 16 : 20,
+                                fontWeight: FontWeight.w600,
                               ),
                         ).animate().fadeIn(duration: 1000.ms),
                         SizedBox(height: isMobile ? 18 : 32),
-                        Wrap(
-                          spacing: isMobile ? 12 : 24,
-                          alignment: isWide ? WrapAlignment.start : WrapAlignment.center,
-                          children: [
-                            _PremiumButton(
-                              text: 'Start Speaking',
-                              icon: Icons.mic_rounded,
-                              background: const LinearGradient(
-                                colors: [kAccentBlue, kPremiumPurple],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
+                        SizedBox(
+                          height: isMobile ? 60 : 80,
+                          child: Wrap(
+                            spacing: isMobile ? 12 : 24,
+                            alignment: isWide ? WrapAlignment.start : WrapAlignment.center,
+                            children: [
+                              _PremiumButton(
+                                text: 'LAUNCH APP NOW',
+                                icon: Icons.rocket_launch_rounded,
+                                background: const LinearGradient(
+                                  colors: [Color(0xFF00D4AA), Color.fromARGB(255, 191, 0, 255)],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
                                 onPressed: () async {
-                                final url = Uri.parse('https://fluoverseapp.netlify.app/');
-                                await launchUrl(url, mode: LaunchMode.externalApplication);
+                                  final url = Uri.parse('https://fluoverseapp.netlify.app/');
+                                  await launchUrl(url, mode: LaunchMode.externalApplication);
                                 },
-                              glowColor: kAccentBlue.withOpacity(0.32),
-                            ),
-                          ],
+                                glowColor: const Color(0xFF00D4AA).withOpacity(0.5),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -1681,13 +1678,6 @@ class ValuePropsSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: horizontalPadding),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color.fromARGB(255, 255, 255, 255), Color.fromARGB(255, 255, 255, 255), Colors.white],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -2246,17 +2236,6 @@ class LearningCycleSection extends StatelessWidget {
       padding: EdgeInsets.symmetric(
         vertical: verticalPadding,
         horizontal: horizontalPadding,
-      ),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFFF3EAFE),
-            Color(0xFFE5E8FE),
-            Colors.white,
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -3707,10 +3686,8 @@ class _PremiumButtonState extends State<_PremiumButton> {
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _hovering = true),
       onExit: (_) => setState(() => _hovering = false),
-      child: AnimatedScale(
+      child: Transform.scale(
         scale: scale,
-        duration: duration,
-        curve: Curves.easeOutBack,
         child: GestureDetector(
           onTap: widget.onPressed,
           child: AnimatedContainer(
@@ -3742,21 +3719,21 @@ class _PremiumButtonState extends State<_PremiumButton> {
                   ? Colors.white.withOpacity(
                       _hovering && !isMobile ? 0.12 : 0.07)
                   : null,
-              boxShadow: [
+              boxShadow: _hovering ? [
                 BoxShadow(
                   color: widget.glowColor.withOpacity(
                       isMobile ? 0.22 : shadowOpacity),
-                  blurRadius: isMobile ? 18 : blur * 2,
-                  spreadRadius: isMobile ? 2 : (_hovering && !isMobile ? 4 : 2),
+                  blurRadius: isMobile ? 12 : blur,
+                  spreadRadius: isMobile ? 1 : 2,
                   offset: Offset(0, isMobile ? 4 : 10),
                 ),
-                if (_hovering && !isMobile)
+                if (!isMobile)
                   BoxShadow(
                     color: Colors.white.withOpacity(0.08),
-                    blurRadius: 32,
-                    spreadRadius: 1,
+                    blurRadius: 20,
+                    spreadRadius: 0.5,
                   ),
-              ],
+              ] : [],
               backgroundBlendMode: BlendMode.srcOver,
             ),
             child: Row(

@@ -21,11 +21,16 @@ class NavigationBarWidget extends StatelessWidget {
     if (width < 900) {
       return _MobileNavigationBar();
     }
+    
+    // Calculate responsive padding based on screen width
+    final double horizontalPadding = width < 1100 ? 16.0 : (width < 1400 ? 20.0 : 48.0);
+    final double spacing = width < 1100 ? 8.0 : (width < 1400 ? 12.0 : 32.0);
+    
     return Material(
       elevation: 0,
       color: Colors.transparent,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 18),
+        padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 18),
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 255, 255, 255),
           border: const Border(
@@ -47,7 +52,7 @@ class NavigationBarWidget extends StatelessWidget {
             _BrandLogo(),
             const Spacer(),
             _NavButtonBar(),
-            const SizedBox(width: 32),
+            SizedBox(width: spacing),
             _PremiumButton(),
           ],
         ),
@@ -60,8 +65,10 @@ class _BrandLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final double logoSize = width < 900 ? 36 : 44;
-    final double fontSize = width < 900 ? 22 : 32;
+    final double logoSize = width < 900 ? 36 : (width < 1100 ? 36 : (width < 1400 ? 38 : 44));
+    final double fontSize = width < 900 ? 22 : (width < 1100 ? 24 : (width < 1400 ? 26 : 32));
+    final double spacing = width < 900 ? 10 : (width < 1100 ? 8 : (width < 1400 ? 10 : 16));
+    
     return Row(
       children: [
         Container(
@@ -91,7 +98,7 @@ class _BrandLogo extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: width < 900 ? 10 : 16),
+        SizedBox(width: spacing),
         Text(
           'Fluoverse',
           style: TextStyle(
@@ -192,8 +199,12 @@ class _PremiumDivider extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     // Hide divider on mobile for a cleaner look
     if (width < 900) return SizedBox.shrink();
+    
+    // Use smaller margin on laptop screens
+    final double margin = width < 1100 ? 2.0 : (width < 1400 ? 3.0 : 8.0);
+    
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+      margin: EdgeInsets.symmetric(horizontal: margin),
       height: 28,
       width: 1.6,
       decoration: BoxDecoration(
@@ -237,6 +248,19 @@ class _NavButtonState extends State<_NavButton> {
     // Hide nav buttons on mobile
     if (width < 900) return SizedBox.shrink();
 
+    // Responsive sizing for laptop screens
+    final bool isSmallLaptop = width < 1100;
+    final bool isLaptop = width < 1400;
+    final double horizontalPadding = isActive 
+        ? (isSmallLaptop ? 12.0 : (isLaptop ? 16.0 : 28.0))
+        : (isSmallLaptop ? 8.0 : (isLaptop ? 12.0 : 18.0));
+    final double verticalPadding = isActive 
+        ? (isSmallLaptop ? 8.0 : (isLaptop ? 10.0 : 14.0))
+        : (isSmallLaptop ? 4.0 : (isLaptop ? 6.0 : 10.0));
+    final double fontSize = isSmallLaptop ? 13.0 : (isLaptop ? 14.0 : 17.0);
+    final double iconSize = isSmallLaptop ? 14.0 : (isLaptop ? 16.0 : 20.0);
+    final double iconSpacing = isSmallLaptop ? 2.0 : (isLaptop ? 3.0 : 6.0);
+
     return MouseRegion(
       onEnter: (_) => setState(() => _hovering = true),
       onExit: (_) => setState(() => _hovering = false),
@@ -277,9 +301,7 @@ class _NavButtonState extends State<_NavButton> {
           onTap: widget.onTap,
           splashColor: Colors.blue.withOpacity(0.12),
           child: Padding(
-            padding: isActive
-                ? const EdgeInsets.symmetric(horizontal: 28, vertical: 14)
-                : const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -290,16 +312,16 @@ class _NavButtonState extends State<_NavButton> {
                       color: isActive
                           ? Colors.white
                           : (_hovering ? underlineColor : Color(0xFF2E5BFF)),
-                      size: 20,
+                      size: iconSize,
                     ),
-                    const SizedBox(width: 6),
+                    SizedBox(width: iconSpacing),
                     Text(
                       widget.label,
                       style: TextStyle(
                         color: isActive
                             ? Colors.white
                             : (_hovering ? underlineColor : Color(0xFF263159)),
-                        fontSize: 17,
+                        fontSize: fontSize,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.7,
                         fontFamily: 'Montserrat',
@@ -310,7 +332,7 @@ class _NavButtonState extends State<_NavButton> {
                 const SizedBox(height: 2),
                 AnimatedUnderline(
                   show: _hovering || isActive,
-                  width: 38,
+                  width: isSmallLaptop ? 28 : (isLaptop ? 32 : 38),
                   color: isActive ? Colors.white : underlineColor,
                 ),
               ],
@@ -333,8 +355,21 @@ class _PremiumButtonState extends State<_PremiumButton> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    // On mobile, use a smaller button and font
+    // Responsive sizing for different screen sizes
     final isMobile = width < 900;
+    final isSmallLaptop = width < 1100;
+    final isLaptop = width < 1400;
+    
+    // Calculate responsive padding and sizes
+    final double horizontalPadding = isMobile 
+        ? 22.0 
+        : (isSmallLaptop ? 20.0 : (isLaptop ? 24.0 : 38.0));
+    final double verticalPadding = isMobile 
+        ? 12.0 
+        : (isSmallLaptop ? 10.0 : (isLaptop ? 12.0 : 18.0));
+    final double fontSize = isMobile ? 15.0 : (isSmallLaptop ? 14.0 : (isLaptop ? 15.0 : 18.0));
+    final double iconSize = isMobile ? 18.0 : (isSmallLaptop ? 16.0 : (isLaptop ? 18.0 : 22.0));
+    
     return MouseRegion(
       onEnter: (_) => setState(() => _hovering = true),
       onExit: (_) => setState(() => _hovering = false),
@@ -364,16 +399,14 @@ class _PremiumButtonState extends State<_PremiumButton> {
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
             foregroundColor: Colors.white,
-            padding: isMobile
-                ? const EdgeInsets.symmetric(horizontal: 22, vertical: 12)
-                : const EdgeInsets.symmetric(horizontal: 38, vertical: 18),
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(28),
             ),
             elevation: 0,
             textStyle: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: isMobile ? 15 : 18,
+              fontSize: fontSize,
               fontFamily: 'Montserrat',
               letterSpacing: 1.1,
             ),
@@ -387,7 +420,7 @@ class _PremiumButtonState extends State<_PremiumButton> {
               Icon(
                 Icons.rocket_launch_outlined,
                 color: Colors.white,
-                size: isMobile ? 18 : 22,
+                size: iconSize,
               ),
               const SizedBox(width: 10),
               Text('Get Started'),

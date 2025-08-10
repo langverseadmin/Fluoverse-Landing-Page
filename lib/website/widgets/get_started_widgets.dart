@@ -398,10 +398,7 @@ class _GetStartedActionButtonState extends State<GetStartedActionButton> with Ti
       onEnter: (_) => _onHover(true),
       onExit: (_) => _onHover(false),
       child: GestureDetector(
-        onTap: () async {
-          final url = Uri.parse('https://fluoverseapp.netlify.app/');
-          await launchUrl(url, mode: LaunchMode.externalApplication);
-        },
+        onTap: widget.onPressed,
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {

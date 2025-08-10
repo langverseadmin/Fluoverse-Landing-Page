@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true, // Allow background behind nav bar
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
       body: Background(
         child: Stack(
@@ -22,10 +22,7 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: const [
                     SizedBox(height: kToolbarHeight),
-
-                    // ✅ Only animate child widgets internally
-                    HeroSection(),               // animations INSIDE
-                    // ComingSoonStrip(), // Disconnected coming soon section
+                    HeroSection(),
                     ValuePropsSection(),
                     LearningCycleSection(),
                     VisionSection(),
@@ -34,8 +31,6 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-
-            // ✅ Navigation bar remains completely static
             Positioned(
               top: 0,
               left: 0,

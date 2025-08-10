@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../widgets/get_started_widgets.dart';
 // import '../screens/join_waitlist.dart'; // Disconnected waitlist page
 import '../widgets/homepage_widgets.dart'; // Import for FooterSection
@@ -53,17 +54,19 @@ class GetStartedScreen extends StatelessWidget {
                     alignment: WrapAlignment.center,
                     children: [
                       GetStartedActionButton(
-                        label: 'Create Account',
-                        icon: LucideIcons.userPlus,
-                        onPressed: () {
-                          // context.push('/join-waitlist'); // Disconnected waitlist page
+                        label: 'Launch Web App',
+                        icon: LucideIcons.rocket,
+                        onPressed: () async {
+                          final url = Uri.parse('https://fluoverseapp.netlify.app/');
+                          await launchUrl(url, mode: LaunchMode.externalApplication);
                         },
                       ),
                       GetStartedActionButton(
-                        label: 'Launch Web App',
-                        icon: LucideIcons.rocket,
-                        onPressed: () {
-                          // TO DO: Implement web app launch logic
+                        label: 'Create Account',
+                        icon: LucideIcons.userPlus,
+                        onPressed: () async {
+                          final url = Uri.parse('https://fluoverseapp.netlify.app/');
+                          await launchUrl(url, mode: LaunchMode.externalApplication);
                         },
                       ),
                     ],
