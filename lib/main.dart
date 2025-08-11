@@ -226,7 +226,8 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
       print('🎯 App started - First-time visitor: $isFirstTime, Onboarding deferred: $isOnboardingDeferred');
       
       // Check if user is on pricing page with token (indicating payment flow)
-      final isOnPricingPage = Uri.base.path == '/pricing';
+      // Handle both normal routing and hash routing
+      final isOnPricingPage = Uri.base.path == '/pricing' || Uri.base.fragment.startsWith('/pricing');
       final hasTokenInQuery = Uri.base.queryParameters['token'] != null;
       final hasTokenInFragment = Uri.base.fragment.contains('token=');
       final hasToken = hasTokenInQuery || hasTokenInFragment;
