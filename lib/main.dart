@@ -55,6 +55,7 @@ class FluoverseWebsiteApp extends StatefulWidget {
 class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
   bool _showOnboarding = false;
   bool _isLoading = true; // Add loading state
+  String? _initialFragment; // Store the initial fragment
 
   // Global keys for tour targets
   final Map<String, GlobalKey> _tourKeys = {
@@ -216,6 +217,7 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
     print('🔗 Path: ${Uri.base.path}');
     print('🔗 Query: ${Uri.base.query}');
     print('🔗 Fragment: ${Uri.base.fragment}');
+    _initialFragment = Uri.base.fragment; // Store the initial fragment
     _checkFirstTimeVisitor();
   }
 
@@ -228,7 +230,7 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
       // Check if user is on pricing page with token (indicating payment flow)
       // Handle both normal routing and hash routing
       final fullUrl = Uri.base.toString();
-      final fragment = Uri.base.fragment;
+      final fragment = _initialFragment ?? Uri.base.fragment; // Use stored fragment if available
       final completeUrl = fragment.isNotEmpty ? '$fullUrl#$fragment' : fullUrl;
       final isOnPricingPage = Uri.base.path == '/pricing' || completeUrl.contains('/pricing');
       final hasTokenInQuery = Uri.base.queryParameters['token'] != null;
