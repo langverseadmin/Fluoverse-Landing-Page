@@ -984,7 +984,7 @@ class _MonthlyYearlyComparisonTable extends StatelessWidget {
                 const SizedBox(width: 120),
                 Expanded(
                   child: Text(
-                    'Fluoversian',
+                    'Fluoversian (monthly)',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
@@ -996,7 +996,7 @@ class _MonthlyYearlyComparisonTable extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    'Fluoversian',
+                    'Fluoversian (yearly)',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,

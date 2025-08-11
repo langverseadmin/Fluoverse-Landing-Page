@@ -568,10 +568,26 @@ class _TourOverlay extends StatelessWidget {
     );
   }
 
-    Offset _calculatePopupPosition(Size screenSize) {
-    const popupWidth = 280.0; // Smaller width
-    const popupHeight = 180.0; // Smaller height
-    const margin = 16.0;
+         Offset _calculatePopupPosition(Size screenSize) {
+     // Calculate popup dimensions based on device type
+     final isMobileOrTablet = screenSize.width < 1200;
+     final isLargeScreen = screenSize.width > 1600;
+     
+     double popupWidth;
+     double popupHeight;
+     
+     if (isMobileOrTablet) {
+       popupWidth = 260.0; // Smaller for mobile/tablet
+       popupHeight = 160.0; // Slightly shorter height too
+     } else if (isLargeScreen) {
+       popupWidth = 320.0; // Larger for desktop/large TV monitors
+       popupHeight = 200.0; // Taller for more content
+     } else {
+       popupWidth = 280.0; // Default size for regular desktop
+       popupHeight = 180.0; // Default height
+     }
+     
+     const margin = 16.0;
     
          // Special handling for mobile menu button
      if (step.targetKey == 'mobile-menu-button') {
@@ -727,11 +743,30 @@ class _TourCard extends StatelessWidget {
     required this.onActionCompleted,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 280, // Match the smaller width
-      padding: const EdgeInsets.all(20),
+     @override
+   Widget build(BuildContext context) {
+     final screenWidth = MediaQuery.of(context).size.width;
+     final isMobileOrTablet = screenWidth < 1200;
+     final isLargeScreen = screenWidth > 1600; // Large TV monitors
+     
+     // Adjust width based on device type
+     double containerWidth;
+     double padding;
+     
+     if (isMobileOrTablet) {
+       containerWidth = 260; // Smaller for mobile/tablet
+       padding = 16;
+     } else if (isLargeScreen) {
+       containerWidth = 320; // Larger for desktop/large TV monitors
+       padding = 24;
+     } else {
+       containerWidth = 280; // Default size for regular desktop
+       padding = 20;
+     }
+     
+     return Container(
+       width: containerWidth,
+       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -784,15 +819,16 @@ class _TourCard extends StatelessWidget {
           
           const SizedBox(height: 16),
           
-          // Description
-          Text(
-            step.description,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black54,
-              height: 1.5,
-            ),
-          ),
+                     // Description
+           Text(
+             step.description,
+             textAlign: TextAlign.justify,
+             style: const TextStyle(
+               fontSize: 14,
+               color: Colors.black54,
+               height: 1.5,
+             ),
+           ),
           
           const SizedBox(height: 20),
           

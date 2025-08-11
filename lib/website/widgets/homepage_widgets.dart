@@ -185,7 +185,7 @@ class HeroSection extends StatelessWidget {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               _PremiumButton(
-                                text: 'LAUNCH APP NOW',
+                                text: 'LAUNCH FLUOVERSE NOW',
                                 icon: Icons.rocket_launch_rounded,
                                 background: const LinearGradient(
                                   colors: [Color(0xFF00D4AA), Color.fromARGB(255, 191, 0, 255)],

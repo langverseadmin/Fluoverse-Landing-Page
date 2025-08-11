@@ -158,7 +158,7 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
                 step: 11,
                 total: 11,
                 title: "Launch the App! 🚀",
-                description: "Perfect! This 'LAUNCH APP NOW' button will take you directly to the Fluoverse app where you can sign up and start your Spanish learning journey immediately.",
+                description: "Perfect! This 'LAUNCH FLUOVERSE NOW' button will take you directly to the Fluoverse app where you can sign up and start your Spanish learning journey immediately.",
                 targetKey: "launch-app-button",
                 action: "Start Learning!",
               ),
@@ -561,7 +561,7 @@ class _GlobalPopupWrapperState extends State<GlobalPopupWrapper> with TickerProv
                                             Icon(Icons.rocket_launch_rounded, size: 20),
                                             SizedBox(width: 8),
                                             Text(
-                                              'Launch App',
+                                              'Launch Fluoverse',
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
