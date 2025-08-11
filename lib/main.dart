@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:web/web.dart' as web;
 import '../website/screens/homepage.dart'; // 👈 Make sure this matches your file structure
 import '../website/screens/features.dart';
 import '../website/screens/contact.dart';
@@ -57,7 +56,6 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
   bool _showOnboarding = false;
   bool _isLoading = true; // Add loading state
   String? _initialFragment; // Store the initial fragment
-  bool _isRedirecting = false; // Add redirecting flag
 
   // Global keys for tour targets
   final Map<String, GlobalKey> _tourKeys = {
@@ -227,8 +225,7 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
     try {
       print('🎯 Starting first-time visitor check...');
       
-      // Check if user is on pricing page with token (indicating payment flow)
-      // Handle both normal routing and hash routing
+      // Check URL state
       final fullUrl = Uri.base.toString();
       final fragment = _initialFragment ?? Uri.base.fragment; // Use stored fragment if available
       final completeUrl = fragment.isNotEmpty ? '$fullUrl#$fragment' : fullUrl;
@@ -247,72 +244,35 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
       print('  - Has token in query: $hasTokenInQuery');
       print('  - Has token in fragment: $hasTokenInFragment');
       print('  - Has token: $hasToken');
-      
-             // Check if we need to redirect to pricing page
-       if (fragment.contains('/pricing') && hasToken && Uri.base.path != '/pricing') {
-         print('🎯 Detected pricing page in fragment but not on pricing route - redirecting');
-         // Extract token from fragment
-         final tokenMatch = RegExp(r'token=([^&]+)').firstMatch(fragment);
-         if (tokenMatch != null) {
-           final token = tokenMatch.group(1);
-           print('🎯 Extracted token: $token');
-           // Set redirecting flag to prevent loading state
-           _isRedirecting = true;
-           // Force navigation to pricing page with token using window.location
-           final newUrl = '${Uri.base.origin}/pricing?token=$token';
-           print('🎯 Redirecting to: $newUrl');
-           print('🎯 Current origin: ${Uri.base.origin}');
-           print('🎯 Current pathname: ${Uri.base.path}');
-           web.window.location.href = newUrl;
-           return; // Exit early since we're redirecting
-         }
-       }
-      
-      // Only check first-time visitor if we're not redirecting
-      if (!_isRedirecting) {
-        print('🎯 Checking first-time visitor status...');
-        final isFirstTime = await FirstTimeVisitorService.instance.checkFirstTimeVisitor();
-        final isOnboardingDeferred = await FirstTimeVisitorService.instance.isOnboardingDeferred();
-        print('🎯 App started - First-time visitor: $isFirstTime, Onboarding deferred: $isOnboardingDeferred');
-        
+
+      // SIMPLIFIED: If a token exists anywhere, do not intervene. Just stop loading immediately.
+      if (hasToken) {
         if (mounted) {
           setState(() {
-            // Show onboarding if:
-            // 1. User is first-time visitor AND not on pricing page with token, OR
-            // 2. User has deferred onboarding (meaning they skipped it during payment flow)
-            _showOnboarding = (isFirstTime && !(isOnPricingPage && hasToken)) || isOnboardingDeferred;
+            _showOnboarding = false;
             _isLoading = false;
           });
-          
-          print('🎯 Final decision - Onboarding will be shown: $_showOnboarding');
-          print('🎯 Breakdown:');
-          print('  - isFirstTime: $isFirstTime');
-          print('  - isOnPricingPage: $isOnPricingPage');
-          print('  - hasToken: $hasToken');
-          print('  - isOnboardingDeferred: $isOnboardingDeferred');
-          print('  - Condition 1 (first-time AND not on pricing with token): ${isFirstTime && !(isOnPricingPage && hasToken)}');
-          print('  - Condition 2 (deferred onboarding): $isOnboardingDeferred');
-          
-          if (isFirstTime && isOnPricingPage && hasToken) {
-            print('🎯 First-time visitor on pricing page with token - deferring onboarding for later');
-            // Defer onboarding for later
-            await FirstTimeVisitorService.instance.deferOnboarding();
-          }
         }
+        return; // Let the router render the current route as-is
       }
-    } catch (e) {
-      print('❌ Error checking first-time visitor: $e');
-      if (mounted && !_isRedirecting) {
+      
+      // Otherwise proceed with first-time/onboarding logic
+      final isFirstTime = await FirstTimeVisitorService.instance.checkFirstTimeVisitor();
+      final isOnboardingDeferred = await FirstTimeVisitorService.instance.isOnboardingDeferred();
+      print('🎯 App started - First-time visitor: $isFirstTime, Onboarding deferred: $isOnboardingDeferred');
+      
+      if (mounted) {
         setState(() {
-          _showOnboarding = false; // Don't show onboarding on error
+          // Show onboarding for first-time users when NOT on pricing with token
+          _showOnboarding = (isFirstTime && !(isOnPricingPage && hasToken)) || isOnboardingDeferred;
           _isLoading = false;
         });
       }
-    } finally {
-      // Ensure loading state is cleared even if there are errors
-      if (mounted && !_isRedirecting && _isLoading) {
-        print('🎯 Clearing loading state in finally block');
+    } catch (e) {
+      print('❌ Error checking first-time visitor: $e');
+      if (mounted) {
         setState(() {
+          _showOnboarding = false; // Don't show onboarding on error
           _isLoading = false;
         });
       }
@@ -562,32 +522,32 @@ class _GlobalPopupWrapperState extends State<GlobalPopupWrapper> with TickerProv
                                       ),
                                     ),
                                     const SizedBox(width: 16),
-                                                                             const Expanded(
-                                           child: Column(
-                                             crossAxisAlignment: CrossAxisAlignment.start,
-                                             children: [
-                                               Text(
-                                                 'Ready to Start?',
-                                                 style: TextStyle(
-                                                   color: Colors.white,
-                                                   fontSize: 20,
-                                                   fontWeight: FontWeight.bold,
-                                                   decoration: TextDecoration.none,
-                                                 ),
-                                               ),
-                                               SizedBox(height: 4),
-                                               Text(
-                                                 'Your Spanish journey awaits',
-                                                 style: TextStyle(
-                                                   color: Colors.white,
-                                                   fontSize: 14,
-                                                   fontWeight: FontWeight.w400,
-                                                   decoration: TextDecoration.none,
-                                                 ),
-                                               ),
-                                             ],
+                                                                     const Expanded(
+                                       child: Column(
+                                         crossAxisAlignment: CrossAxisAlignment.start,
+                                         children: [
+                                           Text(
+                                             'Ready to Start?',
+                                             style: TextStyle(
+                                               color: Colors.white,
+                                               fontSize: 20,
+                                               fontWeight: FontWeight.bold,
+                                               decoration: TextDecoration.none,
+                                             ),
                                            ),
-                                         ),
+                                           SizedBox(height: 4),
+                                           Text(
+                                             'Your Spanish journey awaits',
+                                             style: TextStyle(
+                                               color: Colors.white,
+                                               fontSize: 14,
+                                               fontWeight: FontWeight.w400,
+                                               decoration: TextDecoration.none,
+                                             ),
+                                           ),
+                                         ],
+                                       ),
+                                     ),
                                     GestureDetector(
                                       onTap: _dismissPopup,
                                       child: Container(
