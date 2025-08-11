@@ -104,4 +104,38 @@ class FirstTimeVisitorService {
       print('❌ Error resetting visitor ID: $e');
     }
   }
+  
+  /// Defer onboarding for later (used when user is on pricing page for payment)
+  /// This allows the user to still be considered a first-time visitor when they return
+  Future<void> deferOnboarding() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('onboarding_deferred', true);
+      print('⏳ Onboarding deferred for later');
+    } catch (e) {
+      print('❌ Error deferring onboarding: $e');
+    }
+  }
+  
+  /// Check if onboarding was deferred
+  Future<bool> isOnboardingDeferred() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool('onboarding_deferred') ?? false;
+    } catch (e) {
+      print('❌ Error checking deferred onboarding: $e');
+      return false;
+    }
+  }
+  
+  /// Clear deferred onboarding flag (called when onboarding is completed)
+  Future<void> clearDeferredOnboarding() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('onboarding_deferred');
+      print('✅ Deferred onboarding cleared');
+    } catch (e) {
+      print('❌ Error clearing deferred onboarding: $e');
+    }
+  }
 }

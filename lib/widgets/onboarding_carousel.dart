@@ -587,8 +587,40 @@ class _TourOverlay extends StatelessWidget {
        popupHeight = 180.0; // Default height
      }
      
-     const margin = 16.0;
-    
+          const margin = 16.0;
+     
+     // Special handling for hero section (first step) on mobile devices
+     if (step.targetKey == 'hero-section' && isMobileOrTablet) {
+       // For mobile devices, position the first step explanation box higher up
+       double dx = (screenSize.width / 2 - popupWidth / 2).clamp(margin, screenSize.width - popupWidth - margin);
+       double dy = screenSize.height * 0.25; // Position at 25% from top for better visibility
+       return Offset(dx, dy);
+     }
+     
+     // Special handling for features step on mobile devices
+     if (step.targetKey == 'nav-features' && isMobileOrTablet) {
+       // For mobile devices, position the features step explanation box at 40% from top
+       double dx = (screenSize.width / 2 - popupWidth / 2).clamp(margin, screenSize.width - popupWidth - margin);
+       double dy = screenSize.height * 0.53; // Position at 40% from top
+       return Offset(dx, dy);
+     }
+     
+     // Special handling for pricing step on mobile devices
+     if (step.targetKey == 'nav-pricing' && isMobileOrTablet) {
+       // For mobile devices, position the pricing step explanation box at 5% from top
+       double dx = (screenSize.width / 2 - popupWidth / 2).clamp(margin, screenSize.width - popupWidth - margin);
+       double dy = screenSize.height * 0.05; // Position at 5% from top
+       return Offset(dx, dy);
+     }
+     
+     // Special handling for contact step (step 8) on mobile devices
+     if (step.targetKey == 'nav-contact' && isMobileOrTablet) {
+       // For mobile devices, position this step's explanation box higher up
+       double dx = (screenSize.width / 2 - popupWidth / 2).clamp(margin, screenSize.width - popupWidth - margin);
+       double dy = screenSize.height * 0.15; // Position at 15% from top to avoid overlapping buttons
+       return Offset(dx, dy);
+     }
+     
          // Special handling for mobile menu button
      if (step.targetKey == 'mobile-menu-button') {
        // Check if this is mobile/tablet

@@ -217,13 +217,32 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
   Future<void> _checkFirstTimeVisitor() async {
     try {
       final isFirstTime = await FirstTimeVisitorService.instance.checkFirstTimeVisitor();
-      print('🎯 App started - First-time visitor: $isFirstTime');
+      final isOnboardingDeferred = await FirstTimeVisitorService.instance.isOnboardingDeferred();
+      print('🎯 App started - First-time visitor: $isFirstTime, Onboarding deferred: $isOnboardingDeferred');
+      
+      // Check if user is on pricing page with token (indicating payment flow)
+      final isOnPricingPage = Uri.base.path == '/pricing';
+      final hasToken = Uri.base.queryParameters['token'] != null || 
+                      Uri.base.fragment.contains('token=');
+      
+      print('🎯 Current page: ${Uri.base.path}, Has token: $hasToken');
       
       if (mounted) {
         setState(() {
-          _showOnboarding = isFirstTime;
+          // Show onboarding if:
+          // 1. User is first-time visitor AND not on pricing page with token, OR
+          // 2. User has deferred onboarding (meaning they skipped it during payment flow)
+          _showOnboarding = (isFirstTime && !(isOnPricingPage && hasToken)) || isOnboardingDeferred;
           _isLoading = false;
         });
+        
+        print('🎯 Onboarding will be shown: $_showOnboarding');
+        
+        if (isFirstTime && isOnPricingPage && hasToken) {
+          print('🎯 First-time visitor on pricing page with token - deferring onboarding for later');
+          // Defer onboarding for later
+          await FirstTimeVisitorService.instance.deferOnboarding();
+        }
       }
     } catch (e) {
       print('❌ Error checking first-time visitor: $e');
@@ -242,6 +261,9 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
       _showOnboarding = false;
     });
     print('🎯 _showOnboarding is now: $_showOnboarding');
+    
+    // Clear the deferred onboarding flag when onboarding is completed
+    FirstTimeVisitorService.instance.clearDeferredOnboarding();
   }
 
   @override

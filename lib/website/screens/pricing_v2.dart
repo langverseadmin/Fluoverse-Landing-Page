@@ -15,6 +15,7 @@ import 'dart:html' as html;
 // Removed: import 'package:carousel_slider/carousel_slider.dart';
 import '../widgets/navigation_bar_widget.dart';
 import '../widgets/homepage_widgets.dart';
+import '../../services/first_time_visitor_service.dart';
 
 // Define Plan class for clarity
 class Plan {
@@ -160,6 +161,15 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
     _mainController.dispose();
     _cardsController.dispose();
     _scrollController.dispose();
+    
+    // If user leaves pricing page without completing payment and has a token,
+    // ensure deferred onboarding flag is preserved for when they return
+    final hasToken = _extractTokenFromUrl() != null;
+    if (hasToken && !paymentSuccess) {
+      // User left without completing payment, preserve deferred onboarding
+      print('🎯 User left pricing page without completing payment - preserving deferred onboarding');
+    }
+    
     super.dispose();
   }
 
@@ -285,6 +295,10 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
               try {
                 html.window.parent?.postMessage('payment_success', '*');
               } catch (_) {}
+              
+              // Clear deferred onboarding flag since payment is successful
+              // User can now return to main site and get onboarded properly
+              await FirstTimeVisitorService.instance.clearDeferredOnboarding();
             }
             return;
           }
