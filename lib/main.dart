@@ -381,6 +381,7 @@ class _GlobalPopupWrapperState extends State<GlobalPopupWrapper> with TickerProv
   bool _showPopup = false;
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+  bool _suppressPopupForPaymentFlow = false; // Do not show popup during payment
 
   @override
   void initState() {
@@ -397,14 +398,19 @@ class _GlobalPopupWrapperState extends State<GlobalPopupWrapper> with TickerProv
       curve: Curves.easeInOut,
     ));
 
+    // Detect payment flow via token in URL or being on pricing route
+    final fullUrl = Uri.base.toString();
+    final hasToken = Uri.base.queryParameters['token'] != null || fullUrl.contains('token=');
+    final onPricingRoute = Uri.base.path == '/pricing';
+    _suppressPopupForPaymentFlow = hasToken || onPricingRoute;
+
     // Start popup timer based on onboarding state
     _startPopupTimer();
   }
 
   void _startPopupTimer() {
-    if (widget.showOnboarding) {
-      // For new users, wait for onboarding to complete first
-      // The popup will be triggered when onboarding completes
+    if (widget.showOnboarding || _suppressPopupForPaymentFlow) {
+      // For new users or payment flow, do not show popup automatically
       return;
     } else {
       // For returning users, show popup after 4 seconds
@@ -423,7 +429,7 @@ class _GlobalPopupWrapperState extends State<GlobalPopupWrapper> with TickerProv
     // On mobile, do not show the post-onboarding popup to avoid grey overlay blocking UI
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 900;
-    if (!isMobile) {
+    if (!isMobile && !_suppressPopupForPaymentFlow) {
       // Show popup after onboarding completes (with a small delay)
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted && !_showPopup) {
@@ -476,7 +482,7 @@ class _GlobalPopupWrapperState extends State<GlobalPopupWrapper> with TickerProv
     return Stack(
       children: [
         widget.child,
-        if (_showPopup && !widget.showOnboarding)
+        if (_showPopup && !widget.showOnboarding && !_suppressPopupForPaymentFlow)
           Positioned.fill(
             child: AnimatedBuilder(
               animation: _fadeAnimation,
