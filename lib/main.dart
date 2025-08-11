@@ -211,6 +211,11 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
   @override
   void initState() {
     super.initState();
+    print('🚀 App initializing...');
+    print('🔗 Full URL: ${Uri.base}');
+    print('🔗 Path: ${Uri.base.path}');
+    print('🔗 Query: ${Uri.base.query}');
+    print('🔗 Fragment: ${Uri.base.fragment}');
     _checkFirstTimeVisitor();
   }
 
@@ -222,10 +227,18 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
       
       // Check if user is on pricing page with token (indicating payment flow)
       final isOnPricingPage = Uri.base.path == '/pricing';
-      final hasToken = Uri.base.queryParameters['token'] != null || 
-                      Uri.base.fragment.contains('token=');
+      final hasTokenInQuery = Uri.base.queryParameters['token'] != null;
+      final hasTokenInFragment = Uri.base.fragment.contains('token=');
+      final hasToken = hasTokenInQuery || hasTokenInFragment;
       
-      print('🎯 Current page: ${Uri.base.path}, Has token: $hasToken');
+      print('🎯 URL Analysis:');
+      print('  - Current path: ${Uri.base.path}');
+      print('  - Query parameters: ${Uri.base.queryParameters}');
+      print('  - Fragment: ${Uri.base.fragment}');
+      print('  - Is on pricing page: $isOnPricingPage');
+      print('  - Has token in query: $hasTokenInQuery');
+      print('  - Has token in fragment: $hasTokenInFragment');
+      print('  - Has token: $hasToken');
       
       if (mounted) {
         setState(() {
@@ -236,7 +249,14 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
           _isLoading = false;
         });
         
-        print('🎯 Onboarding will be shown: $_showOnboarding');
+        print('🎯 Final decision - Onboarding will be shown: $_showOnboarding');
+        print('🎯 Breakdown:');
+        print('  - isFirstTime: $isFirstTime');
+        print('  - isOnPricingPage: $isOnPricingPage');
+        print('  - hasToken: $hasToken');
+        print('  - isOnboardingDeferred: $isOnboardingDeferred');
+        print('  - Condition 1 (first-time AND not on pricing with token): ${isFirstTime && !(isOnPricingPage && hasToken)}');
+        print('  - Condition 2 (deferred onboarding): $isOnboardingDeferred');
         
         if (isFirstTime && isOnPricingPage && hasToken) {
           print('🎯 First-time visitor on pricing page with token - deferring onboarding for later');

@@ -121,7 +121,9 @@ class FirstTimeVisitorService {
   Future<bool> isOnboardingDeferred() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      return prefs.getBool('onboarding_deferred') ?? false;
+      final isDeferred = prefs.getBool('onboarding_deferred') ?? false;
+      print('🔍 Checking deferred onboarding flag: $isDeferred');
+      return isDeferred;
     } catch (e) {
       print('❌ Error checking deferred onboarding: $e');
       return false;
