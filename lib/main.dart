@@ -13,6 +13,8 @@ import '../website/screens/pricing_v2.dart';
 import '../website/screens/privacy_policy.dart';
 import '../website/screens/terms_policy.dart';
 import '../website/screens/how_it_works.dart';
+import '../services/first_time_visitor_service.dart';
+import '../widgets/onboarding_carousel.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,55 +22,251 @@ Future<void> main() async {
     url: 'https://pjjiusivnjtpzzqlhpzd.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaml1c2l2bmp0cHp6cWxocHpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4MjI2NTgsImV4cCI6MjA2MjM5ODY1OH0.OAhCRxjORCDmoBDipAc-GkLqp7xe8Tn2LV_sIoDXCqU',
   );
+  
   runApp(const FluoverseWebsiteApp());
 }
 
-final _router = GoRouter(
-  routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const HomePage(),
-    ),
-    GoRoute(
-      path: '/features',
-      builder: (context, state) => const FeaturesScreen(),
-    ),
-    GoRoute(
-      path: '/contact',
-      builder: (context, state) => const ContactScreen(),
-    ),
-    GoRoute(
-      path: '/get-started',
-      builder: (context, state) => const GetStartedScreen(),
-    ),
-    // GoRoute(
-    //   path: '/join-waitlist',
-    //   builder: (context, state) => const JoinWaitlist(),
-    // ),
-    GoRoute(
-      path: '/pricing',
-      builder: (context, state) => const PaymentScreen(),
-    ),
-    GoRoute(
-      path: '/privacy',
-      builder: (context, state) => const PrivacyPolicyScreen(),
-    ),
-    GoRoute(
-      path: '/terms',
-      builder: (context, state) => const TermsPolicyScreen(),
-    ),
-    GoRoute(
-      path: '/how-it-works',
-      builder: (context, state) => const HowItWorksScreen(),
-    ),
-  ],
-);
-
-class FluoverseWebsiteApp extends StatelessWidget {
-  const FluoverseWebsiteApp({super.key});
+// Create a wrapper widget to handle tour keys
+class _HomePageWrapper extends StatelessWidget {
+  final Map<String, GlobalKey>? tourKeys;
+  final VoidCallback? onMobileMenuOpened;
+  
+  const _HomePageWrapper({
+    this.tourKeys,
+    this.onMobileMenuOpened,
+  });
 
   @override
   Widget build(BuildContext context) {
+    return HomePage(
+      tourKeys: tourKeys,
+      onMobileMenuOpened: onMobileMenuOpened,
+    );
+  }
+}
+
+class FluoverseWebsiteApp extends StatefulWidget {
+  const FluoverseWebsiteApp({super.key});
+
+  @override
+  State<FluoverseWebsiteApp> createState() => _FluoverseWebsiteAppState();
+}
+
+class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
+  bool _showOnboarding = false;
+  bool _isLoading = true; // Add loading state
+
+  // Global keys for tour targets
+  final Map<String, GlobalKey> _tourKeys = {
+    'hero-section': GlobalKey(),
+    'nav-home': GlobalKey(),
+    'nav-features': GlobalKey(),
+    'nav-pricing': GlobalKey(),
+    'nav-how-it-works': GlobalKey(),
+    'nav-contact': GlobalKey(),
+    'get-started-button': GlobalKey(),
+    'entire-navbar': GlobalKey(), // New key for entire navbar
+    'launch-app-button': GlobalKey(), // New key for LAUNCH APP NOW button
+    'mobile-menu-button': GlobalKey(), // New key for mobile menu button
+  };
+
+              // Tour steps
+            final List<TourStep> _tourSteps = [
+              TourStep(
+                step: 1,
+                total: 11,
+                title: "Welcome to Fluoverse! 🚀",
+                description: "Let's take a quick tour of your new Spanish learning platform. I'll show you around and explain everything you can do here.",
+                targetKey: "hero-section",
+                action: "Let's start!",
+              ),
+              TourStep(
+                step: 2,
+                total: 11,
+                title: "Navigation Menu 📱",
+                description: "This is your main navigation bar. Use these buttons to explore different sections of Fluoverse. Each tab takes you to specific features and content.",
+                targetKey: "entire-navbar",
+                action: "Got it!",
+              ),
+              TourStep(
+                step: 3,
+                total: 11,
+                title: "Navigation Menu📱",
+                description: "Tap the menu button to access all navigation options. This opens a beautiful menu with all the sections we'll explore.",
+                targetKey: "mobile-menu-button",
+                action: "Open Menu",
+                requiresAction: true, // Now requires action
+              ),
+              TourStep(
+                step: 4,
+                total: 11,
+                title: "Home Screen 🏠",
+                description: "The Home button takes you to the main landing page. Here you'll find an overview of Fluoverse, key features, and quick access to start learning.",
+                targetKey: "nav-home",
+                action: "Show me more",
+              ),
+              TourStep(
+                step: 5,
+                total: 11,
+                title: "How It Works 🔄",
+                description: "Learn about our unique learning cycle! This section explains how our AI conversation tutor works, the learning methodology, and what makes Fluoverse different.",
+                targetKey: "nav-how-it-works",
+                action: "Continue",
+              ),
+              TourStep(
+                step: 6,
+                total: 11,
+                title: "Features Section ✨",
+                description: "Discover all the amazing features that make Fluoverse special. Learn about our AI conversation tutor, personalized learning, and real-world scenarios.",
+                targetKey: "nav-features",
+                action: "Next",
+              ),
+              TourStep(
+                step: 7,
+                total: 11,
+                title: "Pricing Plans 💰",
+                description: "Choose the perfect plan for your learning goals. Start with a 14-day free trial and upgrade for access to premium features with unlimited AI conversations and advanced tools.",
+                targetKey: "nav-pricing",
+                action: "Continue",
+              ),
+              TourStep(
+                step: 8,
+                total: 11,
+                title: "Contact & Support 📧",
+                description: "Need help or have questions? The Contact section connects you with our support team and provides all the information you need to get started.",
+                targetKey: "nav-contact",
+                action: "Almost done",
+              ),
+              TourStep(
+                step: 9,
+                total: 11,
+                title: "Get Started Button 🎯",
+                description: "Ready to begin your journey? Click 'Get Started' to create your account and access all the features we just explored.",
+                targetKey: "get-started-button",
+                action: "Next",
+              ),
+              TourStep(
+                step: 10,
+                total: 11,
+                title: "Close Menu 📱",
+                description: "Great! Now let's close the menu so we can see the final button. Tap the X button to close it.",
+                targetKey: "close-mobile-menu",
+                action: "Close Menu",
+                requiresAction: true,
+              ),
+              TourStep(
+                step: 11,
+                total: 11,
+                title: "Launch the App! 🚀",
+                description: "Perfect! This 'LAUNCH APP NOW' button will take you directly to the Fluoverse app where you can sign up and start your Spanish learning journey immediately.",
+                targetKey: "launch-app-button",
+                action: "Start Learning!",
+              ),
+            ];
+
+  // Create router with tour keys
+  late final GoRouter _router = GoRouter(
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => _HomePageWrapper(
+          tourKeys: _tourKeys,
+          onMobileMenuOpened: () {
+            // This callback will be used by the onboarding tour
+            print('🎯 Mobile menu opened from router callback');
+          },
+        ),
+      ),
+      GoRoute(
+        path: '/features',
+        builder: (context, state) => const FeaturesScreen(),
+      ),
+      GoRoute(
+        path: '/contact',
+        builder: (context, state) => const ContactScreen(),
+      ),
+      GoRoute(
+        path: '/get-started',
+        builder: (context, state) => const GetStartedScreen(),
+      ),
+      GoRoute(
+        path: '/pricing',
+        builder: (context, state) => const PaymentScreen(),
+      ),
+      GoRoute(
+        path: '/privacy',
+        builder: (context, state) => const PrivacyPolicyScreen(),
+      ),
+      GoRoute(
+        path: '/terms',
+        builder: (context, state) => const TermsPolicyScreen(),
+      ),
+      GoRoute(
+        path: '/how-it-works',
+        builder: (context, state) => const HowItWorksScreen(),
+      ),
+    ],
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFirstTimeVisitor();
+  }
+
+  Future<void> _checkFirstTimeVisitor() async {
+    try {
+      final isFirstTime = await FirstTimeVisitorService.instance.checkFirstTimeVisitor();
+      print('🎯 App started - First-time visitor: $isFirstTime');
+      
+      if (mounted) {
+        setState(() {
+          _showOnboarding = isFirstTime;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('❌ Error checking first-time visitor: $e');
+      if (mounted) {
+        setState(() {
+          _showOnboarding = false; // Don't show onboarding on error
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  void _completeOnboarding() {
+    print('🎯 _completeOnboarding called, setting _showOnboarding to false');
+    setState(() {
+      _showOnboarding = false;
+    });
+    print('🎯 _showOnboarding is now: $_showOnboarding');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Show loading while checking first-time visitor status
+    if (_isLoading) {
+      return MaterialApp(
+        title: 'Fluoverse – Loading',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const Scaffold(
+          backgroundColor: Colors.black,
+          body: Center(
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Main app with optional onboarding tour
     return MaterialApp.router(
       title: 'Fluoverse – Speak-First AI Language Tutor',
       debugShowCheckedModeBanner: false,
@@ -79,7 +277,27 @@ class FluoverseWebsiteApp extends StatelessWidget {
       ),
       routerConfig: _router,
       builder: (context, child) {
-        return GlobalPopupWrapper(child: child!);
+        Widget appContent = GlobalPopupWrapper(
+          child: child!,
+          showOnboarding: _showOnboarding,
+          onOnboardingComplete: _completeOnboarding,
+        );
+        
+        // Wrap with onboarding tour if needed - now inside MaterialApp context
+        if (_showOnboarding) {
+          appContent = Stack(
+            children: [
+              appContent,
+              OnboardingTour(
+                targets: _tourKeys,
+                steps: _tourSteps,
+                onComplete: _completeOnboarding,
+              ),
+            ],
+          );
+        }
+        
+        return appContent;
       },
     );
   }
@@ -87,8 +305,15 @@ class FluoverseWebsiteApp extends StatelessWidget {
 
 class GlobalPopupWrapper extends StatefulWidget {
   final Widget child;
+  final bool showOnboarding;
+  final VoidCallback onOnboardingComplete;
 
-  const GlobalPopupWrapper({super.key, required this.child});
+  const GlobalPopupWrapper({
+    super.key,
+    required this.child,
+    required this.showOnboarding,
+    required this.onOnboardingComplete,
+  });
 
   @override
   State<GlobalPopupWrapper> createState() => _GlobalPopupWrapperState();
@@ -96,6 +321,7 @@ class GlobalPopupWrapper extends StatefulWidget {
 
 class _GlobalPopupWrapperState extends State<GlobalPopupWrapper> with TickerProviderStateMixin {
   bool _showPopup = false;
+  bool _onboardingCompleted = false;
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
@@ -114,15 +340,56 @@ class _GlobalPopupWrapperState extends State<GlobalPopupWrapper> with TickerProv
       curve: Curves.easeInOut,
     ));
 
-    // Show popup after 4 seconds
-    Future.delayed(const Duration(seconds: 4), () {
-      if (mounted) {
-        setState(() {
-          _showPopup = true;
-        });
-        _animationController.forward();
-      }
-    });
+    // Start popup timer based on onboarding state
+    _startPopupTimer();
+  }
+
+  void _startPopupTimer() {
+    if (widget.showOnboarding) {
+      // For new users, wait for onboarding to complete first
+      // The popup will be triggered when onboarding completes
+      return;
+    } else {
+      // For returning users, show popup after 4 seconds
+      Future.delayed(const Duration(seconds: 4), () {
+        if (mounted && !_showPopup) {
+          setState(() {
+            _showPopup = true;
+          });
+          _animationController.forward();
+        }
+      });
+    }
+  }
+
+  void _onOnboardingComplete() {
+    _onboardingCompleted = true;
+    // On mobile, do not show the post-onboarding popup to avoid grey overlay blocking UI
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 900;
+    if (!isMobile) {
+      // Show popup after onboarding completes (with a small delay)
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted && !_showPopup) {
+          setState(() {
+            _showPopup = true;
+          });
+          _animationController.forward();
+        }
+      });
+    }
+    // Call the parent's onboarding complete callback
+    widget.onOnboardingComplete();
+  }
+
+  @override
+  void didUpdateWidget(GlobalPopupWrapper oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // If onboarding state changes, update accordingly
+    if (oldWidget.showOnboarding && !widget.showOnboarding) {
+      // Onboarding just completed
+      _onOnboardingComplete();
+    }
   }
 
   @override
@@ -157,7 +424,7 @@ class _GlobalPopupWrapperState extends State<GlobalPopupWrapper> with TickerProv
     return Stack(
       children: [
         widget.child,
-        if (_showPopup)
+        if (_showPopup && !widget.showOnboarding)
           Positioned.fill(
             child: AnimatedBuilder(
               animation: _fadeAnimation,

@@ -104,7 +104,9 @@ class _Star {
 
 /// Revamped Hero Section with premium, connected design
 class HeroSection extends StatelessWidget {
-  const HeroSection({super.key});
+  final Map<String, GlobalKey>? tourKeys;
+  
+  const HeroSection({super.key, this.tourKeys});
 
   @override
   Widget build(BuildContext context) {
@@ -171,11 +173,16 @@ class HeroSection extends StatelessWidget {
                               ),
                         ).animate().fadeIn(duration: 1000.ms),
                         SizedBox(height: isMobile ? 18 : 32),
-                        SizedBox(
-                          height: isMobile ? 60 : 80,
+                        Container(
+                          constraints: BoxConstraints(
+                            minHeight: isMobile ? 60 : 80,
+                            maxHeight: isMobile ? 80 : 100,
+                          ),
                           child: Wrap(
                             spacing: isMobile ? 12 : 24,
+                            runSpacing: isMobile ? 8 : 12,
                             alignment: isWide ? WrapAlignment.start : WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               _PremiumButton(
                                 text: 'LAUNCH APP NOW',
@@ -190,6 +197,7 @@ class HeroSection extends StatelessWidget {
                                   await launchUrl(url, mode: LaunchMode.externalApplication);
                                 },
                                 glowColor: const Color(0xFF00D4AA).withOpacity(0.5),
+                                tourKey: tourKeys?['launch-app-button'], // Add tour key
                               ),
                             ],
                           ),
@@ -3657,6 +3665,7 @@ class _PremiumButton extends StatefulWidget {
   final VoidCallback onPressed;
   final bool outlined;
   final Color glowColor;
+  final GlobalKey? tourKey; // Add tour key parameter
 
   const _PremiumButton({
     required this.text,
@@ -3665,6 +3674,7 @@ class _PremiumButton extends StatefulWidget {
     required this.onPressed,
     this.outlined = false,
     required this.glowColor,
+    this.tourKey, // Add tour key parameter
   });
 
   @override
@@ -3689,6 +3699,7 @@ class _PremiumButtonState extends State<_PremiumButton> {
       child: Transform.scale(
         scale: scale,
         child: GestureDetector(
+          key: widget.tourKey, // Add tour key here
           onTap: widget.onPressed,
           child: AnimatedContainer(
             duration: duration,

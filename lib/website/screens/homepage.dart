@@ -5,7 +5,14 @@ import '../widgets/homepage_widgets.dart';
 import '../widgets/navigation_bar_widget.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final Map<String, GlobalKey>? tourKeys;
+  final VoidCallback? onMobileMenuOpened;
+  
+  const HomePage({
+    super.key, 
+    this.tourKeys,
+    this.onMobileMenuOpened,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,23 +27,26 @@ class HomePage extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: const [
-                    SizedBox(height: kToolbarHeight),
-                    HeroSection(),
-                    ValuePropsSection(),
-                    LearningCycleSection(),
+                  children: [
+                    const SizedBox(height: kToolbarHeight),
+                    HeroSection(key: tourKeys?['hero-section'], tourKeys: tourKeys),
+                    ValuePropsSection(key: Key('features-section')),
+                    LearningCycleSection(key: Key('how-it-works-section')),
                     VisionSection(),
                     FooterSection(),
                   ],
                 ),
               ),
             ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: NavigationBarWidget(),
-            ),
+                                    Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          child: NavigationBarWidget(
+                            tourKeys: tourKeys,
+                            onMenuOpened: onMobileMenuOpened,
+                          ),
+                        ),
           ],
         ),
       ),

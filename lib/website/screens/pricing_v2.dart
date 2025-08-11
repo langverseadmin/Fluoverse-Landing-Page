@@ -381,7 +381,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
                     child: child,
                   ),
                 ),
-                child: const PaymentHero(),
+                child: const PaymentHero(key: Key('pricing-section')),
               ),
               // --- Billing Toggle ---
               AnimatedBuilder(

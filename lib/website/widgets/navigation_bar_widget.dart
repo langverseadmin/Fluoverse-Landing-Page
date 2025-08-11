@@ -10,16 +10,20 @@ import '../screens/features.dart';
 import '../screens/pricing.dart';
 import '../screens/get_started.dart'; // Import GetStartedScreen
 import '../screens/contact.dart'; // Import ContactScreen
+import '../../widgets/onboarding_carousel.dart';
 
 class NavigationBarWidget extends StatelessWidget {
-  const NavigationBarWidget({super.key});
+  final Map<String, GlobalKey>? tourKeys;
+  final VoidCallback? onMenuOpened;
+  
+  const NavigationBarWidget({super.key, this.tourKeys, this.onMenuOpened});
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     // Use mobile navigation bar for small screens
     if (width < 900) {
-      return _MobileNavigationBar();
+      return _MobileNavigationBar(tourKeys: tourKeys, onMenuOpened: onMenuOpened);
     }
     
     // Calculate responsive padding based on screen width
@@ -30,6 +34,7 @@ class NavigationBarWidget extends StatelessWidget {
       elevation: 0,
       color: Colors.transparent,
       child: Container(
+        key: tourKeys?['entire-navbar'], // Key for entire navbar highlight
         padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 18),
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 255, 255, 255),
@@ -51,9 +56,9 @@ class NavigationBarWidget extends StatelessWidget {
           children: [
             _BrandLogo(),
             const Spacer(),
-            _NavButtonBar(),
+            _NavButtonBar(tourKeys: tourKeys),
             SizedBox(width: spacing),
-            _PremiumButton(),
+            _PremiumButton(tourKeys: tourKeys),
           ],
         ),
       ),
@@ -120,6 +125,10 @@ class _BrandLogo extends StatelessWidget {
 }
 
 class _NavButtonBar extends StatelessWidget {
+  final Map<String, GlobalKey>? tourKeys;
+  
+  const _NavButtonBar({this.tourKeys});
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -135,6 +144,7 @@ class _NavButtonBar extends StatelessWidget {
     return Row(
       children: [
         _NavButton(
+          key: tourKeys?['nav-home'],
           label: 'Home',
           icon: Icons.home_outlined,
           selected: isSelected('/'),
@@ -146,6 +156,7 @@ class _NavButtonBar extends StatelessWidget {
         ),
         _PremiumDivider(),
         _NavButton(
+          key: tourKeys?['nav-how-it-works'],
           label: 'How It Works',
           icon: Icons.info_outline,
           selected: isSelected('/how-it-works'),
@@ -157,6 +168,7 @@ class _NavButtonBar extends StatelessWidget {
         ),
         _PremiumDivider(),
         _NavButton(
+          key: tourKeys?['nav-features'],
           label: 'Features',
           icon: Icons.star_outline,
           selected: isSelected('/features'),
@@ -168,6 +180,7 @@ class _NavButtonBar extends StatelessWidget {
         ),
         _PremiumDivider(),
         _NavButton(
+          key: tourKeys?['nav-pricing'],
           label: 'Pricing',
           icon: Icons.attach_money_outlined,
           selected: isSelected('/pricing'),
@@ -179,6 +192,7 @@ class _NavButtonBar extends StatelessWidget {
         ),
         _PremiumDivider(),
         _NavButton(
+          key: tourKeys?['nav-contact'],
           label: 'Contact',
           icon: Icons.mail_outline,
           selected: isSelected('/contact'),
@@ -224,12 +238,14 @@ class _NavButton extends StatefulWidget {
   final IconData icon;
   final VoidCallback onTap;
   final bool selected;
+  final GlobalKey? key;
 
   const _NavButton({
     required this.label,
     required this.icon,
     required this.onTap,
     this.selected = false,
+    this.key,
   });
 
   @override
@@ -345,6 +361,10 @@ class _NavButtonState extends State<_NavButton> {
 }
 
 class _PremiumButton extends StatefulWidget {
+  final Map<String, GlobalKey>? tourKeys;
+
+  const _PremiumButton({this.tourKeys});
+
   @override
   State<_PremiumButton> createState() => _PremiumButtonState();
 }
@@ -395,6 +415,7 @@ class _PremiumButtonState extends State<_PremiumButton> {
           ],
         ),
         child: ElevatedButton(
+          key: widget.tourKeys?['get-started-button'],
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
@@ -505,18 +526,24 @@ class ResponsiveNavigationBar extends StatelessWidget {
 }
 
 class _MobileNavigationBar extends StatelessWidget {
+  final Map<String, GlobalKey>? tourKeys;
+  final VoidCallback? onMenuOpened;
+  
+  const _MobileNavigationBar({this.tourKeys, this.onMenuOpened});
+
   @override
   Widget build(BuildContext context) {
     return Material(
       elevation: 0,
       color: Colors.white,
       child: Container(
+        key: tourKeys?['entire-navbar'], // Key for entire navbar highlight
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: Row(
           children: [
             _BrandLogo(),
             const Spacer(),
-            _MobileMenuButton(),
+            _MobileMenuButton(tourKeys: tourKeys, onMenuOpened: onMenuOpened),
           ],
         ),
       ),
@@ -527,6 +554,11 @@ class _MobileNavigationBar extends StatelessWidget {
 // Enhanced mobile menu with beautiful slide & fade animation, blur, and smooth transitions
 
 class _MobileMenuButton extends StatefulWidget {
+  final Map<String, GlobalKey>? tourKeys;
+  final VoidCallback? onMenuOpened;
+  
+  const _MobileMenuButton({this.tourKeys, this.onMenuOpened});
+
   @override
   State<_MobileMenuButton> createState() => _MobileMenuButtonState();
 }
@@ -542,12 +574,39 @@ class _MobileMenuButtonState extends State<_MobileMenuButton> with SingleTickerP
       duration: const Duration(milliseconds: 420),
       vsync: this,
     );
+
+    // Register programmatic opener for the onboarding overlay
+    OnboardingTourCallback.setOpenMobileMenu(() {
+      if (mounted) {
+        _toggleMenu();
+      }
+    });
+
+    // Register programmatic closer for the onboarding overlay
+    OnboardingTourCallback.setCloseMobileMenu(() {
+      if (mounted) {
+        _closeMenu();
+      }
+    });
   }
 
   void _toggleMenu() async {
+    print('🎯 Mobile menu button _toggleMenu called');
     if (!_open) {
       setState(() => _open = true);
       _controller.forward(from: 0);
+      
+      // Add a small delay before notifying the tour to ensure it's ready
+      await Future.delayed(const Duration(milliseconds: 50));
+      
+      // Notify tour that menu action is completed
+      if (widget.onMenuOpened != null) {
+        widget.onMenuOpened!();
+      }
+      // Also notify the global callback
+      print('🎯 Mobile menu button pressed, notifying tour callback');
+      OnboardingTourCallback.notifyMobileMenuOpened();
+      
       await showGeneralDialog(
         context: context,
         barrierDismissible: true,
@@ -558,6 +617,7 @@ class _MobileMenuButtonState extends State<_MobileMenuButton> with SingleTickerP
           return _MobileMenuDialog(
             controller: _controller,
             onClose: _closeMenu,
+            tourKeys: widget.tourKeys,
           );
         },
         transitionBuilder: (context, anim1, anim2, child) {
@@ -580,12 +640,23 @@ class _MobileMenuButtonState extends State<_MobileMenuButton> with SingleTickerP
     if (_open) {
       _controller.reverse();
       setState(() => _open = false);
+      
+      // Notify tour that menu was closed
+      OnboardingTourCallback.notifyMobileMenuClosed();
+
+      // Ensure any open dialog (created by showGeneralDialog) is dismissed
+      // This prevents the semi-transparent barrier from lingering and blocking taps
+      final navigator = Navigator.of(context, rootNavigator: true);
+      navigator.maybePop();
     }
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    // Unregister on dispose to avoid stale refs
+    OnboardingTourCallback.setOpenMobileMenu(null);
+    OnboardingTourCallback.setCloseMobileMenu(null);
     super.dispose();
   }
 
@@ -598,7 +669,7 @@ class _MobileMenuButtonState extends State<_MobileMenuButton> with SingleTickerP
         child: FadeTransition(opacity: anim, child: child),
       ),
       child: IconButton(
-        key: ValueKey(_open),
+        key: widget.tourKeys?['mobile-menu-button'] ?? ValueKey(_open),
         icon: Icon(_open ? Icons.close : Icons.menu, color: Color(0xFF2E5BFF)),
         onPressed: _toggleMenu,
         iconSize: 32,
@@ -612,10 +683,12 @@ class _MobileMenuButtonState extends State<_MobileMenuButton> with SingleTickerP
 class _MobileMenuDialog extends StatelessWidget {
   final VoidCallback onClose;
   final AnimationController controller;
+  final Map<String, GlobalKey>? tourKeys;
 
   const _MobileMenuDialog({
     required this.onClose,
     required this.controller,
+    this.tourKeys,
   });
 
   @override
@@ -692,6 +765,7 @@ class _MobileMenuDialog extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _PremiumMobileMenuItem(
+                        key: tourKeys?['nav-home'],
                         label: 'Home',
                         icon: Icons.home_outlined,
                         gradient: LinearGradient(
@@ -706,6 +780,7 @@ class _MobileMenuDialog extends StatelessWidget {
                         },
                       ),
                       _PremiumMobileMenuItem(
+                        key: tourKeys?['nav-how-it-works'],
                         label: 'How It Works',
                         icon: Icons.info_outline,
                         gradient: LinearGradient(
@@ -720,6 +795,7 @@ class _MobileMenuDialog extends StatelessWidget {
                         },
                       ),
                       _PremiumMobileMenuItem(
+                        key: tourKeys?['nav-features'],
                         label: 'Features',
                         icon: Icons.star_outline,
                         gradient: LinearGradient(
@@ -734,6 +810,7 @@ class _MobileMenuDialog extends StatelessWidget {
                         },
                       ),
                       _PremiumMobileMenuItem(
+                        key: tourKeys?['nav-pricing'],
                         label: 'Pricing',
                         icon: Icons.attach_money_outlined,
                         gradient: LinearGradient(
@@ -748,6 +825,7 @@ class _MobileMenuDialog extends StatelessWidget {
                         },
                       ),
                       _PremiumMobileMenuItem(
+                        key: tourKeys?['nav-contact'],
                         label: 'Contact',
                         icon: Icons.mail_outline,
                         gradient: LinearGradient(
@@ -763,6 +841,7 @@ class _MobileMenuDialog extends StatelessWidget {
                       ),
                       const SizedBox(height: 28),
                       SizedBox(
+                        key: tourKeys?['get-started-button'],
                         width: double.infinity,
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
@@ -807,6 +886,7 @@ class _PremiumMobileMenuItem extends StatefulWidget {
   final Gradient gradient;
 
   const _PremiumMobileMenuItem({
+    super.key,
     required this.label,
     required this.icon,
     required this.onTap,
