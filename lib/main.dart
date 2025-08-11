@@ -229,7 +229,6 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
       final fullUrl = Uri.base.toString();
       final fragment = _initialFragment ?? Uri.base.fragment; // Use stored fragment if available
       final completeUrl = fragment.isNotEmpty ? '$fullUrl#$fragment' : fullUrl;
-      final isOnPricingPage = Uri.base.path == '/pricing' || completeUrl.contains('/pricing');
       final hasTokenInQuery = Uri.base.queryParameters['token'] != null;
       final hasTokenInFragment = completeUrl.contains('token=');
       final hasToken = hasTokenInQuery || hasTokenInFragment;
@@ -240,12 +239,11 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
       print('  - Complete URL: $completeUrl');
       print('  - Current path: ${Uri.base.path}');
       print('  - Query parameters: ${Uri.base.queryParameters}');
-      print('  - Is on pricing page: $isOnPricingPage');
       print('  - Has token in query: $hasTokenInQuery');
       print('  - Has token in fragment: $hasTokenInFragment');
       print('  - Has token: $hasToken');
 
-      // SIMPLIFIED: If a token exists anywhere, do not intervene. Just stop loading immediately.
+      // 1) If a token exists anywhere, do not intervene at all
       if (hasToken) {
         if (mounted) {
           setState(() {
@@ -256,17 +254,31 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
         return; // Let the router render the current route as-is
       }
       
-      // Otherwise proceed with first-time/onboarding logic
+      // 2) Otherwise, check onboarding status
       final isFirstTime = await FirstTimeVisitorService.instance.checkFirstTimeVisitor();
       final isOnboardingDeferred = await FirstTimeVisitorService.instance.isOnboardingDeferred();
-      print('🎯 App started - First-time visitor: $isFirstTime, Onboarding deferred: $isOnboardingDeferred');
+      print('🎯 App started - First-time: $isFirstTime, Deferred: $isOnboardingDeferred');
       
+      // Clear loading first, then optionally trigger onboarding after a short delay
       if (mounted) {
         setState(() {
-          // Show onboarding for first-time users when NOT on pricing with token
-          _showOnboarding = (isFirstTime && !(isOnPricingPage && hasToken)) || isOnboardingDeferred;
           _isLoading = false;
+          _showOnboarding = false; // will enable after a short delay if needed
         });
+      }
+
+      final shouldShowOnboarding = isFirstTime || isOnboardingDeferred;
+
+      if (shouldShowOnboarding) {
+        // Wait briefly to allow route to settle, then show onboarding (home only)
+        await Future.delayed(const Duration(milliseconds: 700));
+        final stillNoToken = !(Uri.base.queryParameters['token'] != null || (Uri.base.toString().contains('token=')));
+        final onHomeRoute = Uri.base.path == '/';
+        if (mounted && stillNoToken && onHomeRoute) {
+          setState(() {
+            _showOnboarding = true;
+          });
+        }
       }
     } catch (e) {
       print('❌ Error checking first-time visitor: $e');
