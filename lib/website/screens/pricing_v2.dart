@@ -9,9 +9,9 @@ import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:ui'; // Import for ImageFilter
 import 'dart:math';
+import 'dart:js_interop';
 // Add for web postMessage
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
+import 'package:web/web.dart' as web;
 // Removed: import 'package:carousel_slider/carousel_slider.dart';
 import '../widgets/navigation_bar_widget.dart';
 import '../widgets/homepage_widgets.dart';
@@ -293,7 +293,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
               });
               // Send signal to parent (web app) that payment succeeded
               try {
-                html.window.parent?.postMessage('payment_success', '*');
+                web.window.parent?.postMessage('payment_success'.toJS, '*'.toJS);
               } catch (_) {}
               
               // Clear deferred onboarding flag since payment is successful
@@ -763,9 +763,9 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
                  child: GlassmorphicSuccessPopup(
                    onContinue: () {
                      // Send signal again just in case
-                     try { html.window.parent?.postMessage('payment_success', '*'); } catch (_) {}
+                     try { web.window.parent?.postMessage('payment_success'.toJS, '*'.toJS); } catch (_) {}
                      // Close the tab after sending the signal
-                     html.window.close();
+                     web.window.close();
                    },
                  ),
                ),
@@ -821,7 +821,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
                          icon: const Icon(Icons.login),
                          label: const Text('Login / Sign Up'),
                          onPressed: () {
-                           html.window.location.href = 'https://fluoverseapp.netlify.app/';
+                           web.window.location.href = 'https://fluoverseapp.netlify.app/';
                          },
                        ),
                        const SizedBox(height: 16),

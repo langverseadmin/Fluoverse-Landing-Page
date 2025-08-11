@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
+import 'package:web/web.dart' as web;
 import '../website/screens/homepage.dart'; // 👈 Make sure this matches your file structure
 import '../website/screens/features.dart';
 import '../website/screens/contact.dart';
@@ -250,19 +249,21 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
       print('  - Has token in fragment: $hasTokenInFragment');
       print('  - Has token: $hasToken');
       
-      // Check if we need to redirect to pricing page
-      if (fragment.contains('/pricing') && hasToken && Uri.base.path != '/pricing') {
-        print('🎯 Detected pricing page in fragment but not on pricing route - redirecting');
-        // Extract token from fragment
-        final tokenMatch = RegExp(r'token=([^&]+)').firstMatch(fragment);
-        if (tokenMatch != null) {
-          final token = tokenMatch.group(1);
-          print('🎯 Extracted token: $token');
-          // Navigate to pricing page with token
-          _router.go('/pricing?token=$token');
-          return; // Exit early since we're redirecting
-        }
-      }
+             // Check if we need to redirect to pricing page
+       if (fragment.contains('/pricing') && hasToken && Uri.base.path != '/pricing') {
+         print('🎯 Detected pricing page in fragment but not on pricing route - redirecting');
+         // Extract token from fragment
+         final tokenMatch = RegExp(r'token=([^&]+)').firstMatch(fragment);
+         if (tokenMatch != null) {
+           final token = tokenMatch.group(1);
+           print('🎯 Extracted token: $token');
+           // Force navigation to pricing page with token using window.location
+           final newUrl = '${Uri.base.origin}/pricing?token=$token';
+           print('🎯 Redirecting to: $newUrl');
+           web.window.location.href = newUrl;
+           return; // Exit early since we're redirecting
+         }
+       }
       
       if (mounted) {
         setState(() {
@@ -387,7 +388,6 @@ class GlobalPopupWrapper extends StatefulWidget {
 
 class _GlobalPopupWrapperState extends State<GlobalPopupWrapper> with TickerProviderStateMixin {
   bool _showPopup = false;
-  bool _onboardingCompleted = false;
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
@@ -429,7 +429,6 @@ class _GlobalPopupWrapperState extends State<GlobalPopupWrapper> with TickerProv
   }
 
   void _onOnboardingComplete() {
-    _onboardingCompleted = true;
     // On mobile, do not show the post-onboarding popup to avoid grey overlay blocking UI
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 900;
@@ -464,10 +463,6 @@ class _GlobalPopupWrapperState extends State<GlobalPopupWrapper> with TickerProv
     super.dispose();
   }
 
-  void _launchWebApp() async {
-    final url = Uri.parse('https://fluoverseapp.netlify.app/');
-    await launchUrl(url, mode: LaunchMode.externalApplication);
-  }
 
   void _dismissPopup() {
     _animationController.reverse().then((_) {
