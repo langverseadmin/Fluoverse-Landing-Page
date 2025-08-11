@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 import '../website/screens/homepage.dart'; // 👈 Make sure this matches your file structure
 import '../website/screens/features.dart';
 import '../website/screens/contact.dart';
@@ -237,16 +239,30 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
       final hasTokenInFragment = completeUrl.contains('token=');
       final hasToken = hasTokenInQuery || hasTokenInFragment;
       
-             print('🎯 URL Analysis:');
-       print('  - Full URL: $fullUrl');
-       print('  - Fragment: $fragment');
-       print('  - Complete URL: $completeUrl');
-       print('  - Current path: ${Uri.base.path}');
-       print('  - Query parameters: ${Uri.base.queryParameters}');
-       print('  - Is on pricing page: $isOnPricingPage');
-       print('  - Has token in query: $hasTokenInQuery');
-       print('  - Has token in fragment: $hasTokenInFragment');
-       print('  - Has token: $hasToken');
+      print('🎯 URL Analysis:');
+      print('  - Full URL: $fullUrl');
+      print('  - Fragment: $fragment');
+      print('  - Complete URL: $completeUrl');
+      print('  - Current path: ${Uri.base.path}');
+      print('  - Query parameters: ${Uri.base.queryParameters}');
+      print('  - Is on pricing page: $isOnPricingPage');
+      print('  - Has token in query: $hasTokenInQuery');
+      print('  - Has token in fragment: $hasTokenInFragment');
+      print('  - Has token: $hasToken');
+      
+      // Check if we need to redirect to pricing page
+      if (fragment.contains('/pricing') && hasToken && Uri.base.path != '/pricing') {
+        print('🎯 Detected pricing page in fragment but not on pricing route - redirecting');
+        // Extract token from fragment
+        final tokenMatch = RegExp(r'token=([^&]+)').firstMatch(fragment);
+        if (tokenMatch != null) {
+          final token = tokenMatch.group(1);
+          print('🎯 Extracted token: $token');
+          // Navigate to pricing page with token
+          _router.go('/pricing?token=$token');
+          return; // Exit early since we're redirecting
+        }
+      }
       
       if (mounted) {
         setState(() {
