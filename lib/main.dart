@@ -248,23 +248,25 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
       print('  - Has token in fragment: $hasTokenInFragment');
       print('  - Has token: $hasToken');
       
-      // Check if we need to redirect to pricing page
-      if (fragment.contains('/pricing') && hasToken && Uri.base.path != '/pricing') {
-        print('🎯 Detected pricing page in fragment but not on pricing route - redirecting');
-        // Extract token from fragment
-        final tokenMatch = RegExp(r'token=([^&]+)').firstMatch(fragment);
-        if (tokenMatch != null) {
-          final token = tokenMatch.group(1);
-          print('🎯 Extracted token: $token');
-          // Set redirecting flag to prevent loading state
-          _isRedirecting = true;
-          // Force navigation to pricing page with token using window.location
-          final newUrl = '${Uri.base.origin}/pricing?token=$token';
-          print('🎯 Redirecting to: $newUrl');
-          web.window.location.href = newUrl;
-          return; // Exit early since we're redirecting
-        }
-      }
+             // Check if we need to redirect to pricing page
+       if (fragment.contains('/pricing') && hasToken && Uri.base.path != '/pricing') {
+         print('🎯 Detected pricing page in fragment but not on pricing route - redirecting');
+         // Extract token from fragment
+         final tokenMatch = RegExp(r'token=([^&]+)').firstMatch(fragment);
+         if (tokenMatch != null) {
+           final token = tokenMatch.group(1);
+           print('🎯 Extracted token: $token');
+           // Set redirecting flag to prevent loading state
+           _isRedirecting = true;
+           // Force navigation to pricing page with token using window.location
+           final newUrl = '${Uri.base.origin}/pricing?token=$token';
+           print('🎯 Redirecting to: $newUrl');
+           print('🎯 Current origin: ${Uri.base.origin}');
+           print('🎯 Current pathname: ${Uri.base.path}');
+           web.window.location.href = newUrl;
+           return; // Exit early since we're redirecting
+         }
+       }
       
       // Only check first-time visitor if we're not redirecting
       if (!_isRedirecting) {
