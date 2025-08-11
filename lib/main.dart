@@ -228,16 +228,19 @@ class _FluoverseWebsiteAppState extends State<FluoverseWebsiteApp> {
       // Check if user is on pricing page with token (indicating payment flow)
       // Handle both normal routing and hash routing
       final fullUrl = Uri.base.toString();
-      final isOnPricingPage = Uri.base.path == '/pricing' || fullUrl.contains('/pricing');
+      final fragment = Uri.base.fragment;
+      final completeUrl = fragment.isNotEmpty ? '$fullUrl#$fragment' : fullUrl;
+      final isOnPricingPage = Uri.base.path == '/pricing' || completeUrl.contains('/pricing');
       final hasTokenInQuery = Uri.base.queryParameters['token'] != null;
-      final hasTokenInFragment = fullUrl.contains('token=');
+      final hasTokenInFragment = completeUrl.contains('token=');
       final hasToken = hasTokenInQuery || hasTokenInFragment;
       
              print('🎯 URL Analysis:');
        print('  - Full URL: $fullUrl');
+       print('  - Fragment: $fragment');
+       print('  - Complete URL: $completeUrl');
        print('  - Current path: ${Uri.base.path}');
        print('  - Query parameters: ${Uri.base.queryParameters}');
-       print('  - Fragment: ${Uri.base.fragment}');
        print('  - Is on pricing page: $isOnPricingPage');
        print('  - Has token in query: $hasTokenInQuery');
        print('  - Has token in fragment: $hasTokenInFragment');
