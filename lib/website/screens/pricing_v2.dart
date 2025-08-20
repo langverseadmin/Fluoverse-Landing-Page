@@ -203,8 +203,9 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
         final uri = Uri.parse(url);
         if (await canLaunchUrl(uri)) {
           await launchUrl(uri, mode: LaunchMode.externalApplication);
-          // Close the website tab immediately after launching Stripe
-          // Let Stripe handle the payment flow independently
+          // Wait a moment for Stripe to open, then close the website tab
+          await Future.delayed(const Duration(milliseconds: 500));
+          // Close the website tab and let Stripe handle the payment flow independently
           web.window.close();
         } else {
           debugPrint('❌ Could not launch Stripe checkout URL: $url');
@@ -212,8 +213,15 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
           return;
         }
       } else {
-        debugPrint('❌ Failed to create checkout session. Status:  [38;5;9m${response.statusCode} [0m, Body: ${response.body}');
-        throw 'Failed to create checkout session.';
+        debugPrint('❌ Failed to create checkout session. Status: ${response.statusCode}, Body: ${response.body}');
+        final errorMessage = response.statusCode == 400 
+            ? 'Invalid request. Please check your login status and try again.'
+            : response.statusCode == 401 
+                ? 'Authentication failed. Please log in again.'
+                : response.statusCode == 500
+                    ? 'Server error. Please try again later.'
+                    : 'Failed to create checkout session. Please try again.';
+        throw errorMessage;
       }
     } catch (e, stack) {
       debugPrint('❌ Exception in _startStripePayment: $e');
