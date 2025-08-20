@@ -66,11 +66,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
   int selectedPlan = 0; // Default to Fluoversian (only plan)
   bool showComparison = false;
   bool isProcessing = false;
-  bool paymentSuccess = false;
-  String? paymentStatus; // null, 'processing', 'success', 'error'
-  String debugInfo = '';
   bool showLoginPrompt = false;
-  bool isRetrying = false;
 
   late AnimationController _mainController;
   late AnimationController _cardsController;
@@ -122,22 +118,8 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
       });
     });
     // Check for payment param in URL (fragment or query)
-    final paymentParam = _extractPaymentParam();
-    if (paymentParam == 'success') {
-      setState(() {
-        paymentStatus = 'processing';
-        isProcessing = true;
-      });
-      final token = _extractTokenFromUrl();
-      if (token != null) {
-        _pollPremiumStatus(token);
-      }
-    } else if (paymentParam == 'cancel') {
-      setState(() {
-        paymentStatus = 'error';
-        isProcessing = false;
-      });
-    }
+    // Payment parameter handling removed - no longer polling or showing success/error modals
+    // The payment flow is now handled entirely by Stripe
   }
 
   void _setupCardAnims(int count, {bool useCardsController = true}) {
@@ -162,13 +144,7 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
     _cardsController.dispose();
     _scrollController.dispose();
     
-    // If user leaves pricing page without completing payment and has a token,
-    // ensure deferred onboarding flag is preserved for when they return
-    final hasToken = _extractTokenFromUrl() != null;
-    if (hasToken && !paymentSuccess) {
-      // User left without completing payment, preserve deferred onboarding
-      print('🎯 User left pricing page without completing payment - preserving deferred onboarding');
-    }
+    // Payment flow is now handled entirely by Stripe, no need to track payment success
     
     super.dispose();
   }
@@ -184,19 +160,6 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
     if (fragment.contains('token=')) {
       final uri = Uri.parse('http://dummy/?${fragment.split('?').last}');
       return uri.queryParameters['token'];
-    }
-    return null;
-  }
-
-  String? _extractPaymentParam() {
-    // Try query parameters first
-    final payment = Uri.base.queryParameters['payment'];
-    if (payment != null && payment.isNotEmpty) return payment;
-    // Try fragment (for hash routing)
-    final fragment = Uri.base.fragment; // e.g. "pricing?token=...&payment=success"
-    if (fragment.contains('payment=')) {
-      final uri = Uri.parse('http://dummy/?${fragment.split('?').last}');
-      return uri.queryParameters['payment'];
     }
     return null;
   }
@@ -240,8 +203,9 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
         final uri = Uri.parse(url);
         if (await canLaunchUrl(uri)) {
           await launchUrl(uri, mode: LaunchMode.externalApplication);
-          // After returning from Stripe, poll /auth/status for is_premium
-          _pollPremiumStatus(token);
+          // Close the website tab immediately after launching Stripe
+          // Let Stripe handle the payment flow independently
+          web.window.close();
         } else {
           debugPrint('❌ Could not launch Stripe checkout URL: $url');
           _showError('Could not launch payment page. Please check your internet connection or try a different browser.');
@@ -260,76 +224,9 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
     }
   }
 
-  Future<void> _pollPremiumStatus([String? token]) async {
-    token ??= _extractTokenFromUrl();
-    // Remove token exposure from debugInfo - only log for debugging, not user display
-    debugPrint('Polling with token: ${token ?? 'null'}');
-    if (token == null) {
-      _showError('Missing token. Please return to the app and try again.');
-      setState(() {
-        paymentStatus = 'error';
-        isProcessing = false;
-      });
-      return;
-    }
-    for (int i = 0; i < 20; i++) { // Poll for up to 20 seconds
-      await Future.delayed(const Duration(seconds: 1));
-      try {
-        final res = await http.get(
-          Uri.parse('https://fluoverse.onrender.com/auth/status'),
-          headers: {'Authorization': 'Bearer $token'},
-        );
-        // Only log to debugPrint, not to debugInfo for user display
-        debugPrint('Poll $i: status ${res.statusCode}, body: ${res.body}');
-        if (res.statusCode == 200) {
-          final statusJson = jsonDecode(res.body);
-          if (statusJson['is_premium'] == true) {
-            debugPrint('Success detected on poll $i.');
-            if (mounted) {
-              setState(() {
-                paymentSuccess = true;
-                paymentStatus = 'success';
-                isProcessing = false;
-              });
-              // Send signal to parent (web app) that payment succeeded
-              try {
-                web.window.parent?.postMessage('payment_success'.toJS, '*'.toJS);
-              } catch (_) {}
-              
-              // Clear deferred onboarding flag since payment is successful
-              // User can now return to main site and get onboarded properly
-              await FirstTimeVisitorService.instance.clearDeferredOnboarding();
-            }
-            return;
-          }
-        }
-      } catch (e, stack) {
-        debugPrint('Exception on poll $i: $e\n$stack');
-      }
-    }
-    // If not premium after polling, show error with retry option
-    if (mounted) {
-      _showError('Payment not detected. The payment may still be processing. You can retry the check or contact support if the issue persists.');
-      setState(() {
-        paymentStatus = 'error';
-        isProcessing = false;
-      });
-    }
-  }
 
-  Future<void> _retryPaymentCheck() async {
-    setState(() {
-      isRetrying = true;
-    });
-    
-    try {
-      await _pollPremiumStatus();
-    } finally {
-      setState(() {
-        isRetrying = false;
-      });
-    }
-  }
+
+  // Retry payment check removed - no longer polling for payment status
 
   void _showError(String message) {
     showDialog(
@@ -337,9 +234,9 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
       barrierDismissible: true,
       builder: (ctx) => GlassmorphicErrorPopup(
         message: message,
-        showRetryButton: true,
-        onRetry: _retryPaymentCheck,
-        isRetrying: isRetrying,
+        showRetryButton: false, // No retry since we're not polling
+        onRetry: null,
+        isRetrying: false,
       ),
     );
   }
@@ -750,41 +647,12 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
           ),
           // (No persistent checkout button)
           // --- Fancy Loader Overlay ---
-         if (isProcessing || paymentStatus == 'processing')
+         if (isProcessing)
            Positioned.fill(
              child: _FancyLoader(),
            ),
-          // --- Payment Success Modal ---
-         if (paymentStatus == 'success')
-           Positioned.fill(
-             child: Container(
-               color: Colors.black.withOpacity(0.28),
-               child: Center(
-                 child: GlassmorphicSuccessPopup(
-                   onContinue: () {
-                     // Send signal again just in case
-                     try { web.window.parent?.postMessage('payment_success'.toJS, '*'.toJS); } catch (_) {}
-                     // Close the tab after sending the signal
-                     web.window.close();
-                   },
-                 ),
-               ),
-             ),
-           ),
-         if (paymentStatus == 'error')
-           Positioned.fill(
-             child: Container(
-               color: Colors.black.withOpacity(0.28),
-               child: Center(
-                 child: GlassmorphicErrorPopup(
-                   message: 'Payment not detected or was cancelled. The payment may still be processing. You can retry the check or contact support if the issue persists.',
-                   showRetryButton: true,
-                   onRetry: _retryPaymentCheck,
-                   isRetrying: isRetrying,
-                 ),
-               ),
-             ),
-           ),
+          // Success modal removed - no longer showing payment success since we're not polling
+         // Error modal removed - no longer showing payment status errors since we're not polling
          if (showLoginPrompt)
            Positioned.fill(
              child: Container(
