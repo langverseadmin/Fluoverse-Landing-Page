@@ -197,21 +197,37 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
           'plan_name': planName,
         }),
       );
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final url = data['checkout_url'];
-        final uri = Uri.parse(url);
-        if (await canLaunchUrl(uri)) {
-          await launchUrl(uri, mode: LaunchMode.externalApplication);
-          // Wait a moment for Stripe to open, then close the website tab
-          await Future.delayed(const Duration(milliseconds: 500));
-          // Close the website tab and let Stripe handle the payment flow independently
-          web.window.close();
-        } else {
-          debugPrint('❌ Could not launch Stripe checkout URL: $url');
-          _showError('Could not launch payment page. Please check your internet connection or try a different browser.');
-          return;
-        }
+             if (response.statusCode == 200) {
+         final data = jsonDecode(response.body);
+         final url = data['checkout_url'];
+         
+         // Debug the response to see what we're getting
+         debugPrint('✅ Stripe checkout URL received: $url');
+         
+         if (url == null || url.isEmpty) {
+           throw 'No checkout URL received from server';
+         }
+         
+         final uri = Uri.parse(url);
+         
+         // Verify it's a Stripe URL before launching
+         if (!uri.toString().contains('stripe.com') && !uri.toString().contains('checkout.stripe.com')) {
+           debugPrint('❌ Invalid Stripe URL received: $url');
+           throw 'Invalid payment URL received from server';
+         }
+         
+         if (await canLaunchUrl(uri)) {
+           debugPrint('🚀 Launching Stripe checkout: $url');
+           await launchUrl(uri, mode: LaunchMode.externalApplication);
+           // Wait a moment for Stripe to open, then close the website tab
+           await Future.delayed(const Duration(milliseconds: 500));
+           // Close the website tab and let Stripe handle the payment flow independently
+           web.window.close();
+         } else {
+           debugPrint('❌ Could not launch Stripe checkout URL: $url');
+           _showError('Could not launch payment page. Please check your internet connection or try a different browser.');
+           return;
+         }
       } else {
         debugPrint('❌ Failed to create checkout session. Status: ${response.statusCode}, Body: ${response.body}');
         final errorMessage = response.statusCode == 400 
@@ -223,13 +239,25 @@ class _PaymentScreenState extends State<PaymentScreen> with TickerProviderStateM
                     : 'Failed to create checkout session. Please try again.';
         throw errorMessage;
       }
-    } catch (e, stack) {
-      debugPrint('❌ Exception in _startStripePayment: $e');
-      debugPrint(stack.toString());
-      _showError('Error launching checkout: $e');
-    } finally {
-      setState(() { isProcessing = false; });
-    }
+         } catch (e, stack) {
+       debugPrint('❌ Exception in _startStripePayment: $e');
+       debugPrint(stack.toString());
+       
+       String errorMessage = 'Error launching checkout';
+       if (e.toString().contains('No checkout URL')) {
+         errorMessage = 'Server did not provide a valid payment URL. Please try again.';
+       } else if (e.toString().contains('Invalid payment URL')) {
+         errorMessage = 'Invalid payment URL received. Please try again.';
+       } else if (e.toString().contains('Failed to create checkout session')) {
+         errorMessage = 'Unable to create payment session. Please check your login status and try again.';
+       } else {
+         errorMessage = 'Error launching checkout: $e';
+       }
+       
+       _showError(errorMessage);
+     } finally {
+       setState(() { isProcessing = false; });
+     }
   }
 
 
