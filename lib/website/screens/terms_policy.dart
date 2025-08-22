@@ -132,18 +132,18 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
 
   MarkdownStyleSheet _markdownStyleSheet() {
     return MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-      p: const TextStyle(fontSize: 16, color: Colors.white, height: 1.5),
-      h1: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 212, 0, 255)),
-      h2: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 212, 0, 255)),
-      h3: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-      h4: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-      listBullet: const TextStyle(color: Colors.white),
-      a: const TextStyle(color: Colors.lightBlueAccent, decoration: TextDecoration.underline),
-      blockquote: const TextStyle(color: Colors.white70, fontStyle: FontStyle.italic),
-      code: const TextStyle(color: Colors.white, backgroundColor: Color.fromARGB(221, 0, 0, 0)),
-      strong: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-      tableHead: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-      tableBody: const TextStyle(color: Colors.white),
+      p: const TextStyle(fontSize: 16, color: Color(0xFF1F2937), height: 1.5),
+      h1: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: kPremiumPurple),
+      h2: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: kPremiumPurple),
+      h3: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1F2937)),
+      h4: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1F2937)),
+      listBullet: const TextStyle(color: Color(0xFF1F2937)),
+      a: const TextStyle(color: kAccentBlue, decoration: TextDecoration.underline),
+      blockquote: const TextStyle(color: Color(0xFF6B7280), fontStyle: FontStyle.italic),
+      code: const TextStyle(color: Color(0xFF1F2937), backgroundColor: Color(0xFFF3F4F6)),
+      strong: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1F2937)),
+      tableHead: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1F2937)),
+      tableBody: const TextStyle(color: Color(0xFF1F2937)),
     );
   }
 
