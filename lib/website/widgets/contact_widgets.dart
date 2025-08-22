@@ -369,11 +369,10 @@ class _ContactFormSectionState extends State<ContactFormSection>
                         ? size.height * 0.03
                         : size.height * 0.018), // smaller for web
                 // Animated Send Button
-                SizedBox(
-                  width: isMobile
-                      ? double.infinity
-                      : size.width * 0.09, // smaller for web
-                  child: AnimatedSwitcher(
+                Center(
+                  child: SizedBox(
+                    width: isMobile ? double.infinity : null,
+                    child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 350),
                     child: _isSending
                         ? ElevatedButton.icon(
@@ -426,52 +425,30 @@ class _ContactFormSectionState extends State<ContactFormSection>
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: isMobile
-                                      ? size.height * 0.02
-                                      : size.height * 0.01),
+                              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
                               backgroundColor: const Color(0xFF6A82FB),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(isMobile
-                                    ? size.width * 0.025
-                                    : size.width * 0.006),
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               elevation: 0,
                               shadowColor: Colors.transparent,
                               foregroundColor: Colors.white,
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: isMobile
-                                      ? size.width * 0.042
-                                      : size.width * 0.01),
+                                  fontSize: 16),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.send_rounded,
-                                    color: Colors.white,
-                                    size: isMobile
-                                        ? size.width * 0.052
-                                        : size.width * 0.014), // smaller for web
-                                SizedBox(
-                                    width: isMobile
-                                        ? size.width * 0.018
-                                        : size.width * 0.003), // smaller for web
-                                Text(
-                                  'Send Message',
-                                  style: TextStyle(
-                                    fontSize: isMobile
-                                        ? size.width * 0.042
-                                        : size.width * 0.01,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 0.5,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                            child: Text(
+                              'Send Message',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                              softWrap: false,
+                              overflow: TextOverflow.visible,
                             ),
                           ),
+                    ),
                   ),
                 ),
                 if (_feedbackMessage != null) ...[
@@ -594,7 +571,7 @@ class _ContactFormSectionState extends State<ContactFormSection>
             _infoRow(
               icon: Icons.email_outlined,
               label: 'Email',
-              value: 'fluoverse@gmail.com',
+              value: 'info.fluoverse@gmail.com',
               isMobile: isMobile,
             ),
             SizedBox(
