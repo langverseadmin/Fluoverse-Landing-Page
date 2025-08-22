@@ -857,7 +857,7 @@ class _TourCard extends StatelessWidget {
              textAlign: TextAlign.justify,
              style: const TextStyle(
                fontSize: 14,
-               color: Colors.black54,
+               color: Colors.black87,
                height: 1.5,
              ),
            ),
