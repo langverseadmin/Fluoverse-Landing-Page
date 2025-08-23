@@ -2747,438 +2747,7 @@ class _CycleConnectorsPainterPremium extends CustomPainter {
 }
 
 
-/// Ultra-premium Vision Section — Striking, Minimal, and Futuristic
-class VisionSection extends StatelessWidget {
-  const VisionSection({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    final width = mq.size.width;
-    final height = mq.size.height;
-    final isMobile = width < 600;
-    final isTablet = width >= 600 && width < 900;
-    final isLaptop = width >= 900 && width < 1400;
-    final isDesktop = width >= 1400;
-
-    // Helper for percent with min/max clamp
-    double percent(double v, {double min = 0, double? max}) {
-      final val = v;
-      if (max != null) return val.clamp(min, max);
-      return val < min ? min : val;
-    }
-
-    // --- Sizing logic for 4 breakpoints: mobile, tablet, laptop, desktop ---
-
-    // Mobile
-    final double mobileVerticalPadding = percent(height * 0.09, min: 60, max: 80);
-    final double mobilePlanetHeight = percent(height * 0.13, min: 80, max: 110);
-    final double mobileTitleFontSize = percent(width * 0.045, min: 28, max: 32);
-    final double mobileTitleSpacing = 1.2;
-    final double mobileDividerHeight = percent(height * 0.003, min: 2.5, max: 3);
-    final double mobileDividerWidth = percent(width * 0.13, min: 60, max: 80);
-    final double mobileCardPaddingV = percent(height * 0.04, min: 28, max: 36);
-    final double mobileCardPaddingH = percent(width * 0.025, min: 14, max: 22);
-    final double mobileCardFontSize = percent(width * 0.028, min: 18, max: 22);
-    final double mobileCardRadius = percent(width * 0.03, min: 18, max: 22);
-    final double mobileChipSpacing = 8;
-    final double mobileChipRunSpacing = 8;
-    final double mobileChipWidth = 108;
-    final double mobileChipHeight = 68;
-    final double mobileChipIconSize = 18;
-    final double mobileChipFontSize = 11;
-    final double mobileSpaceCodeHeight = percent(height * 0.04, min: 24, max: 32);
-
-    // Tablet
-    final double tabletVerticalPadding = percent(height * 0.1, min: 70, max: 100);
-    final double tabletPlanetHeight = percent(height * 0.15, min: 100, max: 130);
-    final double tabletTitleFontSize = percent(width * 0.05, min: 32, max: 38);
-    final double tabletTitleSpacing = 1.6;
-    final double tabletDividerHeight = percent(height * 0.003, min: 3, max: 3.5);
-    final double tabletDividerWidth = percent(width * 0.15, min: 80, max: 100);
-    final double tabletCardPaddingV = percent(height * 0.045, min: 32, max: 44);
-    final double tabletCardPaddingH = percent(width * 0.03, min: 18, max: 32);
-    final double tabletCardFontSize = percent(width * 0.032, min: 20, max: 26);
-    final double tabletCardRadius = percent(width * 0.035, min: 22, max: 28);
-    final double tabletChipSpacing = 18;
-    final double tabletChipRunSpacing = 14;
-    final double tabletChipWidth = 140;
-    final double tabletChipHeight = 74;
-    final double tabletChipIconSize = 22;
-    final double tabletChipFontSize = 13;
-    final double tabletSpaceCodeHeight = percent(height * 0.045, min: 28, max: 38);
-
-    // Laptop
-    final double laptopVerticalPadding = percent(height * 0.11, min: 90, max: 120);
-    final double laptopPlanetHeight = percent(height * 0.16, min: 120, max: 150);
-    final double laptopTitleFontSize = percent(width * 0.055, min: 36, max: 44);
-    final double laptopTitleSpacing = 2.0;
-    final double laptopDividerHeight = percent(height * 0.003, min: 3.5, max: 4);
-    final double laptopDividerWidth = percent(width * 0.17, min: 100, max: 120);
-    final double laptopCardPaddingV = percent(height * 0.05, min: 40, max: 54);
-    final double laptopCardPaddingH = percent(width * 0.035, min: 24, max: 40);
-    final double laptopCardFontSize = percent(width * 0.035, min: 24, max: 32);
-    final double laptopCardRadius = percent(width * 0.04, min: 28, max: 34);
-    final double laptopChipSpacing = 32;
-    final double laptopChipRunSpacing = 18;
-    final double laptopChipWidth = 180;
-    final double laptopChipHeight = 80;
-    final double laptopChipIconSize = 28;
-    final double laptopChipFontSize = 15;
-    final double laptopSpaceCodeHeight = percent(height * 0.05, min: 36, max: 48);
-
-    // Desktop (big monitor)
-    final double desktopVerticalPadding = percent(height * 0.13, min: 120, max: 160);
-    final double desktopPlanetHeight = percent(height * 0.18, min: 140, max: 180);
-    final double desktopTitleFontSize = percent(width * 0.06, min: 44, max: 54);
-    final double desktopTitleSpacing = 2.8;
-    final double desktopDividerHeight = percent(height * 0.003, min: 4, max: 5);
-    final double desktopDividerWidth = percent(width * 0.2, min: 120, max: 160);
-    final double desktopCardPaddingV = percent(height * 0.06, min: 54, max: 70);
-    final double desktopCardPaddingH = percent(width * 0.045, min: 32, max: 48);
-    final double desktopCardFontSize = percent(width * 0.04, min: 32, max: 38);
-    final double desktopCardRadius = percent(width * 0.05, min: 34, max: 40);
-    final double desktopChipSpacing = 54;
-    final double desktopChipRunSpacing = 38;
-    final double desktopChipWidth = 210;
-    final double desktopChipHeight = 90;
-    final double desktopChipIconSize = 34;
-    final double desktopChipFontSize = 18;
-    final double desktopSpaceCodeHeight = percent(height * 0.06, min: 48, max: 60);
-
-    // Select sizes based on breakpoint
-    double verticalPadding, planetHeight, titleFontSize, titleSpacing, dividerHeight, dividerWidth;
-    double cardPaddingV, cardPaddingH, cardFontSize, cardRadius;
-    double chipSpacing, chipRunSpacing, chipWidth, chipHeight, chipIconSize, chipFontSize, spaceCodeHeight;
-
-    if (isDesktop) {
-      verticalPadding = desktopVerticalPadding;
-      planetHeight = desktopPlanetHeight;
-      titleFontSize = desktopTitleFontSize;
-      titleSpacing = desktopTitleSpacing;
-      dividerHeight = desktopDividerHeight;
-      dividerWidth = desktopDividerWidth;
-      cardPaddingV = desktopCardPaddingV;
-      cardPaddingH = desktopCardPaddingH;
-      cardFontSize = desktopCardFontSize;
-      cardRadius = desktopCardRadius;
-      chipSpacing = desktopChipSpacing;
-      chipRunSpacing = desktopChipRunSpacing;
-      chipWidth = desktopChipWidth;
-      chipHeight = desktopChipHeight;
-      chipIconSize = desktopChipIconSize;
-      chipFontSize = desktopChipFontSize;
-      spaceCodeHeight = desktopSpaceCodeHeight;
-    } else if (isLaptop) {
-      verticalPadding = laptopVerticalPadding;
-      planetHeight = laptopPlanetHeight;
-      titleFontSize = laptopTitleFontSize;
-      titleSpacing = laptopTitleSpacing;
-      dividerHeight = laptopDividerHeight;
-      dividerWidth = laptopDividerWidth;
-      cardPaddingV = laptopCardPaddingV;
-      cardPaddingH = laptopCardPaddingH;
-      cardFontSize = laptopCardFontSize;
-      cardRadius = laptopCardRadius;
-      chipSpacing = laptopChipSpacing;
-      chipRunSpacing = laptopChipRunSpacing;
-      chipWidth = laptopChipWidth;
-      chipHeight = laptopChipHeight;
-      chipIconSize = laptopChipIconSize;
-      chipFontSize = laptopChipFontSize;
-      spaceCodeHeight = laptopSpaceCodeHeight;
-    } else if (isTablet) {
-      verticalPadding = tabletVerticalPadding;
-      planetHeight = tabletPlanetHeight;
-      titleFontSize = tabletTitleFontSize;
-      titleSpacing = tabletTitleSpacing;
-      dividerHeight = tabletDividerHeight;
-      dividerWidth = tabletDividerWidth;
-      cardPaddingV = tabletCardPaddingV;
-      cardPaddingH = tabletCardPaddingH;
-      cardFontSize = tabletCardFontSize;
-      cardRadius = tabletCardRadius;
-      chipSpacing = tabletChipSpacing;
-      chipRunSpacing = tabletChipRunSpacing;
-      chipWidth = tabletChipWidth;
-      chipHeight = tabletChipHeight;
-      chipIconSize = tabletChipIconSize;
-      chipFontSize = tabletChipFontSize;
-      spaceCodeHeight = tabletSpaceCodeHeight;
-    } else {
-      // Mobile
-      verticalPadding = mobileVerticalPadding;
-      planetHeight = mobilePlanetHeight;
-      titleFontSize = mobileTitleFontSize;
-      titleSpacing = mobileTitleSpacing;
-      dividerHeight = mobileDividerHeight;
-      dividerWidth = mobileDividerWidth;
-      cardPaddingV = mobileCardPaddingV;
-      cardPaddingH = mobileCardPaddingH;
-      cardFontSize = mobileCardFontSize;
-      cardRadius = mobileCardRadius;
-      chipSpacing = mobileChipSpacing;
-      chipRunSpacing = mobileChipRunSpacing;
-      chipWidth = mobileChipWidth;
-      chipHeight = mobileChipHeight;
-      chipIconSize = mobileChipIconSize;
-      chipFontSize = mobileChipFontSize;
-      spaceCodeHeight = mobileSpaceCodeHeight;
-    }
-
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 0),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFF0B0E1A),
-            Color(0xFF232347),
-            Color(0xFF181A2A),
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: Center(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Aurora/Nebula Glow Layer
-            Positioned.fill(
-              child: IgnorePointer(
-                child: AnimatedBuilder(
-                  animation: Listenable.merge([
-                    AlwaysStoppedAnimation(DateTime.now().millisecondsSinceEpoch / 40000.0),
-                  ]),
-                  builder: (context, _) {
-                    final t = (DateTime.now().millisecondsSinceEpoch / 40000.0) % 1.0;
-                    return CustomPaint(
-                      painter: _AuroraGlowPainter(t),
-                    );
-                  },
-                ),
-              ),
-            ),
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: isMobile ? double.infinity : 1300),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Floating glass planet
-                  SizedBox(
-                    height: planetHeight,
-                    child: Center(
-                      child: _AnimatedGlassPlanet(
-                        size: planetHeight,
-                        iconSize: chipIconSize + 12,
-                        ringSize: planetHeight * 1.25,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: isMobile ? 10 : isTablet ? 18 : isLaptop ? 24 : 32),
-                  // Title
-                  TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 1.0, end: 1.18),
-                    duration: const Duration(milliseconds: 1200),
-                    curve: Curves.easeOutExpo,
-                    builder: (context, spacing, _) {
-                      return ShaderMask(
-                        shaderCallback: (Rect bounds) {
-                          return const LinearGradient(
-                            colors: [kAccentBlue, kPremiumPurple],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ).createShader(bounds);
-                        },
-                        child: Text(
-                          'THE VISION',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: titleFontSize,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: titleSpacing * spacing,
-                            color: Colors.white,
-                            fontFamily: 'Orbitron',
-                            shadows: [
-                              Shadow(
-                                color: kAccentBlue.withOpacity(0.38),
-                                blurRadius: isMobile
-                                    ? 8
-                                    : isTablet
-                                        ? 16
-                                        : isLaptop
-                                            ? 24
-                                            : 32,
-                              ),
-                              Shadow(
-                                color: kPremiumPurple.withOpacity(0.18),
-                                blurRadius: isMobile
-                                    ? 4
-                                    : isTablet
-                                        ? 8
-                                        : isLaptop
-                                            ? 12
-                                            : 18,
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(height: isMobile ? 18 : isTablet ? 32 : isLaptop ? 54 : 64),
-                  // Divider
-                  Container(
-                    height: dividerHeight,
-                    width: dividerWidth,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(dividerHeight),
-                      gradient: const LinearGradient(
-                        colors: [kAccentBlue, kPremiumPurple],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: kAccentBlue.withOpacity(0.22),
-                          blurRadius: isMobile
-                              ? 6
-                              : isTablet
-                                  ? 12
-                                  : isLaptop
-                                      ? 18
-                                      : 24,
-                          spreadRadius: isMobile
-                              ? 1
-                              : isTablet
-                                  ? 1.5
-                                  : isLaptop
-                                      ? 2
-                                      : 2.5,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: isMobile ? 24 : isTablet ? 36 : isLaptop ? 54 : 64),
-                  // Vision statement card
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: cardPaddingV, horizontal: cardPaddingH),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(cardRadius),
-                      color: Colors.white.withOpacity(0.09),
-                      border: Border.all(
-                        color: kAccentBlue.withOpacity(0.22),
-                        width: isMobile
-                            ? 1.2
-                            : isTablet
-                                ? 1.6
-                                : isLaptop
-                                    ? 2.0
-                                    : 2.2,
-                      ),
-                      backgroundBlendMode: BlendMode.srcOver,
-                    ),
-                    child: ShaderMask(
-                      shaderCallback: (Rect bounds) {
-                        return const LinearGradient(
-                          colors: [kAccentBlue, kPremiumPurple],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ).createShader(bounds);
-                      },
-                      child: Text(
-                        "Language is more than vocabulary — it's connection. Fluoverse is building a global community where learners don't just study languages, they build real relationships through them.",
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                              fontSize: cardFontSize,
-                              letterSpacing: isMobile
-                                  ? 0.7
-                                  : isTablet
-                                      ? 1.2
-                                      : isLaptop
-                                          ? 1.7
-                                          : 2.2,
-                              fontFamily: 'Orbitron',
-                              height: 1.32,
-                              shadows: [
-                                Shadow(
-                                  color: kPremiumPurple.withOpacity(0.22),
-                                  blurRadius: isMobile
-                                      ? 8
-                                      : isTablet
-                                          ? 16
-                                          : isLaptop
-                                              ? 24
-                                              : 32,
-                                ),
-                              ],
-                            ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: isMobile ? 24 : isTablet ? 36 : isLaptop ? 54 : 64),
-                  // Vision chips
-                  Wrap(
-                    spacing: chipSpacing,
-                    runSpacing: chipRunSpacing,
-                    alignment: WrapAlignment.center,
-                    children: [
-                      _VisionChip(
-                        icon: Icons.rocket_launch_rounded,
-                        label: "Bridge\nCultures",
-                        color: kAccentBlue,
-                        width: chipWidth,
-                        height: chipHeight,
-                        iconSize: chipIconSize,
-                        fontSize: chipFontSize,
-                      ),
-                      _VisionChip(
-                        icon: Icons.hub_rounded,
-                        label: "Connect\nLearners",
-                        color: kPremiumPurple,
-                        width: chipWidth,
-                        height: chipHeight,
-                        iconSize: chipIconSize,
-                        fontSize: chipFontSize,
-                      ),
-                      _VisionChip(
-                        icon: Icons.lightbulb_rounded,
-                        label: "Ignite\nMinds",
-                        color: kAccentBlue,
-                        width: chipWidth,
-                        height: chipHeight,
-                        iconSize: chipIconSize,
-                        fontSize: chipFontSize,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: isMobile ? 24 : isTablet ? 36 : isLaptop ? 54 : 64),
-                  // Space code line
-                  SizedBox(
-                    height: spaceCodeHeight,
-                    child: _SpaceCodeLine(
-                      fontSize: chipFontSize.toDouble() + (isMobile ? 0 : 4),
-                      padding: isMobile
-                          ? percent(width * 0.012, min: 3, max: 6)
-                          : isTablet
-                              ? 8
-                              : isLaptop
-                                  ? 12
-                                  : 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 // Aurora/Nebula Glow Painter (unchanged)
 class _AuroraGlowPainter extends CustomPainter {
@@ -3238,299 +2807,11 @@ class _AuroraGlowPainter extends CustomPainter {
   bool shouldRepaint(covariant _AuroraGlowPainter oldDelegate) => true;
 }
 
-// Animated floating glass planet with shifting gradient and orbiting ring
-class _AnimatedGlassPlanet extends StatefulWidget {
-  final double size;
-  final double iconSize;
-  final double ringSize;
-  const _AnimatedGlassPlanet({
-    this.size = 160,
-    this.iconSize = 70,
-    this.ringSize = 200,
-    super.key,
-  });
 
-  @override
-  State<_AnimatedGlassPlanet> createState() => _AnimatedGlassPlanetState();
-}
 
-class _AnimatedGlassPlanetState extends State<_AnimatedGlassPlanet>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 10),
-    )..repeat();
-  }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (_, __) {
-        final t = _controller.value;
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            // Orbiting ring
-            Transform.rotate(
-              angle: t * 2 * 3.1415,
-              child: CustomPaint(
-                size: Size(widget.ringSize, widget.ringSize),
-                painter: _PlanetRingPainter(strokeWidth: widget.size * 0.045),
-              ),
-            ),
-            // Floating planet
-            Transform.translate(
-              offset: Offset(0, widget.size * 0.19 * (0.5 - 0.5 * (1 + sin(t * 2 * 3.1415)))),
-              child: Container(
-                width: widget.size,
-                height: widget.size,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: SweepGradient(
-                    colors: [
-                      kAccentBlue,
-                      kPremiumPurple,
-                      kAccentBlue,
-                    ],
-                    stops: [
-                      0.0,
-                      (0.5 + 0.5 * cos(t * 2 * 3.1415)).clamp(0.0, 1.0),
-                      1.0
-                    ],
-                    transform: GradientRotation(t * 2 * 3.1415),
-                  ),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.85),
-                    width: widget.size * 0.025,
-                  ),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.public_rounded,
-                    color: Colors.white.withOpacity(0.93),
-                    size: widget.iconSize,
-                    shadows: [
-                      Shadow(
-                        color: kAccentBlue.withOpacity(0.32),
-                        blurRadius: widget.size * 0.15,
-                      ),
-                      Shadow(
-                        color: kPremiumPurple.withOpacity(0.18),
-                        blurRadius: widget.size * 0.08,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-// Painter for the planet's orbiting ring
-class _PlanetRingPainter extends CustomPainter {
-  final double strokeWidth;
-  const _PlanetRingPainter({this.strokeWidth = 7});
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final rect = Rect.fromCenter(center: center, width: size.width * 0.9, height: size.height * 0.3);
-    final paint = Paint()
-      ..shader = LinearGradient(
-        colors: [
-          kAccentBlue.withOpacity(0.38),
-          kPremiumPurple.withOpacity(0.38),
-          Colors.white.withOpacity(0.12),
-        ],
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight,
-      ).createShader(rect)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
-    canvas.drawOval(rect, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-// Futuristic glass "chip" with neon glow and icon
-class _VisionChip extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final double width;
-  final double height;
-  final double iconSize;
-  final double fontSize;
-
-  const _VisionChip({
-    required this.icon,
-    required this.label,
-    required this.color,
-    this.width = 210,
-    this.height = 80,
-    this.iconSize = 34,
-    this.fontSize = 18,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(height * 0.22),
-        color: Colors.white.withOpacity(0.08),
-        border: Border.all(
-          color: color.withOpacity(0.32),
-          width: 2.2,
-        ),
-        backgroundBlendMode: BlendMode.srcOver,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ShaderMask(
-            shaderCallback: (Rect bounds) {
-              return LinearGradient(
-                colors: [color, Colors.white],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ).createShader(bounds);
-            },
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: iconSize,
-            ),
-          ),
-          SizedBox(width: width * 0.09),
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.93),
-              fontWeight: FontWeight.bold,
-              fontSize: fontSize,
-              fontFamily: 'Orbitron',
-              letterSpacing: 0.7,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Animated "space code" line with Spanish words and ASCII symbols
-class _SpaceCodeLine extends StatefulWidget {
-  final double fontSize;
-  final double padding;
-  const _SpaceCodeLine({this.fontSize = 18, this.padding = 14, super.key});
-  @override
-  State<_SpaceCodeLine> createState() => _SpaceCodeLineState();
-}
-
-class _SpaceCodeLineState extends State<_SpaceCodeLine>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final List<String> _words;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 7),
-    )..repeat();
-    _words = [
-      'Conexión', 'Unidos', 'Comunidad', 'Amistad', 'Vínculo', 'Colaborar', 'Compartir', 'Apoyar',
-      'Escuchar', 'Hablar', 'Juntos', 'Red', 'Encuentro', 'Cultura', 'Diversidad', 'Empatía',
-      'Bienvenida', 'Participar', 'Crecer', 'Colmena', 'Tribu', 'Solidaridad', 'Voz', 'Grupo',
-      'Colaboración', 'Intercambio', 'Pertenecer', 'Junt@s', 'Aliados', 'Puente', 'Familia', 'Equipo'
-    ];
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final isMobile = width < 600;
-    final isLaptop = width >= 900 && width < 1400;
-    // 2 lines for laptop, 2 for mobile, 1 for others
-    final lines = (isMobile || isLaptop) ? 2 : 1;
-    // Show only a third of the words on mobile and laptop
-    final visibleWords = (isMobile || isLaptop) ? (_words.length / 3).ceil() : _words.length;
-    final wordsToShow = _words.take(visibleWords).toList();
-    final wordsPerLine = (wordsToShow.length / lines).ceil();
-
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (_, __) {
-        final t = _controller.value;
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: List.generate(lines, (line) {
-            final start = line * wordsPerLine;
-            final end = ((line + 1) * wordsPerLine).clamp(0, wordsToShow.length);
-            final lineWords = wordsToShow.sublist(start, end);
-
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: const NeverScrollableScrollPhysics(),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(lineWords.length, (i) {
-                  final globalIndex = start + i;
-                  final opacity = 0.3 + 0.7 * ((t + globalIndex / wordsToShow.length) % 1.0);
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: widget.padding),
-                    child: Opacity(
-                      opacity: opacity,
-                      child: Text(
-                        lineWords[i],
-                        style: TextStyle(
-                          color: globalIndex % 2 == 0 ? kAccentBlue : kPremiumPurple,
-                          fontSize: widget.fontSize,
-                          fontFamily: 'Fira Mono',
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.7,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-            );
-          }),
-        );
-      },
-    );
-  }
-}
 
 
 class _FooterLink extends StatefulWidget {
@@ -3804,4 +3085,2046 @@ class _PremiumButtonState extends State<_PremiumButton> {
       ),
     );
   }
+}
+
+/// Fluency Rooms Section — Modern, Creative Learning Experience
+class FluencyRoomsSection extends StatelessWidget {
+  const FluencyRoomsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
+    final width = mq.size.width;
+    final height = mq.size.height;
+    final isMobile = width < 600;
+    final isTablet = width >= 600 && width < 900;
+    final isLaptop = width >= 900 && width < 1400;
+    final isDesktop = width >= 1400;
+
+    // Helper for percent with min/max clamp
+    double percent(double v, {double min = 0, double? max}) {
+      final val = v;
+      if (max != null) return val.clamp(min, max);
+      return val < min ? min : val;
+    }
+
+    // --- Sizing logic for 4 breakpoints: mobile, tablet, laptop, desktop ---
+
+    // Mobile
+    final double mobileVerticalPadding = percent(height * 0.08, min: 50, max: 70);
+    final double mobileTitleFontSize = percent(width * 0.045, min: 28, max: 32);
+    final double mobileTitleSpacing = 1.2;
+    final double mobileCardPaddingV = percent(height * 0.04, min: 28, max: 36);
+    final double mobileCardPaddingH = percent(width * 0.025, min: 14, max: 22);
+    final double mobileCardFontSize = percent(width * 0.028, min: 18, max: 22);
+    final double mobileCardRadius = percent(width * 0.03, min: 18, max: 22);
+    final double mobileFeatureSpacing = 16;
+    final double mobileFeatureIconSize = 24;
+    final double mobileFeatureFontSize = 14;
+
+    // Tablet
+    final double tabletVerticalPadding = percent(height * 0.09, min: 60, max: 90);
+    final double tabletTitleFontSize = percent(width * 0.05, min: 32, max: 38);
+    final double tabletTitleSpacing = 1.6;
+    final double tabletCardPaddingV = percent(height * 0.045, min: 32, max: 44);
+    final double tabletCardPaddingH = percent(width * 0.03, min: 18, max: 32);
+    final double tabletCardFontSize = percent(width * 0.032, min: 20, max: 26);
+    final double tabletCardRadius = percent(width * 0.035, min: 22, max: 28);
+    final double tabletFeatureSpacing = 24;
+    final double tabletFeatureIconSize = 28;
+    final double tabletFeatureFontSize = 16;
+
+    // Laptop - much more compact for 15-inch screens
+    final double laptopVerticalPadding = percent(height * 0.06, min: 40, max: 60);
+    final double laptopTitleFontSize = percent(width * 0.04, min: 28, max: 32);
+    final double laptopTitleSpacing = 1.5;
+    final double laptopCardPaddingV = percent(height * 0.03, min: 24, max: 32);
+    final double laptopCardPaddingH = percent(width * 0.025, min: 16, max: 24);
+    final double laptopCardFontSize = percent(width * 0.028, min: 16, max: 22);
+    final double laptopCardRadius = percent(width * 0.03, min: 20, max: 26);
+    final double laptopFeatureSpacing = 20;
+    final double laptopFeatureIconSize = 24;
+    final double laptopFeatureFontSize = 14;
+
+    // Desktop (big monitor)
+    final double desktopVerticalPadding = percent(height * 0.12, min: 100, max: 140);
+    final double desktopTitleFontSize = percent(width * 0.06, min: 44, max: 54);
+    final double desktopTitleSpacing = 2.8;
+    final double desktopCardPaddingV = percent(height * 0.06, min: 54, max: 70);
+    final double desktopCardPaddingH = percent(width * 0.045, min: 32, max: 48);
+    final double desktopCardFontSize = percent(width * 0.04, min: 32, max: 38);
+    final double desktopCardRadius = percent(width * 0.05, min: 34, max: 40);
+    final double desktopFeatureSpacing = 40;
+    final double desktopFeatureIconSize = 36;
+    final double desktopFeatureFontSize = 20;
+
+    // Select sizes based on breakpoint
+    double verticalPadding, titleFontSize, titleSpacing;
+    double cardPaddingV, cardPaddingH, cardFontSize, cardRadius;
+    double featureSpacing, featureIconSize, featureFontSize;
+
+    if (isDesktop) {
+      verticalPadding = desktopVerticalPadding;
+      titleFontSize = desktopTitleFontSize;
+      titleSpacing = desktopTitleSpacing;
+      cardPaddingV = desktopCardPaddingV;
+      cardPaddingH = desktopCardPaddingH;
+      cardFontSize = desktopCardFontSize;
+      cardRadius = desktopCardRadius;
+      featureSpacing = desktopFeatureSpacing;
+      featureIconSize = desktopFeatureIconSize;
+      featureFontSize = desktopFeatureFontSize;
+    } else if (isLaptop) {
+      verticalPadding = laptopVerticalPadding;
+      titleFontSize = laptopTitleFontSize;
+      titleSpacing = laptopTitleSpacing;
+      cardPaddingV = laptopCardPaddingV;
+      cardPaddingH = laptopCardPaddingH;
+      cardFontSize = laptopCardFontSize;
+      cardRadius = laptopCardRadius;
+      featureSpacing = laptopFeatureSpacing;
+      featureIconSize = laptopFeatureIconSize;
+      featureFontSize = laptopFeatureFontSize;
+    } else if (isTablet) {
+      verticalPadding = tabletVerticalPadding;
+      titleFontSize = tabletTitleFontSize;
+      titleSpacing = tabletTitleSpacing;
+      cardPaddingV = tabletCardPaddingV;
+      cardPaddingH = tabletCardPaddingH;
+      cardFontSize = tabletCardFontSize;
+      cardRadius = tabletCardRadius;
+      featureSpacing = tabletFeatureSpacing;
+      featureIconSize = tabletFeatureIconSize;
+      featureFontSize = tabletFeatureFontSize;
+    } else {
+      // Mobile
+      verticalPadding = mobileVerticalPadding;
+      titleFontSize = mobileTitleFontSize;
+      titleSpacing = mobileTitleSpacing;
+      cardPaddingV = mobileCardPaddingV;
+      cardPaddingH = mobileCardPaddingH;
+      cardFontSize = mobileCardFontSize;
+      cardRadius = mobileCardRadius;
+      featureSpacing = mobileFeatureSpacing;
+      featureIconSize = mobileFeatureIconSize;
+      featureFontSize = mobileFeatureFontSize;
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.only(
+        top: verticalPadding,
+        bottom: verticalPadding + 20, // Extra bottom padding to prevent overflow
+        left: 0,
+        right: 0,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? double.infinity : 
+                     isTablet ? 900 : 
+                     isLaptop ? 1200 : 
+                     1400,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Title with gradient
+              TweenAnimationBuilder<double>(
+                tween: Tween(begin: 1.0, end: 1.18),
+                duration: const Duration(milliseconds: 1200),
+                curve: Curves.easeOutExpo,
+                builder: (context, spacing, _) {
+                  return ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return const LinearGradient(
+                        colors: [kAccentBlue, kPremiumPurple],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds);
+                    },
+                    child: Text(
+                      'Fluency Rooms',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: titleFontSize,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: titleSpacing * spacing,
+                        color: Colors.white,
+                        fontFamily: 'Orbitron',
+                      ),
+                    ),
+                  );
+                },
+              ),
+              
+              SizedBox(height: isMobile ? 16 : isTablet ? 24 : isLaptop ? 32 : 40),
+              
+              // Subtitle
+              Text(
+                                      'Practice with peers, guided by AI',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: featureFontSize + (isLaptop ? 0 : 2),
+                        color: const Color(0xFF6B7280),
+                        fontWeight: FontWeight.w500,
+                      ),
+              ),
+              
+              SizedBox(height: isMobile ? 24 : isTablet ? 32 : isLaptop ? 40 : 48),
+              
+              // Fluency Room Experience Preview
+              Container(
+                width: double.infinity,
+                height: isMobile ? 400 : isTablet ? 450 : isLaptop ? 500 : 520,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(cardRadius),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(cardRadius),
+                  child: Stack(
+                    children: [
+                      // Background pattern
+                      Positioned.fill(
+                        child: CustomPaint(
+                          painter: _ConversationPatternPainter(),
+                        ),
+                      ),
+                      
+                      // Room interface
+                      Padding(
+                        padding: EdgeInsets.all(cardPaddingH),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Compact integrated header with participants and round info
+                            Row(
+                              children: [
+                                // Title and topic (icon removed by request)
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                                                              Text(
+                                          'Travel Spanish Room',
+                                          style: TextStyle(
+                                            fontSize: featureFontSize,
+                                            fontWeight: FontWeight.w700,
+                                            color: const Color(0xFF1F2937),
+                                          ),
+                                        ),
+                                        Text(
+                                          'Topic: Ordering Food',
+                                          style: TextStyle(
+                                            fontSize: featureFontSize - 3,
+                                            color: const Color(0xFF6B7280),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                                // Room status indicator
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: kAccentBlue.withOpacity(0.1),
+                                    border: Border.all(
+                                      color: kAccentBlue.withOpacity(0.3),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.people_alt_rounded,
+                                        size: featureFontSize - 2,
+                                        color: kAccentBlue,
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        "3 learners",
+                                        style: TextStyle(
+                                          color: kAccentBlue,
+                                          fontSize: featureFontSize - 3,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            
+                            const SizedBox(height: 12),
+                            
+                            // Simple room preview card
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: const Color(0xFFF8FAFC),
+                                border: Border.all(
+                                  color: const Color(0xFFE2E8F0),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Room info row
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.people_alt_rounded,
+                                        color: kAccentBlue,
+                                        size: featureFontSize,
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Travel Spanish Room",
+                                              style: TextStyle(
+                                                fontSize: featureFontSize,
+                                                fontWeight: FontWeight.w700,
+                                                color: const Color(0xFF1F2937),
+                                              ),
+                                            ),
+                                            Text(
+                                              "Topic: Ordering Food • Round 2/3",
+                                              style: TextStyle(
+                                                fontSize: featureFontSize - 3,
+                                                color: const Color(0xFF6B7280),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                          color: const Color(0xFF10B981).withOpacity(0.1),
+                                          border: Border.all(
+                                            color: const Color(0xFF10B981).withOpacity(0.3),
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "00:55",
+                                          style: TextStyle(
+                                            color: const Color(0xFF10B981),
+                                            fontSize: featureFontSize - 2,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: 'monospace',
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  
+                                  const SizedBox(height: 16),
+                                  
+                                  // Participants row
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(12),
+                                            color: Colors.white,
+                                            border: Border.all(
+                                              color: kAccentBlue.withOpacity(0.3),
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                width: 32,
+                                                height: 32,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: kAccentBlue,
+                                                ),
+                                                child: const Center(
+                                                  child: Text(
+                                                    "M",
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Maria",
+                                                      style: TextStyle(
+                                                        fontSize: featureFontSize - 2,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: const Color(0xFF1F2937),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      "Speaking...",
+                                                      style: TextStyle(
+                                                        fontSize: featureFontSize - 3,
+                                                        color: kAccentBlue,
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      
+                                      const SizedBox(width: 12),
+                                      
+                                      Expanded(
+                                        child: Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(12),
+                                            color: Colors.white,
+                                            border: Border.all(
+                                              color: const Color(0xFFE2E8F0),
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                width: 32,
+                                                height: 32,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: const Color(0xFFCBD5E1),
+                                                ),
+                                                child: const Center(
+                                                  child: Text(
+                                                    "Y",
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "You",
+                                                      style: TextStyle(
+                                                        fontSize: featureFontSize - 2,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: const Color(0xFF1F2937),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      "Next up",
+                                                      style: TextStyle(
+                                                        fontSize: featureFontSize - 3,
+                                                        color: const Color(0xFF6B7280),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  
+                                  const SizedBox(height: 16),
+                                  
+                                  // AI hint
+                                  Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: kPremiumPurple.withOpacity(0.1),
+                                      border: Border.all(
+                                        color: kPremiumPurple.withOpacity(0.3),
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.psychology_rounded,
+                                          color: kPremiumPurple,
+                                          size: featureFontSize - 1,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            "AI Tip: Try 'Me gustaría' instead of 'Quiero' for a more polite tone",
+                                            style: TextStyle(
+                                              color: kPremiumPurple,
+                                              fontSize: featureFontSize - 3,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            
+                            // Removed large progress section - now integrated in header above
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              
+              SizedBox(height: isMobile ? 32 : isTablet ? 40 : isLaptop ? 48 : 56),
+              
+              // Feature highlights in modern cards
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  // Responsive card widths - more compact for laptop
+                  double cardWidth;
+                  if (isMobile) {
+                    cardWidth = constraints.maxWidth * 0.85;
+                  } else if (isTablet) {
+                    cardWidth = 280.0;
+                  } else if (isLaptop) {
+                    cardWidth = 260.0; // Smaller cards for laptop screens
+                  } else {
+                    cardWidth = 320.0; // Normal for desktop
+                  }
+                  
+                  return Wrap(
+                    spacing: featureSpacing,
+                    runSpacing: featureSpacing * 0.8,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      _ModernFeatureCard(
+                        icon: Icons.people_alt_rounded,
+                        title: "Join Learners",
+                        description: "Connect with other students in topic-specific rooms",
+                        color: kAccentBlue,
+                        iconSize: featureIconSize,
+                        fontSize: featureFontSize,
+                        width: cardWidth,
+                      ),
+                      _ModernFeatureCard(
+                        icon: Icons.psychology_rounded,
+                        title: "AI Coach",
+                        description: "Get intelligent hints and guidance when you need help",
+                        color: kPremiumPurple,
+                        iconSize: featureIconSize,
+                        fontSize: featureFontSize,
+                        width: cardWidth,
+                      ),
+                      _ModernFeatureCard(
+                        icon: Icons.analytics_rounded,
+                        title: "Real-time Scoring",
+                        description: "Instant feedback on fluency and accuracy",
+                        color: kAccentBlue,
+                        iconSize: featureIconSize,
+                        fontSize: featureFontSize,
+                        width: cardWidth,
+                      ),
+                    ],
+                  );
+                },
+              ),
+              
+              SizedBox(height: isMobile ? 32 : isTablet ? 40 : isLaptop ? 48 : 56),
+              
+              // Room benefits summary
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: const Color(0xFFF8FAFC),
+                  border: Border.all(
+                    color: const Color(0xFFE2E8F0),
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      "Why Fluency Rooms Work",
+                      style: TextStyle(
+                        color: const Color(0xFF1E293B),
+                        fontSize: featureFontSize + 2,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Orbitron',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    Wrap(
+                      spacing: 16,
+                      runSpacing: 16,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        _BenefitChip(
+                          icon: Icons.people_alt_rounded,
+                          text: "Learn with peers",
+                          color: kAccentBlue,
+                          fontSize: featureFontSize,
+                        ),
+                        _BenefitChip(
+                          icon: Icons.timer_rounded,
+                          text: "Structured rounds",
+                          color: kPremiumPurple,
+                          fontSize: featureFontSize,
+                        ),
+                        _BenefitChip(
+                          icon: Icons.psychology_rounded,
+                          text: "AI guidance",
+                          color: kAccentBlue,
+                          fontSize: featureFontSize,
+                        ),
+                        _BenefitChip(
+                          icon: Icons.analytics_rounded,
+                          text: "Instant scoring",
+                          color: kPremiumPurple,
+                          fontSize: featureFontSize,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Modern feature card for fluency rooms
+class _ModernFeatureCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String description;
+  final Color color;
+  final double iconSize;
+  final double fontSize;
+  final double width;
+
+  const _ModernFeatureCard({
+    required this.icon,
+    required this.title,
+    required this.description,
+    required this.color,
+    required this.iconSize,
+    required this.fontSize,
+    required this.width,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: 200, // Fixed height for consistent sizing
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: iconSize + 12,
+            height: iconSize + 12,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [color, color.withOpacity(0.8)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Icon(
+              icon,
+              size: iconSize - 4,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            title,
+            style: TextStyle(
+              color: const Color(0xFF1F2937),
+              fontSize: fontSize - 1,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'Orbitron',
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 6),
+          Flexible(
+            child: Text(
+              description,
+              style: TextStyle(
+                color: const Color(0xFF6B7280),
+                fontSize: fontSize - 3,
+                fontWeight: FontWeight.w400,
+                height: 1.2,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Conversation bubble widget
+class _ConversationBubble extends StatelessWidget {
+  final String message;
+  final bool isAI;
+  final double fontSize;
+  final bool isFeedback;
+
+  const _ConversationBubble({
+    required this.message,
+    required this.isAI,
+    required this.fontSize,
+    this.isFeedback = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: isAI ? Alignment.centerLeft : Alignment.centerRight,
+      child: Container(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.6,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: isAI 
+              ? (isFeedback ? kPremiumPurple.withOpacity(0.1) : const Color(0xFFF3F4F6))
+              : kAccentBlue.withOpacity(0.1),
+          border: Border.all(
+            color: isAI 
+                ? (isFeedback ? kPremiumPurple.withOpacity(0.3) : const Color(0xFFE5E7EB))
+                : kAccentBlue.withOpacity(0.3),
+            width: 1,
+          ),
+        ),
+        child: Text(
+          message,
+          style: TextStyle(
+            color: isAI 
+                ? (isFeedback ? kPremiumPurple : const Color(0xFF374151))
+                : kAccentBlue,
+            fontSize: fontSize - 1,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Background pattern painter for conversation interface
+class _ConversationPatternPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFFF9FAFB)
+      ..style = PaintingStyle.fill;
+
+    // Draw subtle grid pattern
+    final gridSize = 40.0;
+    for (double x = 0; x < size.width; x += gridSize) {
+      for (double y = 0; y < size.height; y += gridSize) {
+        if ((x + y) % (gridSize * 2) == 0) {
+          canvas.drawCircle(
+            Offset(x, y),
+            1,
+            paint..color = const Color(0xFFE5E7EB).withOpacity(0.3),
+          );
+        }
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// Participant avatar widget
+class _ParticipantAvatar extends StatelessWidget {
+  final String name;
+  final double score;
+  final bool isSpeaking;
+  final double fontSize;
+
+  const _ParticipantAvatar({
+    required this.name,
+    required this.score,
+    required this.isSpeaking,
+    required this.fontSize,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: isSpeaking ? kAccentBlue.withOpacity(0.1) : const Color(0xFFF8FAFC),
+        border: Border.all(
+          color: isSpeaking ? kAccentBlue.withOpacity(0.3) : const Color(0xFFE2E8F0),
+          width: isSpeaking ? 2 : 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          // Avatar
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isSpeaking ? kAccentBlue : const Color(0xFFCBD5E1),
+            ),
+            child: Center(
+              child: Text(
+                name[0].toUpperCase(),
+                style: TextStyle(
+                  color: isSpeaking ? Colors.white : const Color(0xFF64748B),
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          // Name
+          Text(
+            name,
+            style: TextStyle(
+              color: const Color(0xFF1E293B),
+              fontSize: fontSize - 2,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          // Score
+          Text(
+            '${score.toStringAsFixed(1)}',
+            style: TextStyle(
+              color: kAccentBlue,
+              fontSize: fontSize - 3,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Round conversation bubble
+class _RoundBubble extends StatelessWidget {
+  final String speaker;
+  final String message;
+  final double score;
+  final double fontSize;
+  final bool isCurrentUser;
+
+  const _RoundBubble({
+    required this.speaker,
+    required this.message,
+    required this.score,
+    required this.fontSize,
+    this.isCurrentUser = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: isCurrentUser ? kAccentBlue.withOpacity(0.1) : const Color(0xFFF8FAFC),
+        border: Border.all(
+          color: isCurrentUser ? kAccentBlue.withOpacity(0.3) : const Color(0xFFE2E8F0),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                speaker,
+                style: TextStyle(
+                  color: isCurrentUser ? kAccentBlue : const Color(0xFF64748B),
+                  fontSize: fontSize - 2,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: kPremiumPurple.withOpacity(0.1),
+                ),
+                child: Text(
+                  '${score.toStringAsFixed(1)}',
+                  style: TextStyle(
+                    color: kPremiumPurple,
+                    fontSize: fontSize - 3,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            message,
+            style: TextStyle(
+              color: const Color(0xFF1E293B),
+              fontSize: fontSize - 1,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// AI Help popup widget
+class _AIHelpPopup extends StatelessWidget {
+  final String message;
+  final double fontSize;
+  final bool isActive;
+
+  const _AIHelpPopup({
+    required this.message,
+    required this.fontSize,
+    this.isActive = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: isActive ? kPremiumPurple.withOpacity(0.1) : const Color(0xFFFEF3C7),
+        border: Border.all(
+          color: isActive ? kPremiumPurple.withOpacity(0.3) : const Color(0xFFF59E0B),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            isActive ? Icons.psychology_rounded : Icons.lightbulb_rounded,
+            color: isActive ? kPremiumPurple : const Color(0xFFF59E0B),
+            size: fontSize,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              message,
+              style: TextStyle(
+                color: isActive ? kPremiumPurple : const Color(0xFF92400E),
+                fontSize: fontSize - 2,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Interactive preview card with hover effects and animations
+class _InteractivePreviewCard extends StatefulWidget {
+  final double fontSize;
+  final VoidCallback onTap;
+
+  const _InteractivePreviewCard({
+    required this.fontSize,
+    required this.onTap,
+  });
+
+  @override
+  State<_InteractivePreviewCard> createState() => _InteractivePreviewCardState();
+}
+
+class _InteractivePreviewCardState extends State<_InteractivePreviewCard>
+    with SingleTickerProviderStateMixin {
+  bool _isHovered = false;
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _glowAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.02).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
+    );
+    _glowAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _onHover(bool hovering) {
+    setState(() => _isHovered = hovering);
+    if (hovering) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => _onHover(true),
+      onExit: (_) => _onHover(false),
+      child: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: const Color(0xFFF8FAFC),
+                border: Border.all(
+                  color: _isHovered 
+                      ? kAccentBlue.withOpacity(0.4) 
+                      : const Color(0xFFE2E8F0),
+                  width: _isHovered ? 2 : 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: kAccentBlue.withOpacity(_glowAnimation.value * 0.15),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: InkWell(
+                onTap: widget.onTap,
+                borderRadius: BorderRadius.circular(16),
+                child: SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Conversation Preview",
+                          style: TextStyle(
+                            color: const Color(0xFF1E293B),
+                            fontSize: widget.fontSize - 1,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        AnimatedRotation(
+                          turns: _isHovered ? 0.125 : 0.0,
+                          duration: const Duration(milliseconds: 200),
+                          child: Icon(
+                            Icons.expand_more_rounded,
+                            color: kAccentBlue,
+                            size: widget.fontSize,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "Tap to see the full conversation flow with AI hints and scoring",
+                      style: TextStyle(
+                        color: const Color(0xFF64748B),
+                        fontSize: widget.fontSize - 3,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: _isHovered 
+                            ? const LinearGradient(
+                                colors: [kAccentBlue, kPremiumPurple],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              )
+                            : null,
+                        color: _isHovered ? null : kAccentBlue.withOpacity(0.1),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.touch_app_rounded,
+                            color: _isHovered ? Colors.white : kAccentBlue,
+                            size: widget.fontSize - 2,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            "Tap to expand",
+                            style: TextStyle(
+                              color: _isHovered ? Colors.white : kAccentBlue,
+                              fontSize: widget.fontSize - 3,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// Interactive header with animated collapse button
+class _InteractiveHeader extends StatefulWidget {
+  final double fontSize;
+  final VoidCallback onCollapse;
+
+  const _InteractiveHeader({
+    required this.fontSize,
+    required this.onCollapse,
+  });
+
+  @override
+  State<_InteractiveHeader> createState() => _InteractiveHeaderState();
+}
+
+class _InteractiveHeaderState extends State<_InteractiveHeader>
+    with SingleTickerProviderStateMixin {
+  bool _isHovered = false;
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _onHover(bool hovering) {
+    setState(() => _isHovered = hovering);
+    if (hovering) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: const Color(0xFFF8FAFC),
+        border: Border.all(
+          color: _isHovered 
+              ? kAccentBlue.withOpacity(0.3) 
+              : const Color(0xFFE2E8F0),
+          width: 1,
+        ),
+        boxShadow: _isHovered ? [
+          BoxShadow(
+            color: kAccentBlue.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ] : null,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.chat_bubble_rounded,
+                color: kAccentBlue,
+                size: widget.fontSize,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                "Active Conversation",
+                style: TextStyle(
+                  color: const Color(0xFF1E293B),
+                  fontSize: widget.fontSize,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          MouseRegion(
+            onEnter: (_) => _onHover(true),
+            onExit: (_) => _onHover(false),
+            child: AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: _scaleAnimation.value,
+                  child: InkWell(
+                    onTap: widget.onCollapse,
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        gradient: _isHovered 
+                            ? const LinearGradient(
+                                colors: [kAccentBlue, kPremiumPurple],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              )
+                            : null,
+                        color: _isHovered ? null : kAccentBlue.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        Icons.expand_less_rounded,
+                        color: _isHovered ? Colors.white : kAccentBlue,
+                        size: widget.fontSize - 1,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Interactive conversation area with tap to expand
+class _InteractiveConversationArea extends StatefulWidget {
+  final double fontSize;
+
+  const _InteractiveConversationArea({
+    required this.fontSize,
+  });
+
+  @override
+  State<_InteractiveConversationArea> createState() => _InteractiveConversationAreaState();
+}
+
+class _InteractiveConversationAreaState extends State<_InteractiveConversationArea> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    // Avoid Expanded inside our own Column by returning different roots
+    if (!_isExpanded) {
+      return _InteractivePreviewCard(
+        fontSize: widget.fontSize,
+        onTap: () => setState(() => _isExpanded = true),
+      );
+    }
+
+    // Expanded state: make content scrollable without returning Expanded here
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Interactive header with collapse button
+          _InteractiveHeader(
+            fontSize: widget.fontSize,
+            onCollapse: () => setState(() => _isExpanded = false),
+          ),
+          
+          const SizedBox(height: 12),
+          
+          // Conversation flow
+          _RoundBubble(
+            speaker: "Maria",
+            message: "Me gustaría una paella, por favor",
+            score: 8.5,
+            fontSize: widget.fontSize - 1,
+          ),
+          
+          const SizedBox(height: 8),
+          
+          _AIHelpPopup(
+            message: "Great! 'paella' is pronounced 'pah-eh-yah'",
+            fontSize: widget.fontSize - 1,
+          ),
+          
+          const SizedBox(height: 8),
+          
+          _RoundBubble(
+            speaker: "You",
+            message: "Quiero... um... un café con leche",
+            score: 7.8,
+            fontSize: widget.fontSize - 1,
+            isCurrentUser: true,
+          ),
+          
+          const SizedBox(height: 8),
+          
+          _AIHelpPopup(
+            message: "Tip: 'Quiero' means 'I want'. Try 'Me gustaría' for 'I would like'",
+            fontSize: widget.fontSize - 1,
+            isActive: true,
+          ),
+          
+          const SizedBox(height: 8),
+          
+          // Additional conversation turns
+          _RoundBubble(
+            speaker: "Carlos",
+            message: "¿Tienes recomendaciones para postres?",
+            score: 9.1,
+            fontSize: widget.fontSize - 1,
+          ),
+          
+          const SizedBox(height: 8),
+          
+          _AIHelpPopup(
+            message: "Carlos is asking for dessert recommendations!",
+            fontSize: widget.fontSize - 1,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Benefit chip widget
+class _BenefitChip extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final Color color;
+  final double fontSize;
+
+  const _BenefitChip({
+    required this.icon,
+    required this.text,
+    required this.color,
+    required this.fontSize,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: color.withOpacity(0.1),
+        border: Border.all(
+          color: color.withOpacity(0.3),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: color,
+            size: fontSize,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: TextStyle(
+              color: color,
+              fontSize: fontSize - 2,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Live Room Preview Widget - Single Card Design
+class _LiveRoomPreview extends StatefulWidget {
+  final double fontSize;
+
+  const _LiveRoomPreview({
+    required this.fontSize,
+  });
+
+  @override
+  State<_LiveRoomPreview> createState() => _LiveRoomPreviewState();
+}
+
+class _LiveRoomPreviewState extends State<_LiveRoomPreview>
+    with TickerProviderStateMixin {
+  late AnimationController _speakingController;
+  late AnimationController _hintController;
+  late AnimationController _turnController;
+  late Animation<double> _speakingAnimation;
+  late Animation<double> _hintAnimation;
+  late Animation<double> _turnAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    // Speaking ring animation
+    _speakingController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..repeat();
+    
+    // AI hint fade animation
+    _hintController = AnimationController(
+      duration: const Duration(milliseconds: 3000),
+      vsync: this,
+    );
+    
+    // Your turn slide animation
+    _turnController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+    
+    _speakingAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _speakingController, curve: Curves.easeInOut),
+    );
+    
+    _hintAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _hintController, curve: Curves.easeInOut),
+    );
+    
+    _turnAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _turnController, curve: Curves.easeOutBack),
+    );
+    
+    // Start animations
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _hintController.forward();
+    });
+    
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      _turnController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _speakingController.dispose();
+    _hintController.dispose();
+    _turnController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: const Color(0xFFF8FAFC),
+        border: Border.all(
+          color: const Color(0xFFE2E8F0),
+          width: 1,
+        ),
+      ),
+      child: Stack(
+        children: [
+          // Top chips row
+          Positioned(
+            top: 4,
+            left: 8,
+            right: 8,
+            child: Row(
+              children: [
+                // Topic chip
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: kAccentBlue.withOpacity(0.1),
+                    border: Border.all(
+                      color: kAccentBlue.withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: Text(
+                    "Travel Spanish",
+                    style: TextStyle(
+                      color: kAccentBlue,
+                      fontSize: widget.fontSize - 7,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 2),
+                // Round chip
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: kPremiumPurple.withOpacity(0.1),
+                    border: Border.all(
+                      color: kPremiumPurple.withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: Text(
+                    "Round 2/3",
+                    style: TextStyle(
+                      color: kPremiumPurple,
+                      fontSize: widget.fontSize - 7,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                // Timer chip
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: const Color(0xFF10B981).withOpacity(0.1),
+                    border: Border.all(
+                      color: const Color(0xFF10B981).withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: Text(
+                    "00:55",
+                    style: TextStyle(
+                      color: const Color(0xFF10B981),
+                      fontSize: widget.fontSize - 7,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'monospace',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          // Center participants area
+          Positioned(
+            top: 35,
+            left: 8,
+            right: 8,
+            child: Row(
+              children: [
+                // Maria (speaking)
+                Expanded(
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      border: Border.all(
+                        color: kAccentBlue.withOpacity(0.3),
+                        width: 2,
+                      ),
+                    ),
+                    child: Stack(
+                      children: [
+                        // Speaking ring animation
+                        Positioned.fill(
+                          child: AnimatedBuilder(
+                            animation: _speakingAnimation,
+                            builder: (context, child) {
+                              return CustomPaint(
+                                painter: _SpeakingRingPainter(
+                                  progress: _speakingAnimation.value,
+                                  color: kAccentBlue,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        // Content
+                        Padding(
+                          padding: const EdgeInsets.all(6),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 22,
+                                height: 22,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: kAccentBlue,
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    "M",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                "Maria",
+                                style: TextStyle(
+                                  color: const Color(0xFF1F2937),
+                                  fontSize: widget.fontSize - 6,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(
+                                "Speaking...",
+                                style: TextStyle(
+                                  color: kAccentBlue,
+                                  fontSize: widget.fontSize - 7,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                
+                // Center waveform
+                Container(
+                  width: 30,
+                  height: 50,
+                  child: CustomPaint(
+                    painter: _WaveformPainter(),
+                  ),
+                ),
+                
+                // You (next)
+                Expanded(
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      border: Border.all(
+                        color: const Color(0xFFE2E8F0),
+                        width: 1,
+                      ),
+                    ),
+                    child: Stack(
+                      children: [
+                        // Your turn indicator
+                        Positioned(
+                          top: 2,
+                          right: 2,
+                          child: AnimatedBuilder(
+                            animation: _turnAnimation,
+                            builder: (context, child) {
+                              return Transform.translate(
+                                offset: Offset(0, 8 * (1 - _turnAnimation.value)),
+                                child: Opacity(
+                                  opacity: _turnAnimation.value,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: kPremiumPurple,
+                                    ),
+                                    child: Text(
+                                      "Your turn",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: widget.fontSize - 8,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        // Content
+                        Padding(
+                          padding: const EdgeInsets.all(6),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 22,
+                                height: 22,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: const Color(0xFFCBD5E1),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    "Y",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                "You",
+                                style: TextStyle(
+                                  color: const Color(0xFF1F2937),
+                                  fontSize: widget.fontSize - 6,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(
+                                "Next up",
+                                style: TextStyle(
+                                  color: const Color(0xFF6B7280),
+                                  fontSize: widget.fontSize - 7,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          // Right-side AI hint bubble
+          Positioned(
+            top: 40,
+            right: 8,
+            child: AnimatedBuilder(
+              animation: _hintAnimation,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(20 * (1 - _hintAnimation.value), 0),
+                  child: Opacity(
+                    opacity: _hintAnimation.value,
+                    child: Container(
+                      width: 120,
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: kPremiumPurple.withOpacity(0.1),
+                        border: Border.all(
+                          color: kPremiumPurple.withOpacity(0.3),
+                          width: 1,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: kPremiumPurple.withOpacity(0.1),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.psychology_rounded,
+                            color: kPremiumPurple,
+                            size: widget.fontSize - 5,
+                          ),
+                          const SizedBox(width: 2),
+                          Expanded(
+                            child: Text(
+                              "Try 'Me gustaría' instead of 'Quiero'",
+                              style: TextStyle(
+                                color: kPremiumPurple,
+                                fontSize: widget.fontSize - 7,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          
+          // Bottom progress section
+          Positioned(
+            bottom: 4,
+            left: 8,
+            right: 8,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Round progress
+                Row(
+                  children: [
+                    Text(
+                      "Round Progress:",
+                      style: TextStyle(
+                        color: const Color(0xFF6B7280),
+                        fontSize: widget.fontSize - 7,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const Spacer(),
+                    Row(
+                      children: List.generate(3, (index) {
+                        bool isCompleted = index < 2;
+                        bool isCurrent = index == 1;
+                        return Container(
+                          width: 12,
+                          height: 2,
+                          margin: EdgeInsets.only(right: index < 2 ? 2 : 0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(1),
+                            color: isCompleted 
+                                ? kAccentBlue 
+                                : isCurrent 
+                                    ? kPremiumPurple 
+                                    : const Color(0xFFE5E7EB),
+                          ),
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+                
+                const SizedBox(height: 3),
+                
+                // Fluency and accuracy meters
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Fluency",
+                            style: TextStyle(
+                              color: const Color(0xFF6B7280),
+                              fontSize: widget.fontSize - 8,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 1),
+                          SizedBox(
+                            height: 1,
+                            child: LinearProgressIndicator(
+                              value: 0.85,
+                              backgroundColor: const Color(0xFFE5E7EB),
+                              valueColor: AlwaysStoppedAnimation<Color>(kAccentBlue),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Accuracy",
+                            style: TextStyle(
+                              color: const Color(0xFF6B7280),
+                              fontSize: widget.fontSize - 8,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 1),
+                          SizedBox(
+                            height: 1,
+                            child: LinearProgressIndicator(
+                              value: 0.78,
+                              backgroundColor: const Color(0xFFE5E7EB),
+                              valueColor: AlwaysStoppedAnimation<Color>(kPremiumPurple),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Speaking ring animation painter
+class _SpeakingRingPainter extends CustomPainter {
+  final double progress;
+  final Color color;
+
+  _SpeakingRingPainter({
+    required this.progress,
+    required this.color,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color.withOpacity(0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = (size.width / 2) - 4;
+    
+    // Draw pulsing ring
+    final pulseRadius = radius + (10 * progress);
+    canvas.drawCircle(center, pulseRadius, paint);
+    
+    // Draw rotating dots
+    for (int i = 0; i < 3; i++) {
+      final angle = (progress * 2 * 3.14159) + (i * 2 * 3.14159 / 3);
+      final x = center.dx + (radius * 0.8) * cos(angle);
+      final y = center.dy + (radius * 0.8) * sin(angle);
+      
+      canvas.drawCircle(
+        Offset(x, y),
+        3,
+        paint..color = color.withOpacity(0.8),
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+/// Waveform painter for center animation
+class _WaveformPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = kAccentBlue.withOpacity(0.6)
+      ..style = PaintingStyle.fill;
+
+    final centerY = size.height / 2;
+    final barWidth = 4.0;
+    final spacing = 6.0;
+    
+    for (int i = 0; i < 5; i++) {
+      final height = 20 + (10 * sin(i * 0.5));
+      final x = i * (barWidth + spacing);
+      final y = centerY - height / 2;
+      
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(x, y, barWidth, height),
+          const Radius.circular(2),
+        ),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

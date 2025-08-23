@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
                     HeroSection(key: tourKeys?['hero-section'], tourKeys: tourKeys),
                     ValuePropsSection(key: Key('features-section')),
                     LearningCycleSection(key: Key('how-it-works-section')),
-                    VisionSection(),
+                    FluencyRoomsSection(),
                     FooterSection(),
                   ],
                 ),
