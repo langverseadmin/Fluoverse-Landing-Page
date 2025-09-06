@@ -6,7 +6,7 @@ class PaymentManager {
     constructor() {
         this.isProcessing = false;
         this.apiEndpoint = 'https://fluoverse.onrender.com/create-checkout-session';
-        this.appUrl = 'http://localhost:55217/'; // Your local Flutter app
+        this.appUrl = 'https://fluoverseapp.netlify.app/'; // Your local Flutter app
         this.currentUrl = window.location.href;
         
         // Stripe price IDs from your Flutter app
