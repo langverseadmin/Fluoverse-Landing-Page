@@ -37,25 +37,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Demo button interaction
-    const demoBtn = document.getElementById('demo-btn');
-    if (demoBtn) {
-        demoBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Add loading state
-            const originalText = this.textContent;
-            this.textContent = 'Loading Demo...';
-            this.style.pointerEvents = 'none';
-            
-            // Simulate demo loading
-            setTimeout(() => {
-                alert('Demo would open here! This is just a UI preview.');
-                this.textContent = originalText;
-                this.style.pointerEvents = 'auto';
-            }, 1500);
-        });
-    }
+    // Demo button interaction - now handled by payment.js
+    // Removed demo button functionality as it now uses startPayment()
     
     // Intersection Observer for animations
     const observerOptions = {
@@ -290,6 +273,231 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     initTooltips();
+});
+
+// Launch Fluoverse App function
+function launchFluoverse() {
+    console.log('🚀 Launching Fluoverse app...');
+    const appUrl = 'https://fluoverseapp.netlify.app/'; // Official Flutter app URL
+    
+    // Redirect to the Flutter app
+    window.location.href = appUrl;
+}
+
+// Spanish words rotation for mic button
+const spanishWords = [
+    ['Hola', 'Gracias', 'Amigo'],
+    ['Buenos días', 'Por favor', 'De nada'],
+    ['¿Cómo estás?', 'Mucho gusto', 'Hasta luego'],
+    ['¿Qué tal?', 'Lo siento', 'Con permiso'],
+    ['¡Excelente!', '¡Perfecto!', '¡Fantástico!']
+];
+
+let currentWordSet = 0;
+
+// Function to rotate Spanish words
+function rotateSpanishWords() {
+    const wordBubbles = document.querySelectorAll('.word-bubble');
+    
+    if (wordBubbles.length === 0) return;
+    
+    // Get next word set
+    currentWordSet = (currentWordSet + 1) % spanishWords.length;
+    const newWords = spanishWords[currentWordSet];
+    
+    // Update word content
+    wordBubbles.forEach((bubble, index) => {
+        if (newWords[index]) {
+            bubble.textContent = newWords[index];
+        }
+    });
+}
+
+// Function to combine words into a sentence
+function combineWordsIntoSentence() {
+    const wordBubbles = document.querySelectorAll('.word-bubble');
+    
+    if (wordBubbles.length === 0) return;
+    
+    // Get current words
+    const currentWords = Array.from(wordBubbles).map(bubble => bubble.textContent);
+    
+    // Create sentence combinations
+    const sentenceCombinations = [
+        `${currentWords[0]} ${currentWords[1]} ${currentWords[2]}`,
+        `${currentWords[0]} ${currentWords[2]} ${currentWords[1]}`,
+        `${currentWords[1]} ${currentWords[0]} ${currentWords[2]}`,
+        `${currentWords[1]} ${currentWords[2]} ${currentWords[0]}`,
+        `${currentWords[2]} ${currentWords[0]} ${currentWords[1]}`,
+        `${currentWords[2]} ${currentWords[1]} ${currentWords[0]}`
+    ];
+    
+    // Pick a random combination
+    const randomSentence = sentenceCombinations[Math.floor(Math.random() * sentenceCombinations.length)];
+    
+    // Hide all existing bubbles
+    wordBubbles.forEach((bubble) => {
+        bubble.style.opacity = '0';
+        bubble.style.transform = 'scale(0)';
+    });
+    
+    // Get the microphone visual container
+    const micVisual = document.querySelector('.microphone-visual');
+    console.log('MicVisual found:', micVisual);
+    console.log('Random sentence:', randomSentence);
+    
+    // Create a new centered sentence bubble - positioned relative to button
+    const sentenceBubble = document.createElement('div');
+    sentenceBubble.className = 'word-bubble sentence-bubble';
+    sentenceBubble.textContent = randomSentence;
+    sentenceBubble.style.position = 'absolute';
+    sentenceBubble.style.left = '50%';
+    sentenceBubble.style.top = '+80px';
+    sentenceBubble.style.transform = 'translateX(-50%) scale(0)';
+    sentenceBubble.style.fontSize = '0.9rem';
+    sentenceBubble.style.padding = '0.8rem 1.5rem';
+    sentenceBubble.style.zIndex = '10';
+    sentenceBubble.style.opacity = '0';
+    sentenceBubble.style.textAlign = 'center';
+    sentenceBubble.style.whiteSpace = 'nowrap';
+    sentenceBubble.style.width = 'auto';
+    
+    // Add directly to the microphone visual container
+    if (micVisual) {
+        micVisual.appendChild(sentenceBubble);
+        console.log('Sentence bubble added to micVisual');
+        
+        // Animate in
+        setTimeout(() => {
+            sentenceBubble.style.opacity = '1';
+            sentenceBubble.style.transform = 'translateX(-50%) scale(1)';
+        }, 100);
+    }
+    
+    // Reset after 3 seconds
+    setTimeout(() => {
+        // Animate out
+        sentenceBubble.style.opacity = '0';
+        sentenceBubble.style.transform = 'translateX(-50%) scale(0)';
+        
+        setTimeout(() => {
+            // Remove sentence bubble
+            if (sentenceBubble.parentNode) {
+                sentenceBubble.parentNode.removeChild(sentenceBubble);
+            }
+            
+            // Show original bubbles
+            wordBubbles.forEach((bubble) => {
+                bubble.style.opacity = '1';
+                bubble.style.transform = 'scale(1)';
+            });
+            
+            // Rotate to next word set
+            rotateSpanishWords();
+        }, 300);
+    }, 3000);
+}
+
+// Add click event to mic button
+document.addEventListener('DOMContentLoaded', function() {
+    const micButton = document.querySelector('.mic-button');
+    if (micButton) {
+        let isPressed = false;
+        let pressTimer = null;
+        
+        // Check if device is mobile
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+            // Mobile: Only tap functionality - no press mechanism
+            micButton.addEventListener('click', function() {
+                rotateSpanishWords();
+            });
+        } else {
+            // Desktop: Press and hold functionality
+            // Handle button press (mousedown)
+            micButton.addEventListener('mousedown', function() {
+                isPressed = true;
+                // Start timer to combine words after holding for 500ms
+                pressTimer = setTimeout(() => {
+                    if (isPressed) {
+                        combineWordsIntoSentence();
+                    }
+                }, 500);
+            });
+            
+            // Handle button release (mouseup)
+            micButton.addEventListener('mouseup', function() {
+                isPressed = false;
+                if (pressTimer) {
+                    clearTimeout(pressTimer);
+                    pressTimer = null;
+                }
+                // If released before 500ms, just rotate words
+                if (!pressTimer) {
+                    rotateSpanishWords();
+                }
+            });
+            
+            // Handle mouse leave while pressed
+            micButton.addEventListener('mouseleave', function() {
+                isPressed = false;
+                if (pressTimer) {
+                    clearTimeout(pressTimer);
+                    pressTimer = null;
+                }
+            });
+        }
+    }
+});
+
+// Testimonials Carousel
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.querySelector('.testimonials-container');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const dots = document.querySelectorAll('.dot');
+    
+    if (!container || !prevBtn || !nextBtn) return;
+    
+    let currentSlide = 0;
+    const totalSlides = container.children.length;
+    
+    function updateCarousel() {
+        const translateX = -currentSlide * 100;
+        container.style.transform = `translateX(${translateX}%)`;
+        
+        // Update dots
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+        });
+    }
+    
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateCarousel();
+    }
+    
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+    }
+    
+    function goToSlide(slideIndex) {
+        currentSlide = slideIndex;
+        updateCarousel();
+    }
+    
+    // Event listeners
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+    
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => goToSlide(index));
+    });
+    
+    // Auto-play (optional)
+    setInterval(nextSlide, 5000);
 });
 
 // Add CSS for animations

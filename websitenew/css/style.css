@@ -993,6 +993,74 @@ section {
     gap: 2rem;
 }
 
+/* Testimonials Carousel */
+.testimonials-carousel {
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonials-container {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    gap: 0;
+}
+
+.testimonials-container .testimonial-card {
+    min-width: 100%;
+    flex-shrink: 0;
+    width: 100%;
+}
+
+/* Carousel Navigation */
+.carousel-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.carousel-btn {
+    background: rgba(102, 126, 234, 0.2);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    color: #667eea;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.carousel-btn:hover {
+    background: rgba(102, 126, 234, 0.3);
+    border-color: rgba(102, 126, 234, 0.5);
+    transform: scale(1.1);
+}
+
+.carousel-dots {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(102, 126, 234, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: #667eea;
+    transform: scale(1.2);
+}
+
 .testimonial-card {
     background: rgba(26, 26, 46, 0.9);
     border: 1px solid rgba(102, 126, 234, 0.2);
@@ -1713,6 +1781,32 @@ section {
     z-index: 2;
     cursor: pointer;
     transition: all 0.3s ease;
+    animation: softGlow 4s ease-in-out infinite;
+}
+
+/* Pulse waves animation */
+.mic-button::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    border-radius: 50%;
+    animation: pulseWave 2s ease-out infinite;
+}
+
+.mic-button::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border: 1px solid rgba(102, 126, 234, 0.1);
+    border-radius: 50%;
+    animation: pulseWave 2s ease-out infinite 0.5s;
 }
 
 .mic-button:hover {
@@ -1722,6 +1816,15 @@ section {
         0 20px 60px rgba(102, 126, 234, 0.4),
         0 12px 40px rgba(0, 0, 0, 0.5),
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    /* Removed hover glow animation */
+}
+
+.mic-button:hover::before {
+    animation: pulseWave 0.8s ease-out infinite;
+}
+
+.mic-button:hover::after {
+    animation: pulseWave 0.8s ease-out infinite 0.2s;
 }
 
 .mic-button:active {
@@ -1730,6 +1833,7 @@ section {
         0 8px 30px rgba(102, 126, 234, 0.2),
         0 4px 20px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    /* Removed pulsing animation for comfort */
 }
 
 .mic-text {
@@ -1762,6 +1866,26 @@ section {
     font-weight: 500;
 }
 
+/* Hide word bubbles when button is pressed */
+.mic-button:active ~ .floating-words .word-bubble:not(.sentence-bubble) {
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+}
+
+/* Sentence bubble styling */
+.sentence-bubble {
+    background: rgba(26, 26, 46, 0.9);
+    border: 2px solid rgba(102, 126, 234, 0.4);
+    border-radius: 12px;
+    padding: 0.8rem 1.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
 .word-bubble:hover {
     transform: translateY(-5px);
     border-color: rgba(102, 126, 234, 0.4);
@@ -1789,6 +1913,148 @@ section {
 @keyframes gentleFloat {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
+}
+
+/* Breathing glow animation */
+@keyframes breathingGlow {
+    0%, 100% { 
+        box-shadow: 
+            0 15px 50px rgba(102, 126, 234, 0.3),
+            0 8px 32px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    50% { 
+        box-shadow: 
+            0 20px 60px rgba(102, 126, 234, 0.5),
+            0 12px 40px rgba(0, 0, 0, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* Pulse wave animation */
+@keyframes pulseWave {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+}
+
+/* Word orbit animation */
+@keyframes wordOrbit {
+    0% {
+        transform: rotate(0deg) translateX(80px) rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg) translateX(80px) rotate(-360deg);
+    }
+}
+
+/* Soft glow animation for idle state */
+@keyframes softGlow {
+    0%, 100% { 
+        box-shadow: 
+            0 15px 50px rgba(102, 126, 234, 0.2),
+            0 8px 32px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    50% { 
+        box-shadow: 
+            0 18px 55px rgba(102, 126, 234, 0.3),
+            0 10px 35px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+}
+
+/* Word collapse animation */
+@keyframes wordCollapse {
+    0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+/* Word burst animation */
+@keyframes wordBurst {
+    0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+/* Mobile styles for floating words */
+@media (max-width: 768px) {
+    .floating-words {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    
+    /* Hide phone mockup on mobile */
+    .phone-mockup {
+        display: none;
+    }
+    
+    .word-bubble {
+        font-size: 0.95rem;
+        padding: 0.7rem 1.1rem;
+        animation: gentleFloat 6s ease-in-out infinite;
+    }
+    
+    .bubble-1 {
+        top: 10%;
+        left: 5%;
+        animation-delay: 0s;
+    }
+    
+    .bubble-2 {
+        top: 15%;
+        right: 5%;
+        animation-delay: 2s;
+    }
+    
+    .bubble-3 {
+        bottom: 15%;
+        left: 15%;
+        animation-delay: 4s;
+    }
+}
+
+@media (max-width: 480px) {
+    .word-bubble {
+        font-size: 0.85rem;
+        padding: 0.6rem 0.9rem;
+    }
+    
+    .bubble-1 {
+        top: 8%;
+        left: 2%;
+    }
+    
+    .bubble-2 {
+        top: 12%;
+        right: 2%;
+    }
+    
+    .bubble-3 {
+        bottom: 5%;
+        left: 25%;
+    }
 }
     
     .cta-guarantee {

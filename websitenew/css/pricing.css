@@ -44,7 +44,7 @@
 /* Social Proof Badge */
 .social-proof-badge {
     display: inline-flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
     background: rgba(102, 126, 234, 0.1);
     border: 1px solid rgba(102, 126, 234, 0.3);
@@ -54,14 +54,23 @@
     font-size: 0.9rem;
     color: #ffffff;
     font-weight: 500;
+    line-height: 1.2;
 }
 
 .badge-icon {
     font-size: 1rem;
+    line-height: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 0.1em;
 }
 
 .badge-text {
     color: #b8c5d6;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
 }
 
 /* Gradient Text */
@@ -784,7 +793,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .pricing-hero {
-        padding: 60px 0 30px;
+        padding: 100px 0 30px;
     }
     
     .pricing-hero-title {
@@ -800,6 +809,12 @@
         gap: 1rem;
         flex-direction: column;
         align-items: center;
+        margin-top: 1rem;
+    }
+    
+    .social-proof-badge {
+        margin-top: 1rem;
+        margin-bottom: 2rem;
     }
     
     .urgency-banner {
@@ -852,6 +867,40 @@
         gap: 0.8rem;
     }
     
+    .billing-toggle-compact {
+        padding: 0.8rem 1rem;
+        gap: 0.8rem;
+        max-width: 100%;
+        margin: 0 1rem 1.5rem 1rem;
+    }
+    
+    .billing-label {
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+    
+    .discount-badge {
+        font-size: 0.7rem;
+        padding: 1px 6px;
+        margin-left: 0.3rem;
+    }
+    
+    .toggle-switch {
+        width: 50px;
+        height: 26px;
+    }
+    
+    .toggle-slider {
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+    }
+    
+    .toggle-input:checked + .toggle-label .toggle-slider {
+        transform: translateX(22px);
+    }
+    
     .comparison-table {
         display: none; /* Hide on mobile for better UX */
     }
@@ -877,7 +926,7 @@
 
 @media (max-width: 480px) {
     .pricing-hero {
-        padding: 50px 0 20px;
+        padding: 90px 0 20px;
     }
     
     .pricing-hero-title {
@@ -921,6 +970,38 @@
     .popular-badge {
         padding: 4px 16px;
         font-size: 0.75rem;
+    }
+    
+    .billing-toggle-compact {
+        padding: 0.6rem 0.8rem;
+        gap: 0.6rem;
+        margin: 0 0.5rem 1.5rem 0.5rem;
+    }
+    
+    .billing-label {
+        font-size: 0.8rem;
+    }
+    
+    .discount-badge {
+        font-size: 0.65rem;
+        padding: 1px 4px;
+        margin-left: 0.2rem;
+    }
+    
+    .toggle-switch {
+        width: 45px;
+        height: 24px;
+    }
+    
+    .toggle-slider {
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        bottom: 3px;
+    }
+    
+    .toggle-input:checked + .toggle-label .toggle-slider {
+        transform: translateX(19px);
     }
 }
 
