@@ -1009,6 +1009,8 @@ section {
     min-width: 100%;
     flex-shrink: 0;
     width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
 }
 
 /* Carousel Navigation */
@@ -1104,11 +1106,43 @@ section {
 .testimonial-text {
     font-size: 1.1rem;
     line-height: 1.6;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     color: #ffffff;
     position: relative;
     z-index: 1;
     font-style: italic;
+}
+
+.testimonial-text-full {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: #ffffff;
+    position: relative;
+    z-index: 1;
+    font-style: italic;
+}
+
+.read-more-btn {
+    background: rgba(102, 126, 234, 0.2);
+    border: 1px solid rgba(102, 126, 234, 0.4);
+    color: #667eea;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1rem;
+}
+
+.read-more-btn:hover {
+    background: rgba(102, 126, 234, 0.3);
+    border-color: rgba(102, 126, 234, 0.6);
+    color: #ffffff;
+    transform: translateY(-1px);
 }
 
 .testimonial-author {
@@ -1122,6 +1156,13 @@ section {
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
+}
+
+.author-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .avatar-placeholder {
@@ -1460,6 +1501,17 @@ section {
         flex-direction: column;
         text-align: center;
         gap: 2rem;
+    }
+    
+    .footer-brand {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .footer-logo {
+        justify-content: center;
     }
     
     .footer-links {
@@ -1836,6 +1888,18 @@ section {
     /* Removed pulsing animation for comfort */
 }
 
+.mic-button:focus {
+    outline: none;
+    box-shadow: 
+        0 15px 50px rgba(102, 126, 234, 0.2),
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.mic-button:focus-visible {
+    outline: none;
+}
+
 .mic-text {
     color: #667eea;
     font-size: 1.1rem;
@@ -2008,6 +2072,41 @@ section {
     /* Hide phone mockup on mobile */
     .phone-mockup {
         display: none;
+    }
+    
+    /* Change text to "Tap to Speak" on mobile */
+    .mic-text::after {
+        content: "Tap to Speak";
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #667eea;
+        text-align: center;
+        letter-spacing: 0.5px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .mic-text {
+        font-size: 0;
+    }
+    
+    /* Make testimonials smaller on mobile */
+    .testimonials-container .testimonial-card {
+        max-width: 350px;
+        padding: 1.5rem;
+    }
+    
+    .testimonial-text {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+    
+    /* Center demo button on mobile */
+    .demo .btn {
+        display: block;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
     }
     
     .word-bubble {

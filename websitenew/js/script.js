@@ -497,8 +497,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Auto-play (optional)
-    setInterval(nextSlide, 5000);
+    setInterval(nextSlide, 9000);
 });
+
+// Read more functionality for testimonials
+function toggleReadMore(button) {
+    const testimonialCard = button.closest('.testimonial-card');
+    const shortText = testimonialCard.querySelector('.testimonial-text');
+    const fullText = testimonialCard.querySelector('.testimonial-text-full');
+    
+    if (fullText.style.display === 'none') {
+        // Show full text
+        shortText.style.display = 'none';
+        fullText.style.display = 'block';
+        button.textContent = 'Read less';
+        
+        // Expand the card slightly for longer text
+        testimonialCard.style.maxHeight = 'none';
+    } else {
+        // Show short text
+        shortText.style.display = 'block';
+        fullText.style.display = 'none';
+        button.textContent = 'Read more';
+        
+        // Reset card height
+        testimonialCard.style.maxHeight = '';
+    }
+}
 
 // Add CSS for animations
 const style = document.createElement('style');
