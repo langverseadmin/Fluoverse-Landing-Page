@@ -286,11 +286,11 @@ function launchFluoverse() {
 
 // Spanish words rotation for mic button
 const spanishWords = [
-    ['Hola', 'Gracias', 'Amigo'],
-    ['Buenos días', 'Por favor', 'De nada'],
     ['¿Cómo estás?', 'Mucho gusto', 'Hasta luego'],
-    ['¿Qué tal?', 'Lo siento', 'Con permiso'],
-    ['¡Excelente!', '¡Perfecto!', '¡Fantástico!']
+    ['Buenos días', '¿Cómo te llamas?', 'Mucho gusto'],
+    ['¿Qué tal?', 'Encantado', 'Hasta pronto'],
+    ['¿Cómo va?', 'Un placer', 'Nos vemos'],
+    ['¿Todo bien?', 'Es un gusto', 'Hasta la vista']
 ];
 
 let currentWordSet = 0;
