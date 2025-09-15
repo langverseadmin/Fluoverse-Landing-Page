@@ -222,10 +222,9 @@ class PaymentManager {
             
             const requestBody = {
                 price_id: priceId,
-                product_name: `Fluoverse Premium (${period})`,
-                features: this.getFeaturesList(isYearly),
                 period: period,
-                plan_name: 'Fluoverse Premium'
+                plan_name: 'Fluoverse Premium',
+                coupon_code: null
             };
             
             console.log('🚀 Making payment request to:', this.apiEndpoint);
