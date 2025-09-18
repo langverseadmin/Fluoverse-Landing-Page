@@ -57,6 +57,19 @@ class PaymentManager {
         }
     }
     
+    getPromoCode() {
+        // Simple check - if promo notice exists, apply COMPLETE20
+        const promoNotice = document.querySelector('.simple-promo');
+        
+        if (promoNotice) {
+            console.log('🎉 Promo code COMPLETE20 applied!');
+            return 'COMPLETE20';
+        }
+        
+        console.log('❌ No promo code applied');
+        return null;
+    }
+    
     extractTokenFromUrl() {
         console.log('🔍 Extracting token from URL...');
         console.log('📍 Current URL:', window.location.href);
@@ -220,11 +233,14 @@ class PaymentManager {
             const priceId = isYearly ? this.priceIds.yearly : this.priceIds.monthly;
             const period = isYearly ? 'yearly' : 'monthly';
             
+            // Check if promo code should be applied
+            const promoCode = this.getPromoCode();
+            
             const requestBody = {
                 price_id: priceId,
                 period: period,
                 plan_name: 'Fluoverse Premium',
-                coupon_code: null
+                coupon_code: promoCode
             };
             
             console.log('🚀 Making payment request to:', this.apiEndpoint);

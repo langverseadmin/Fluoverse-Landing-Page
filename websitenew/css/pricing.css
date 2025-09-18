@@ -104,6 +104,41 @@
     font-size: 1rem;
 }
 
+/* Simple Promo Notice */
+.simple-promo {
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 8px;
+    padding: 1rem 0;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.promo-notice {
+    color: #b8c5d6;
+    font-size: 0.9rem;
+}
+
+.promo-text strong {
+    color: #667eea;
+    font-weight: 600;
+}
+
+/* Simple Price Display */
+.original-price {
+    text-decoration: line-through;
+    color: #a0a0a0;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-right: 0.5rem;
+}
+
+.discounted-price {
+    color: #ff6b6b;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
 /* Urgency Banner */
 .urgency-banner {
     display: inline-flex;
@@ -1002,6 +1037,16 @@
     
     .toggle-input:checked + .toggle-label .toggle-slider {
         transform: translateX(19px);
+    }
+    
+    /* Simple promo mobile styles */
+    .simple-promo {
+        margin: 0.5rem 0;
+        padding: 0.8rem 0;
+    }
+    
+    .promo-notice {
+        font-size: 0.8rem;
     }
 }
 

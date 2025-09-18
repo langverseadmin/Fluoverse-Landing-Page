@@ -2,6 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     
+    // Promotional Banner Functionality
+    initializePromoBanner();
+    
     // Billing Toggle Functionality
     const billingToggle = document.getElementById('billing-toggle');
     const monthlyPrices = document.querySelectorAll('.monthly-price');
@@ -202,10 +205,124 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 1000);
         }, 3000);
     }
-    
-
-    
-
 });
+
+// Promotional Banner Functions
+function initializePromoBanner() {
+    // Set countdown timer (7 days from now)
+    const endTime = new Date().getTime() + (7 * 24 * 60 * 60 * 1000);
+    
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const timeLeft = endTime - now;
+        
+        if (timeLeft > 0) {
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            // Update timer display
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            
+            if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
+            if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+            if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+            if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
+            
+            // Add urgency effects when time is running low
+            if (days === 0 && hours < 24) {
+                const timerItems = document.querySelectorAll('.timer-item');
+                timerItems.forEach(item => {
+                    item.style.animation = 'timerPulse 0.5s ease-in-out infinite';
+                    item.style.background = 'rgba(255, 107, 107, 0.3)';
+                });
+            }
+        } else {
+            // Timer expired
+            const timerEl = document.querySelector('.promo-timer');
+            if (timerEl) {
+                timerEl.innerHTML = '<div class="timer-expired">Offer Expired!</div>';
+            }
+        }
+    }
+    
+    // Update countdown every second
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    
+    // Add entrance animation to promo banner
+    const promoBanner = document.querySelector('.promo-banner');
+    if (promoBanner) {
+        promoBanner.style.opacity = '0';
+        promoBanner.style.transform = 'translateY(-50px)';
+        
+        setTimeout(() => {
+            promoBanner.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            promoBanner.style.opacity = '1';
+            promoBanner.style.transform = 'translateY(0)';
+        }, 500);
+    }
+}
+
+// Copy promo code function
+function copyPromoCode() {
+    const promoCode = 'COMPLETE20';
+    
+    // Create temporary textarea element
+    const textarea = document.createElement('textarea');
+    textarea.value = promoCode;
+    document.body.appendChild(textarea);
+    textarea.select();
+    
+    try {
+        // Copy to clipboard
+        document.execCommand('copy');
+        
+        // Show success feedback
+        const button = document.querySelector('.promo-button');
+        const originalText = button.innerHTML;
+        
+        button.innerHTML = '<span class="button-text">Copied!</span><span class="button-icon">✓</span>';
+        button.style.background = 'linear-gradient(45deg, #22c55e, #16a34a)';
+        
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.style.background = 'linear-gradient(45deg, #ffd700, #ffed4e)';
+        }, 2000);
+        
+        // Track promo code copy event
+        console.log('Promo code copied:', promoCode);
+        
+    } catch (err) {
+        console.error('Failed to copy promo code:', err);
+        
+        // Fallback: show code in alert
+        alert(`Promo code: ${promoCode}`);
+    } finally {
+        // Clean up
+        document.body.removeChild(textarea);
+    }
+}
+
+// Add CSS for timer expired state
+const style = document.createElement('style');
+style.textContent = `
+    .timer-expired {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #ff6b6b;
+        text-align: center;
+        padding: 1rem;
+        background: rgba(255, 107, 107, 0.1);
+        border: 2px solid #ff6b6b;
+        border-radius: 12px;
+        animation: pulse 1s ease-in-out infinite;
+    }
+`;
+document.head.appendChild(style);
 
 
