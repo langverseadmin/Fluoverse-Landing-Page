@@ -278,10 +278,23 @@ document.addEventListener('DOMContentLoaded', function() {
 // Launch Fluoverse App function
 function launchFluoverse() {
     console.log('🚀 Launching Fluoverse app...');
-    const appUrl = 'https://fluoverseapp.netlify.app/'; // Official Flutter app URL
     
-    // Redirect to the Flutter app
-    window.location.href = appUrl;
+    // Get UTM data to pass to app
+    const utmData = getUTMData();
+    const appUrl = 'https://fluoverseapp.netlify.app/';
+    
+    // Build URL with UTM parameters if they exist
+    if (Object.keys(utmData).length > 0) {
+        const params = new URLSearchParams();
+        Object.entries(utmData).forEach(([key, value]) => {
+            if (value) params.append(key, value);
+        });
+        
+        const finalUrl = `${appUrl}?${params.toString()}`;
+        window.location.href = finalUrl;
+    } else {
+        window.location.href = appUrl;
+    }
 }
 
 // Spanish words rotation for mic button
