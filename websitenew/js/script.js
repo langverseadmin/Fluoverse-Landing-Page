@@ -726,7 +726,7 @@ function sendUTMData(action = 'activation') {
     };
     
     // Send to your backend endpoint
-    fetch('http://localhost:9000/api/utm/track', {
+    fetch('https://fluoverse.onrender.com/api/utm/track', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
