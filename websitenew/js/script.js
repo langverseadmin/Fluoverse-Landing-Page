@@ -589,3 +589,65 @@ style.textContent = `
 `;
 
 document.head.appendChild(style);
+
+// Fluency Sprint Popup Functions
+function initFluencyPopup() {
+    // Check if popup was already shown in this session
+    if (sessionStorage.getItem('fluencyPopupShown')) {
+        return;
+    }
+    
+    // Show popup after 3 seconds
+    setTimeout(() => {
+        showFluencyPopup();
+    }, 3000);
+}
+
+function showFluencyPopup() {
+    const popup = document.getElementById('fluency-sprint-popup');
+    if (popup) {
+        popup.classList.add('show');
+        // Mark as shown in this session
+        sessionStorage.setItem('fluencyPopupShown', 'true');
+        
+        // Prevent body scroll when popup is open
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeFluencyPopup() {
+    const popup = document.getElementById('fluency-sprint-popup');
+    if (popup) {
+        popup.classList.remove('show');
+        // Restore body scroll
+        document.body.style.overflow = '';
+    }
+}
+
+function joinFluencySprint() {
+    // Close popup first
+    closeFluencyPopup();
+    
+    // Redirect to competition info page
+    window.location.href = 'competition.html';
+}
+
+// Close popup when clicking outside
+document.addEventListener('click', function(e) {
+    const popup = document.getElementById('fluency-sprint-popup');
+    if (popup && e.target === popup) {
+        closeFluencyPopup();
+    }
+});
+
+// Close popup with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeFluencyPopup();
+    }
+});
+
+// Initialize popup when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initFluencyPopup();
+});
