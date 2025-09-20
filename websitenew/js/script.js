@@ -713,7 +713,7 @@ function sendUTMData(action = 'activation') {
     };
     
     // Send to your backend endpoint
-    fetch('http://localhost:9000/api/track-utm', {
+    fetch('http://localhost:9000/api/utm/track', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
