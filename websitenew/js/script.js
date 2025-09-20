@@ -741,6 +741,19 @@ function launchFluoverseWithUTM() {
     launchFluoverse();
 }
 
+// Enhanced startPayment function with UTM tracking
+function startPaymentWithUTM() {
+    // Send UTM data before starting payment
+    sendUTMData('payment_start');
+    
+    // Call the original startPayment function
+    if (typeof startPayment === 'function') {
+        startPayment();
+    } else {
+        console.error('startPayment function not found');
+    }
+}
+
 // Enhanced joinFluencySprint function with UTM tracking
 function joinFluencySprintWithUTM() {
     // Send UTM data before redirecting
