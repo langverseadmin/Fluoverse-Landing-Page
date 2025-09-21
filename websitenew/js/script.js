@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Demo button interaction - now handled by payment.js
     // Removed demo button functionality as it now uses startPayment()
     
+    // Initialize countdown badge
+    initializeCountdownBadge();
+    
     // Intersection Observer for animations
     const observerOptions = {
         threshold: 0.1,
@@ -647,7 +650,53 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+
 // Initialize popup when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initFluencyPopup();
 });
+
+// Countdown Badge Function
+function initializeCountdownBadge() {
+    const badgeElement = document.getElementById('countdown-badge');
+    if (!badgeElement) return;
+    
+    // Set sprint start date (September 24, 2025)
+    const sprintStartDate = new Date('2025-09-24T00:00:00');
+    
+    function updateCountdown() {
+        const now = new Date();
+        const timeLeft = sprintStartDate - now;
+        
+        if (timeLeft > 0) {
+            const days = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            
+            if (days > 1) {
+                badgeElement.textContent = `${days} days left`;
+            } else if (days === 1) {
+                badgeElement.textContent = 'Tomorrow!';
+            } else if (hours > 0) {
+                badgeElement.textContent = `${hours}h left`;
+            } else {
+                badgeElement.textContent = 'Starting now!';
+            }
+            
+            // Add urgency styling when time is running low
+            if (days <= 1) {
+                badgeElement.style.background = 'rgba(255, 107, 107, 0.25)';
+                badgeElement.style.borderColor = 'rgba(255, 107, 107, 0.5)';
+                badgeElement.style.animation = 'subtlePulse 1.5s ease-in-out infinite';
+            }
+        } else {
+            badgeElement.textContent = 'Live now!';
+            badgeElement.style.background = 'rgba(34, 197, 94, 0.15)';
+            badgeElement.style.color = '#22c55e';
+            badgeElement.style.borderColor = 'rgba(34, 197, 94, 0.3)';
+        }
+    }
+    
+    // Update immediately and then every hour
+    updateCountdown();
+    setInterval(updateCountdown, 3600000); // Update every hour
+}
