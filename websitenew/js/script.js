@@ -663,8 +663,6 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-<<<<<<< HEAD
-=======
 // UTM Parameter Management
 let utmData = {};
 
@@ -781,7 +779,6 @@ function joinFluencySprintWithUTM() {
     closeFluencyPopup();
     window.location.href = 'competition.html';
 }
->>>>>>> 12cef834666b850a47d271a9f14cec15539bbc48
 
 // Initialize popup when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
