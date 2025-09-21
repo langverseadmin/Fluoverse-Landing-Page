@@ -281,10 +281,23 @@ document.addEventListener('DOMContentLoaded', function() {
 // Launch Fluoverse App function
 function launchFluoverse() {
     console.log('🚀 Launching Fluoverse app...');
-    const appUrl = 'https://fluoverseapp.netlify.app/'; // Official Flutter app URL
     
-    // Redirect to the Flutter app
-    window.location.href = appUrl;
+    // Get UTM data to pass to app
+    const utmData = getUTMData();
+    const appUrl = 'https://fluoverseapp.netlify.app/';
+    
+    // Build URL with UTM parameters if they exist
+    if (Object.keys(utmData).length > 0) {
+        const params = new URLSearchParams();
+        Object.entries(utmData).forEach(([key, value]) => {
+            if (value) params.append(key, value);
+        });
+        
+        const finalUrl = `${appUrl}?${params.toString()}`;
+        window.location.href = finalUrl;
+    } else {
+        window.location.href = appUrl;
+    }
 }
 
 // Spanish words rotation for mic button
@@ -650,9 +663,132 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+<<<<<<< HEAD
+=======
+// UTM Parameter Management
+let utmData = {};
+
+// Parse UTM parameters from URL
+function parseUTMParameters() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    
+    utmData = {};
+    utmParams.forEach(param => {
+        const value = urlParams.get(param);
+        if (value) {
+            utmData[param] = value;
+        }
+    });
+    
+    // Store in sessionStorage for persistence across page navigation
+    if (Object.keys(utmData).length > 0) {
+        sessionStorage.setItem('utmData', JSON.stringify(utmData));
+        console.log('UTM Parameters captured:', utmData);
+    }
+    
+    return utmData;
+}
+
+// Get stored UTM data (from current URL or sessionStorage)
+function getUTMData() {
+    // First try to get from current URL
+    const currentUTM = parseUTMParameters();
+    if (Object.keys(currentUTM).length > 0) {
+        return currentUTM;
+    }
+    
+    // Fallback to sessionStorage
+    const storedUTM = sessionStorage.getItem('utmData');
+    if (storedUTM) {
+        try {
+            return JSON.parse(storedUTM);
+        } catch (e) {
+            console.error('Error parsing stored UTM data:', e);
+        }
+    }
+    
+    return {};
+}
+
+// Send UTM data to backend when user activates/joins
+function sendUTMData(action = 'activation') {
+    const utmData = getUTMData();
+    
+    if (Object.keys(utmData).length === 0) {
+        console.log('No UTM data to send');
+        return;
+    }
+    
+    // Prepare payload
+    const payload = {
+        action: action,
+        timestamp: new Date().toISOString(),
+        page_url: window.location.href,
+        referrer: document.referrer,
+        user_agent: navigator.userAgent,
+        ...utmData
+    };
+    
+    // Send to your backend endpoint
+    fetch('https://fluoverse.onrender.com/api/utm/track', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('UTM data sent successfully:', payload);
+        } else {
+            console.error('Failed to send UTM data:', response.status);
+        }
+    })
+    .catch(error => {
+        console.error('Error sending UTM data:', error);
+    });
+}
+
+// Enhanced launchFluoverse function with UTM tracking
+function launchFluoverseWithUTM() {
+    // Send UTM data before redirecting
+    sendUTMData('app_launch');
+    
+    // Launch the app
+    launchFluoverse();
+}
+
+// Enhanced startPayment function with UTM tracking
+function startPaymentWithUTM() {
+    // Send UTM data before starting payment
+    sendUTMData('payment_start');
+    
+    // Call the original startPayment function
+    if (typeof startPayment === 'function') {
+        startPayment();
+    } else {
+        console.error('startPayment function not found');
+    }
+}
+
+// Enhanced joinFluencySprint function with UTM tracking
+function joinFluencySprintWithUTM() {
+    // Send UTM data before redirecting
+    sendUTMData('competition_join');
+    
+    // Close popup and redirect
+    closeFluencyPopup();
+    window.location.href = 'competition.html';
+}
+>>>>>>> 12cef834666b850a47d271a9f14cec15539bbc48
 
 // Initialize popup when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Parse UTM parameters on page load
+    parseUTMParameters();
+    
+    // Initialize popup
     initFluencyPopup();
 });
 
