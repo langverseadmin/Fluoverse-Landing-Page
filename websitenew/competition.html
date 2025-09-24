@@ -151,7 +151,7 @@
                 </div>
                 
                 <div style="margin-bottom:1.2rem;">
-                        <a href="#" class="btn btn-primary" style="min-height:48px; font-size:1.1rem; padding:14px 28px; width:100%; max-width:350px; display:inline-block;" onclick="launchFluoverseWithUTM(); return false;">Join Competition</a>
+                        <a href="#" class="btn btn-primary" style="min-height:48px; font-size:1.1rem; padding:14px 28px; width:100%; max-width:350px; display:inline-block;" onclick="launchFluoverseWithPreservedReferral(); return false;">Join Competition</a>
                 </div>
                 
                 <div style="margin-bottom:0;">
@@ -249,6 +249,98 @@
                 </div>
             </div>
 
+            <!-- Referral Section (Visible to everyone) -->
+            <div id="referral-section" style="margin-top: 2rem;">
+                <div class="section-header" style="text-align: center; margin-bottom: 2rem;">
+                    <h2 class="section-title" style="font-size: 2rem; margin-bottom: 0.8rem;">🎯 Earn Extra Points</h2>
+                    <p style="font-size: 1rem; color: #b8c5d6; max-width: 600px; margin: 0 auto; padding: 0 20px;">Invite friends to join the competition and earn bonus points for each referral!</p>
+                </div>
+
+                <!-- Referral Progress Display -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div style="text-align: center; padding: 1.5rem; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%); border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 12px;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">👤</div>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: #667eea;" id="referral-count">0</h3>
+                        <p style="color: #b8c5d6; font-size: 0.9rem;">Friends Referred</p>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 1.5rem; background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 12px;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: #ffd700;" id="referral-points">0</h3>
+                        <p style="color: #b8c5d6; font-size: 0.9rem;">Bonus Points Earned</p>
+                    </div>
+                    
+                    <div style="text-align: center; padding: 1.5rem; background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 12px;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏆</div>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: #22c55e;" id="next-milestone">1</h3>
+                        <p style="color: #b8c5d6; font-size: 0.9rem;">Next Milestone</p>
+                    </div>
+                </div>
+
+                <!-- Referral Link Section -->
+                <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 2rem 1.5rem; margin-bottom: 2rem;">
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.4rem; margin-bottom: 0.8rem; color: #ffffff; font-weight: 600;">Your Referral Link</h3>
+                        <p style="font-size: 0.9rem; color: #b8c5d6; margin-bottom: 0;">Share this link with friends to earn points when they join!</p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; background: rgba(0, 0, 0, 0.3); border-radius: 10px; padding: 1rem; margin-bottom: 1rem;">
+                        <input type="text" id="referral-link-input" readonly style="flex: 1; background: transparent; border: none; color: #ffffff; font-size: 0.9rem; outline: none;" />
+                        <button id="copy-referral-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 8px; padding: 0.8rem 1.5rem; color: white; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                            Copy Link
+                        </button>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <p style="color: #22c55e; font-size: 0.8rem; margin: 0;" id="copy-status"></p>
+                    </div>
+                </div>
+
+                <!-- Referral Rewards Table -->
+                <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.3rem; margin-bottom: 1rem; color: #ffffff; font-weight: 600; text-align: center;">Referral Rewards</h3>
+                    
+                    <div style="display: grid; gap: 0.8rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border-left: 3px solid #667eea;">
+                            <span style="color: #ffffff; font-size: 0.9rem;">👤 Invite 1 friend</span>
+                            <span style="color: #667eea; font-weight: 600;">+100 points</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border-left: 3px solid #ffd700;">
+                            <span style="color: #ffffff; font-size: 0.9rem;">👥 Invite 2 friends</span>
+                            <span style="color: #ffd700; font-weight: 600;">+300 points total</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border-left: 3px solid #ff6b6b;">
+                            <span style="color: #ffffff; font-size: 0.9rem;">🧑‍🤝‍🧑 Invite 3 friends</span>
+                            <span style="color: #ff6b6b; font-weight: 600;">+600 points total</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border-left: 3px solid #22c55e;">
+                            <span style="color: #ffffff; font-size: 0.9rem;">👨‍👩‍👦 Invite 4 friends</span>
+                            <span style="color: #22c55e; font-weight: 600;">+1,000 points total</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border-left: 3px solid #8b5cf6;">
+                            <span style="color: #ffffff; font-size: 0.9rem;">🌟 Invite 5 friends</span>
+                            <span style="color: #8b5cf6; font-weight: 600;">+1,500 points total</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Get Referral Code Section (For non-authenticated users) -->
+                <div id="get-referral-code-section" style="display: none;">
+                    <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%); border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 16px; padding: 2rem 1.5rem; margin-bottom: 2rem; text-align: center;">
+                        <div style="margin-bottom: 1.5rem;">
+                            <h3 style="font-size: 1.4rem; margin-bottom: 0.8rem; color: #ffffff; font-weight: 600;">Get Your Referral Code</h3>
+                            <p style="font-size: 0.9rem; color: #b8c5d6; margin-bottom: 1.5rem;">Sign up for Fluoverse to get your unique referral link and start earning points!</p>
+                        </div>
+                        
+                        <a href="#" onclick="window.open(createFlutterAppURL(), '_blank'); return false;" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 10px; padding: 12px 24px; color: white; font-size: 1rem; font-weight: 600; text-decoration: none; display: inline-block; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+                            🚀 Get My Referral Code
+                        </a>
+                        
+                        <p style="font-size: 0.8rem; color: #b8c5d6; margin-top: 1rem; margin-bottom: 0;">After signing up, come back here to see your referral stats!</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- How to Join Section -->
             <div style="margin-top: 2rem;">
                 <div class="section-header" style="text-align: center; margin-bottom: 2rem;">
@@ -296,7 +388,7 @@
 
                     <!-- Join Button -->
                     <div>
-                                <a href="#" class="btn btn-primary" style="min-height: 50px; font-size: 1.1rem; padding: 14px 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); transition: all 0.3s ease;" onclick="launchFluoverseWithUTM(); return false;">
+                                <a href="#" class="btn btn-primary" style="min-height: 50px; font-size: 1.1rem; padding: 14px 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); transition: all 0.3s ease;" onclick="launchFluoverseWithPreservedReferral(); return false;">
                                     Join Competition Now
                                 </a>
                     </div>

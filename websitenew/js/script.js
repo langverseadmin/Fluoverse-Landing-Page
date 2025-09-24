@@ -787,6 +787,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize popup
     initFluencyPopup();
+    
+    // Initialize referral system
+    initReferralSystem();
 });
 
 // Countdown Badge Function
@@ -833,3 +836,146 @@ function initializeCountdownBadge() {
     updateCountdown();
     setInterval(updateCountdown, 3600000); // Update every hour
 }
+
+// ==================== REFERRAL CODE PRESERVATION ====================
+
+// Check if user is authenticated (check for main app auth)
+function isUserAuthenticated() {
+    // Check for main app authentication (access token in localStorage)
+    const accessToken = localStorage.getItem('accessToken');
+    return accessToken && accessToken.startsWith('eyJ');
+}
+
+// Check if current user was referred (for tracking purposes)
+function checkReferralSource() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const referralCode = urlParams.get('ref');
+    
+    if (referralCode) {
+        console.log('🎯 Referral code detected:', referralCode);
+        // Store referral code for processing when user joins
+        localStorage.setItem('fluoverse_referral_source', referralCode);
+    }
+}
+
+// Initialize referral system (only for UI display and referral code preservation)
+function initReferralSystem() {
+    // Check if we're on the competition page
+    if (!window.location.pathname.includes('competition.html')) {
+        return;
+    }
+    
+    // Show referral section to everyone
+    const referralSection = document.getElementById('referral-section');
+    if (referralSection) {
+        referralSection.style.display = 'block';
+    }
+    
+    // Check if user is authenticated
+    if (isUserAuthenticated()) {
+        // User is authenticated - show full referral functionality
+        showAuthenticatedReferralUI();
+    } else {
+        // User is not authenticated - show "Get Referral Code" section
+        showUnauthenticatedReferralUI();
+    }
+    
+    // Always check for referral source (for both authenticated and non-authenticated users)
+    checkReferralSource();
+}
+
+// Show referral UI for authenticated users
+function showAuthenticatedReferralUI() {
+    // Hide the "Get Referral Code" section
+    const getReferralSection = document.getElementById('get-referral-code-section');
+    if (getReferralSection) {
+        getReferralSection.style.display = 'none';
+    }
+    
+    // Show the referral progress section (first grid in referral section)
+    const progressSection = document.querySelector('#referral-section > div:nth-child(2)');
+    if (progressSection) progressSection.style.display = 'grid';
+    
+    // Show the referral link section (third div in referral section)
+    const linkSection = document.querySelector('#referral-section > div:nth-child(3)');
+    if (linkSection) linkSection.style.display = 'block';
+    
+    // Show the rewards section (fourth div in referral section)
+    const rewardsSection = document.querySelector('#referral-section > div:nth-child(4)');
+    if (rewardsSection) rewardsSection.style.display = 'block';
+}
+
+// Show referral UI for non-authenticated users
+function showUnauthenticatedReferralUI() {
+    // Show the "Get Referral Code" section
+    const getReferralSection = document.getElementById('get-referral-code-section');
+    if (getReferralSection) {
+        getReferralSection.style.display = 'block';
+    }
+    
+    // Hide the referral progress section
+    const progressSection = document.querySelector('#referral-section > div:nth-child(2)');
+    if (progressSection) progressSection.style.display = 'none';
+    
+    // Hide the referral link section
+    const linkSection = document.querySelector('#referral-section > div:nth-child(3)');
+    if (linkSection) linkSection.style.display = 'none';
+    
+    // Hide the rewards section
+    const rewardsSection = document.querySelector('#referral-section > div:nth-child(4)');
+    if (rewardsSection) rewardsSection.style.display = 'none';
+}
+
+// Get referral code from current URL
+function getReferralCodeFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const referralCode = urlParams.get('ref');
+    
+    if (referralCode) {
+        console.log('🎯 Referral code detected:', referralCode);
+    }
+    
+    return referralCode;
+}
+
+// Create Flutter app URL with preserved referral code
+function createFlutterAppURL() {
+    const baseURL = 'https://fluoverseapp.netlify.app/';
+    const referralCode = getReferralCodeFromURL();
+    
+    if (referralCode) {
+        const flutterURL = `${baseURL}?ref=${referralCode}`;
+        console.log('🔗 Flutter app URL with preserved referral:', flutterURL);
+        return flutterURL;
+    }
+    
+    console.log('🔗 Flutter app URL (no referral):', baseURL);
+    return baseURL;
+}
+
+// Launch Flutter app with preserved referral code
+function launchFluoverseWithPreservedReferral() {
+    // Send UTM data
+    sendUTMData('app_launch');
+    
+    // Get the Flutter app URL with preserved referral code
+    const flutterURL = createFlutterAppURL();
+    
+    // Redirect to Flutter app
+    window.location.href = flutterURL;
+}
+
+// Enhanced launch function (for authenticated users)
+function launchFluoverseWithReferral() {
+    // Send UTM data and launch app
+    sendUTMData('app_launch');
+    launchFluoverse();
+}
+
+// Export functions for use in other parts of the app
+window.referralSystem = {
+    init: initReferralSystem,
+    launchWithPreservedReferral: launchFluoverseWithPreservedReferral,
+    createFlutterAppURL: createFlutterAppURL,
+    getReferralCodeFromURL: getReferralCodeFromURL
+};
