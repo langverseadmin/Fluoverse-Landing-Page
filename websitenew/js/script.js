@@ -865,19 +865,10 @@ function initReferralSystem() {
         return;
     }
     
-    // Show referral section to everyone
-    const referralSection = document.getElementById('referral-section');
-    if (referralSection) {
-        referralSection.style.display = 'block';
-    }
-    
-    // Check if user is authenticated
-    if (isUserAuthenticated()) {
-        // User is authenticated - show full referral functionality
-        showAuthenticatedReferralUI();
-    } else {
-        // User is not authenticated - show "Get Referral Code" section
-        showUnauthenticatedReferralUI();
+    // Always show the "Get My Referral Code" section
+    const getReferralSection = document.getElementById('get-referral-code-section');
+    if (getReferralSection) {
+        getReferralSection.style.display = 'block';
     }
     
     // Always check for referral source (for both authenticated and non-authenticated users)
