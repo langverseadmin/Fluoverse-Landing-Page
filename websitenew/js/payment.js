@@ -11,8 +11,8 @@ class PaymentManager {
         
         // Stripe price IDs from your Flutter app
         this.priceIds = {
-            monthly: 'price_1RtuFxJlDbRIIvhYgzGfHeZC',
-            yearly: 'price_1Rpc2PJlDbRIIvhYNamSUptB'
+            monthly: 'price_1SBXuFJlDbRIIvhYUFjjZ1FA',
+            yearly: 'price_1SBZWYJlDbRIIvhYR3A19Lpf'
         };
         
         this.init();
@@ -58,14 +58,7 @@ class PaymentManager {
     }
     
     getPromoCode() {
-        // Simple check - if promo notice exists, apply COMPLETE20
-        const promoNotice = document.querySelector('.simple-promo');
-        
-        if (promoNotice) {
-            console.log('🎉 Promo code COMPLETE20 applied!');
-            return 'COMPLETE20';
-        }
-        
+        // No promotional codes currently active
         console.log('❌ No promo code applied');
         return null;
     }
