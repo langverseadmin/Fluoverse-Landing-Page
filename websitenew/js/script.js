@@ -797,8 +797,8 @@ function initializeCountdownBadge() {
     const badgeElement = document.getElementById('countdown-badge');
     if (!badgeElement) return;
     
-    // Set sprint start date (September 24, 2025)
-    const sprintStartDate = new Date('2025-09-24T00:00:00');
+    // Set sprint start date (October 24, 2025)
+    const sprintStartDate = new Date('2025-10-24T00:00:00');
     
     function updateCountdown() {
         const now = new Date();
