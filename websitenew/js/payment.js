@@ -128,9 +128,17 @@ class PaymentManager {
         
         if (!button) return;
         
+        // Allow per-page label overrides via data-attributes
+        const labels = {
+            authenticated: button.getAttribute('data-auth-label') || 'Start Learning Free',
+            needs_auth: button.getAttribute('data-needs-auth-label') || 'Login to Start',
+            processing: button.getAttribute('data-processing-label') || 'Processing...',
+            error: button.getAttribute('data-error-label') || 'Try Again'
+        };
+        
         switch (state) {
             case 'authenticated':
-                button.textContent = 'Start Learning Free';
+                button.textContent = labels.authenticated;
                 button.disabled = false;
                 button.classList.remove('btn-disabled');
                 if (ctaButton) {
@@ -140,17 +148,17 @@ class PaymentManager {
                 break;
                 
             case 'needs_auth':
-                button.textContent = 'Login to Start';
+                button.textContent = labels.needs_auth;
                 button.disabled = false;
-                button.classList.remove('btn-disabled'); // Remove disabled class so button is clickable
+                button.classList.remove('btn-disabled');
                 if (ctaButton) {
                     ctaButton.textContent = 'Login to Start';
-                    ctaButton.classList.remove('btn-disabled'); // Remove disabled class so button is clickable
+                    ctaButton.classList.remove('btn-disabled');
                 }
                 break;
                 
             case 'processing':
-                button.textContent = 'Processing...';
+                button.textContent = labels.processing;
                 button.disabled = true;
                 button.classList.add('btn-loading');
                 if (ctaButton) {
@@ -161,7 +169,7 @@ class PaymentManager {
                 break;
                 
             case 'error':
-                button.textContent = 'Try Again';
+                button.textContent = labels.error;
                 button.disabled = false;
                 button.classList.remove('btn-loading');
                 if (ctaButton) {

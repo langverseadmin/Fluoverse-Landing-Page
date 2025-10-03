@@ -109,12 +109,51 @@
             
             <div class="plans-grid" style="justify-content: center;">
                 
-                <!-- Single Plan -->
+                <!-- Free Plan -->
                 <div class="plan-card popular">
                     <div class="popular-badge">Most Popular</div>
                     <div class="plan-header">
-                        <h3 class="plan-name">Fluoverse Premium</h3>
-                        <p class="plan-description">Complete access to all Spanish learning features</p>
+                        <h3 class="plan-name">Free</h3>
+                        <p class="plan-description">Full access this month — no payment required</p>
+                        <div class="plan-price">
+                            <span class="price-amount">
+                                <span class="price-amount">€0</span>
+                                <span class="price-period">/month</span>
+                            </span>
+                        </div>
+                        <p class="price-note">All features included</p>
+                    </div>
+                    
+                    <div class="plan-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Unlimited daily usage</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Daily Fluency Rooms with real people</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Monthly 7-day Fluency Sprints</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Priority support</span>
+                        </div>
+                    </div>
+                    
+                    <div class="plan-footer">
+                        <button class="plan-button btn-primary" onclick="launchFluoverseWithUTM(); return false;">Start Free</button>
+                        <p class="trial-text">Instant access — launches the app</p>
+                    </div>
+                </div>
+
+                <!-- Supporter Plan -->
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3 class="plan-name">Supporter</h3>
+                        <p class="plan-description">Same features — support our mission this month</p>
                         <div class="plan-price">
                             <span class="price-amount monthly-price">
                                 <span class="price-amount">€12</span>
@@ -147,15 +186,19 @@
                             <span class="feature-icon">✓</span>
                             <span>Priority support</span>
                         </div>
-                        <div class="feature-item yearly-feature" style="display: none;">
+                        <div class="feature-item">
                             <span class="feature-icon">✓</span>
-                            <span>One-on-one feedback calls</span>
+                            <span>One on One feedback calls</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Early access to features</span>
                         </div>
                     </div>
                     
                     <div class="plan-footer">
-                        <button class="plan-button btn-primary" id="paymentButton" onclick="startPaymentWithUTM()">Start Learning Free</button>
-                        <p class="trial-text">7-day free trial - no credit card required</p>
+                        <button class="plan-button btn-primary" id="paymentButton" data-auth-label="Support Us" data-needs-auth-label="Support Us" data-processing-label="Processing..." data-error-label="Try Again" onclick="startPaymentWithUTM()">Support Us</button>
+                        <p class="trial-text">Optional support tier — thank you!</p>
                     </div>
                 </div>
 
