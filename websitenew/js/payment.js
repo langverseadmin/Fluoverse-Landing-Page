@@ -6,7 +6,7 @@ class PaymentManager {
     constructor() {
         this.isProcessing = false;
         this.apiEndpoint = 'https://fluoverse.onrender.com/create-checkout-session';
-        this.appUrl = 'https://fluoverseapp.netlify.app/'; // Your local Flutter app
+        this.appUrl = 'https://fluoverseapp.netlify.app/'; // Production web app
         this.currentUrl = window.location.href;
         
         // Stripe price IDs from your Flutter app
@@ -233,6 +233,7 @@ class PaymentManager {
             const isYearly = billingToggle ? billingToggle.checked : false;
             const priceId = isYearly ? this.priceIds.yearly : this.priceIds.monthly;
             const period = isYearly ? 'yearly' : 'monthly';
+            const planName = isYearly ? 'Fluoversian (yearly)' : 'Fluoversian (monthly)';
             
             // Check if promo code should be applied
             const promoCode = this.getPromoCode();
@@ -240,7 +241,7 @@ class PaymentManager {
             const requestBody = {
                 price_id: priceId,
                 period: period,
-                plan_name: 'Fluoverse Premium',
+                plan_name: planName,
                 coupon_code: promoCode
             };
             

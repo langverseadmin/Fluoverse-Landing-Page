@@ -279,12 +279,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Launch Fluoverse App function
-function launchFluoverse() {
+function launchFluoverse(path = '') {
     console.log('🚀 Launching Fluoverse app...');
     
     // Get UTM data to pass to app
     const utmData = getUTMData();
-    const appUrl = 'https://fluoverseapp.netlify.app/';
+    
+    // Build base URL with optional path (deep link)
+    const baseUrl = 'https://fluoverseapp.netlify.app';
+    const targetBase = path ? `${baseUrl}${path.startsWith('/') ? path : `/${path}`}` : `${baseUrl}/`;
     
     // Build URL with UTM parameters if they exist
     if (Object.keys(utmData).length > 0) {
@@ -293,10 +296,10 @@ function launchFluoverse() {
             if (value) params.append(key, value);
         });
         
-        const finalUrl = `${appUrl}?${params.toString()}`;
+        const finalUrl = `${targetBase}?${params.toString()}`;
         window.location.href = finalUrl;
     } else {
-        window.location.href = appUrl;
+        window.location.href = targetBase;
     }
 }
 
@@ -749,12 +752,12 @@ function sendUTMData(action = 'activation') {
 }
 
 // Enhanced launchFluoverse function with UTM tracking
-function launchFluoverseWithUTM() {
+function launchFluoverseWithUTM(path = '') {
     // Send UTM data before redirecting
     sendUTMData('app_launch');
     
     // Launch the app
-    launchFluoverse();
+    launchFluoverse(path);
 }
 
 // Enhanced startPayment function with UTM tracking
