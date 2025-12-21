@@ -16,16 +16,41 @@ export default function Hero() {
             className="text-center lg:text-left"
           >
             {/* Main Heading */}
-            <div className="hero-text-wrapper" style={{ marginTop: '-8rem', marginBottom: '3rem' }}>
-              <motion.h1
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="hero-text-effect"
-                style={{ position: 'relative', zIndex: 10 }}
-              >
-                FLUOVERSE
-              </motion.h1>
+            <div className="gold-text-wrapper mt-0 md:-mt-32 mb-12 mx-auto lg:mx-0 lg:ml-0 lg:mr-auto">
+              <div className="gold-text-bg">
+                {"FLUOVERSE".split("").map((letter, index) => (
+                  <motion.span
+                    key={`bg-${index}`}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ 
+                      duration: 0.5, 
+                      delay: index * 0.1,
+                      ease: "easeOut"
+                    }}
+                    style={{ display: "inline-block" }}
+                  >
+                    {letter === " " ? "\u00A0" : letter}
+                  </motion.span>
+                ))}
+              </div>
+              <div className="gold-text-fg">
+                {"FLUOVERSE".split("").map((letter, index) => (
+                  <motion.span
+                    key={`fg-${index}`}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ 
+                      duration: 0.5, 
+                      delay: index * 0.1,
+                      ease: "easeOut"
+                    }}
+                    style={{ display: "inline-block" }}
+                  >
+                    {letter === " " ? "\u00A0" : letter}
+                  </motion.span>
+                ))}
+              </div>
             </div>
             <motion.h2
               initial={{ opacity: 0, y: -20 }}
@@ -34,10 +59,8 @@ export default function Hero() {
               className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-semibold mb-16 text-white/90 leading-tight"
             >
               Empowering Every Voice to{" "}
-              <span className="relative">
-                <span className="relative z-10">Speak with Confidence</span>
-                <span className="absolute bottom-2 left-0 right-0 h-4 bg-gradient-to-r from-primary-400/60 to-accent-400/60 -rotate-1"></span>
-              </span>
+              <br />
+              Speak with <span className="text-purple-400">Confidence</span>
             </motion.h2>
 
             {/* App Download Buttons */}

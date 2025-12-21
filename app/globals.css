@@ -143,5 +143,78 @@ body {
     overflow: hidden;
     border-radius: 0 0 3rem 3rem;
   }
+
+  /* Gold Text Effect */
+  .gold-text-wrapper {
+    display: grid;
+    grid-template-areas: 'overlap';
+    place-content: center;
+    justify-items: center;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 1024px) {
+    .gold-text-wrapper {
+      place-content: start;
+      justify-items: start;
+    }
+  }
+
+  .gold-text-wrapper > div {
+    background-clip: text;  
+    -webkit-background-clip: text;
+    color: #363833;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.5em, 8vw, 5rem);
+    grid-area: overlap;
+    letter-spacing: 1px;
+    -webkit-text-stroke: 4px transparent;
+  }
+
+  @media (min-width: 1024px) {
+    .gold-text-wrapper > div {
+      font-size: clamp(1.5em, 6vw, 5rem);
+    }
+  }
+
+  .gold-text-bg {
+    background-image: repeating-linear-gradient(105deg, 
+      #9333ea 0%, 
+      #7c3aed 5%,
+      #a855f7 12%);
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    transform: scaleY(1.05);
+    transform-origin: top;
+  }
+
+  .gold-text-fg {
+    color: white !important;
+    background-clip: unset !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: white !important;
+    text-shadow: 0 0 0 transparent;
+    transform: scale(1);
+  }
+
+  /* Trusted By Carousel Animation */
+  @keyframes scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-scroll {
+    animation: scroll 40s linear infinite;
+    will-change: transform;
+  }
+  
+  .animate-scroll:hover {
+    animation-play-state: paused;
+  }
 }
 
