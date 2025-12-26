@@ -2,9 +2,11 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import TrustedBy from "@/components/TrustedBy";
 import Features from "@/components/Features";
-import HowItWorks from "@/components/HowItWorks";
+import Benefits from "@/components/Benefits";
+import Community from "@/components/Community";
+import UserVideo from "@/components/UserVideo";
 import Testimonials from "@/components/Testimonials";
-import CTA from "@/components/CTA";
+import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -14,9 +16,11 @@ export default function Home() {
       <Hero />
       <TrustedBy />
       <Features />
-      <HowItWorks />
+      <Benefits />
+      <Community />
+      <UserVideo />
       <Testimonials />
-      <CTA />
+      <FAQ />
       <Footer />
     </main>
   );

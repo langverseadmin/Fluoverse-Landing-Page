@@ -32,7 +32,7 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-24 bg-[#1a0b2e]">
+    <section id="how-it-works" className="py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -75,7 +75,7 @@ export default function HowItWorks() {
                   </div>
 
                   {/* Card */}
-                  <div className="bg-[#1a0b2e] rounded-2xl p-8 pt-12 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-white/10">
+                  <div className="bg-white/5 rounded-2xl p-8 pt-12 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-white/10">
                     {/* Icon */}
                     <div className="inline-flex p-4 rounded-xl bg-gradient-to-br from-primary-100 to-accent-100 mb-6">
                       <Icon className="w-6 h-6 text-primary-600" />

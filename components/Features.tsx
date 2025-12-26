@@ -1,56 +1,26 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Sparkles, Repeat, Mic, Users, Target, Zap } from "lucide-react";
+import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 
-const features = [
+const stats = [
   {
-    icon: Sparkles,
-    title: "Personalized Learning",
-    description: "Fluoverse adapts to your goals, interests, and style. Get a custom path and content that fits you perfectly.",
-    gradient: "from-cyan-400 to-blue-500",
-    tags: ["Personalization", "Custom Path", "Motivation"],
+    value: "5,000+",
+    label: "Minutes Spoken",
   },
   {
-    icon: Repeat,
-    title: "Speak-First Cycles",
-    description: "Our lessons get you speaking in no time. Move from vocab to conversation fast, with cycles for vocab, reading, listening, and real scenarios.",
-    gradient: "from-yellow-400 to-orange-500",
-    tags: ["Vocabulary", "Reading", "Listening", "Speaking"],
+    value: "200+",
+    label: "Active Learners",
   },
   {
-    icon: Mic,
-    title: "Fluoverse AI Coach",
-    description: "Practice with the Fluoverse AI coach. Get instant feedback and support in live voice sessions that feel natural and engaging.",
-    gradient: "from-purple-400 to-pink-500",
-    tags: ["AI Coach", "Live Practice", "Supportive"],
-  },
-  {
-    icon: Users,
-    title: "Fluency Rooms",
-    description: "Join immersive conversation rooms where you practice real-world scenarios with AI-powered native speakers.",
-    gradient: "from-green-400 to-teal-500",
-    tags: ["Immersive", "Real Scenarios", "Native Speakers"],
-  },
-  {
-    icon: Target,
-    title: "Goal-Oriented",
-    description: "Set your learning goals and track your progress. Whether it's travel, work, or fluency, we adapt to your needs.",
-    gradient: "from-red-400 to-rose-500",
-    tags: ["Goals", "Progress", "Adaptive"],
-  },
-  {
-    icon: Zap,
-    title: "Fast & Effective",
-    description: "Learn faster with our proven methodology. See results in weeks, not months, with our speak-first approach.",
-    gradient: "from-indigo-400 to-purple-500",
-    tags: ["Fast", "Effective", "Proven"],
+    value: "1,500+",
+    label: "Conversations Started",
   },
 ];
 
 export default function Features() {
   return (
-    <section id="features" className="py-24 bg-[#1a0b2e]">
+    <section id="features" className="py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -58,64 +28,197 @@ export default function Features() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-            Master Spanish with{" "}
-            <span className="gradient-text">Fluoverse</span>
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight">
+            Fluoverse is Already Helping Learners
+            <br />
+            <span className="text-white/90">Speak with <span className="text-purple-400">Confidence</span></span>
           </h2>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Experience a seamless blend of AI-driven lessons and cultural immersion 
-            for rapid, lasting mastery.
-          </p>
         </motion.div>
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative bg-[#1a0b2e] p-8 rounded-2xl border border-white/10 hover:border-white/20 hover:shadow-2xl transition-all duration-300"
-              >
-                {/* Gradient Background on Hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-300`} />
-                
-                {/* Icon */}
-                <div className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${feature.gradient} mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-
-                {/* Content */}
-                <h3 className="text-2xl font-bold text-white mb-3">
-                  {feature.title}
-                </h3>
-                <p className="text-white/80 mb-6 leading-relaxed">
-                  {feature.description}
-                </p>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2">
-                  {feature.tags.map((tag, tagIndex) => (
-                    <span
-                      key={tagIndex}
-                      className="px-3 py-1 bg-white/10 text-white/90 text-sm font-medium rounded-full border border-white/20"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            );
-          })}
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          {stats.map((stat, index) => (
+            <StatCard key={index} stat={stat} index={index} />
+          ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function StatCard({ stat, index }: { stat: { value: string; label: string }; index: number }) {
+  const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const [showShine, setShowShine] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
+
+  // Extract numeric value from stat.value (e.g., "5,000+" -> 5000)
+  const targetValue = useMemo(() => {
+    const numStr = stat.value.replace(/[^0-9]/g, '');
+    return parseInt(numStr, 10);
+  }, [stat.value]);
+
+  // Intersection Observer for count-up animation
+  useEffect(() => {
+    if (!cardRef.current || hasAnimated) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true);
+            setShowShine(true);
+            observer.disconnect();
+            
+            const duration = 2000; // 2 seconds
+            const steps = 60;
+            const increment = targetValue / steps;
+            const stepDuration = duration / steps;
+            let currentStep = 0;
+
+            const timer = setInterval(() => {
+              currentStep++;
+              const nextValue = Math.min(Math.floor(increment * currentStep), targetValue);
+              setCount(nextValue);
+
+              if (nextValue >= targetValue) {
+                clearInterval(timer);
+                setCount(targetValue);
+              }
+            }, stepDuration);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(cardRef.current);
+
+    return () => observer.disconnect();
+  }, [targetValue, hasAnimated]);
+
+  // Format number with commas and plus sign
+  const formattedValue = useMemo(() => {
+    return count.toLocaleString() + '+';
+  }, [count]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+    
+    rafRef.current = requestAnimationFrame(() => {
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      setMousePosition({ x, y });
+    });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+    setMousePosition({ x: 50, y: 50 });
+  }, []);
+
+  // Calculate shadow offset based on light position
+  // Text center is approximately at 50% x, 30% y of card
+  const shadowData = useMemo(() => {
+    const textCenterX = 50;
+    const textCenterY = 30;
+    const dx = mousePosition.x - textCenterX;
+    const dy = mousePosition.y - textCenterY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const maxDistance = 50;
+    const shadowIntensity = Math.min(distance / maxDistance, 1);
+    
+    // Calculate shadow direction (opposite to light direction)
+    const angle = Math.atan2(dy, dx);
+    // Much longer shadow offset for dramatic effect
+    const shadowOffsetX = Math.cos(angle + Math.PI) * shadowIntensity * 25;
+    const shadowOffsetY = Math.sin(angle + Math.PI) * shadowIntensity * 25;
+
+    if (shadowIntensity <= 0.05) {
+      return { shadow: 'none', spotlight: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(255, 255, 255, 0.25) 0%, transparent 40%)` };
+    }
+
+    // Reduced to 10 layers for better performance
+    const shadow = Array.from({ length: 10 }, (_, i) => {
+      const progress = i / 9;
+      const offsetX = shadowOffsetX * progress;
+      const offsetY = shadowOffsetY * progress;
+      const blur = 1 + progress * 2;
+      const opacity = Math.max(shadowIntensity * (1 - progress * 0.7), 0.1);
+      return `${offsetX}px ${offsetY}px ${blur}px rgba(0, 0, 0, ${opacity})`;
+    }).join(', ');
+
+    return {
+      shadow,
+      spotlight: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(255, 255, 255, 0.25) 0%, transparent 40%)`
+    };
+  }, [mousePosition.x, mousePosition.y]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="group relative bg-white/5 backdrop-blur-sm rounded-2xl p-10 lg:p-12 border border-white/10 overflow-hidden"
+      style={{ boxShadow: 'none' }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* More prominent bottom purple glow to match hero */}
+      <div className="absolute inset-0 rounded-2xl pointer-events-none bg-gradient-to-b from-transparent via-purple-500/25 to-purple-400/40 blur-md"></div>
+
+      {/* Border hints */}
+      <div className="absolute inset-0 rounded-2xl border border-white/5 pointer-events-none"></div>
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+      
+      {/* Shiny effect when card appears */}
+      {showShine && (
+        <div 
+          className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"
+          style={{
+            animation: `shimmer 1.5s ease-in-out forwards`
+          }}
+        ></div>
+      )}
+      
+      {/* Spotlight effect that follows mouse */}
+      <div 
+        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none will-change-[background]"
+        style={{
+          background: shadowData.spotlight
+        }}
+      ></div>
+      
+      <div className="relative text-center md:text-left" ref={textRef}>
+        <div 
+          className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight will-change-[text-shadow]"
+          style={{
+            textShadow: shadowData.shadow
+          }}
+        >
+          {formattedValue}
+        </div>
+        <div className="text-base sm:text-lg text-white/70 font-medium uppercase tracking-wider">
+          {stat.label}
+        </div>
+      </div>
+    </motion.div>
   );
 }
 

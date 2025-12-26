@@ -5,7 +5,7 @@ import { Star, User, MessageCircle, BookOpen, CheckCircle2 } from "lucide-react"
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-[#1a0b2e] pt-20 hero-texture">
+    <section className="relative min-h-screen flex items-center justify-center pt-20 hero-texture">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Side - Content */}
@@ -52,7 +52,7 @@ export default function Hero() {
                 ))}
               </div>
             </div>
-            <motion.h2
+            <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -61,7 +61,7 @@ export default function Hero() {
               Empowering Every Voice to{" "}
               <br />
               Speak with <span className="text-purple-400">Confidence</span>
-            </motion.h2>
+            </motion.h1>
 
             {/* App Download Buttons */}
             <motion.div
