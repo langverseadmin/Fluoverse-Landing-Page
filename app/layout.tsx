@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
+import VWO from "@/components/VWO";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -223,7 +225,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <GoogleAnalytics />
+        <VWO />
+        {children}
+      </body>
     </html>
   );
 }
