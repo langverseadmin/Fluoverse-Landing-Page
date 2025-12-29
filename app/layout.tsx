@@ -208,6 +208,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#7c3aed" />
         <meta name="format-detection" content="telephone=no" />
         <link rel="canonical" href="https://fluoverse.com" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:700|Pacifico" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
