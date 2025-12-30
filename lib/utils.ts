@@ -51,33 +51,12 @@ export function openFluoverseApp(): void {
   const isAndroid = /android/.test(userAgent);
 
   if (isIOS) {
-    // Try deep link first
-    const deepLink = 'fluoverse://open';
+    // Use App Store link directly
+    // Note: Custom URL schemes (fluoverse://) require configuration in the iOS app's Info.plist
+    // Since the scheme isn't registered, we use the App Store link
+    // If the app is installed, the App Store page will show an "Open" button
     const appStoreUrl = 'https://apps.apple.com/gr/app/fluoverse/id6755234538';
-    
-    let appOpened = false;
-    let redirectTimer: NodeJS.Timeout;
-    
-    // Listen for page visibility change (app opening will hide the page)
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        appOpened = true;
-        if (redirectTimer) clearTimeout(redirectTimer);
-      }
-    };
-    
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    
-    // Try to open the app
-    window.location.href = deepLink;
-    
-    // If app doesn't open within 2 seconds, redirect to App Store
-    redirectTimer = setTimeout(() => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      if (!appOpened) {
-        window.location.href = appStoreUrl;
-      }
-    }, 2000);
+    window.location.href = appStoreUrl;
   } else if (isAndroid) {
     // Use Android Intent URL which handles fallback automatically
     const packageName = 'com.fluoverse.app';
