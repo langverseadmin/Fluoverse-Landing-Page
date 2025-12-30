@@ -49,7 +49,7 @@ export default function NotFound() {
 
         {/* Description */}
         <p className="text-xl text-white/80 mb-10 max-w-lg mx-auto">
-          Oops! The page you're looking for doesn't exist. It might have been moved, deleted, or you entered the wrong URL.
+          Oops! The page you&apos;re looking for doesn&apos;t exist. It might have been moved, deleted, or you entered the wrong URL.
         </p>
 
         {/* Action Buttons */}

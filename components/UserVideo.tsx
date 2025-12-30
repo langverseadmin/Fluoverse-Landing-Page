@@ -156,12 +156,12 @@ export default function UserVideo({
           >
             <div className="relative bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl p-8 lg:p-10 shadow-xl w-full h-full flex flex-col justify-between overflow-hidden">
               {/* Decorative Quote Mark */}
-              <div className="absolute top-6 left-6 text-purple-400/30 text-7xl font-serif leading-none">"</div>
+              <div className="absolute top-6 left-6 text-purple-400/30 text-7xl font-serif leading-none">&quot;</div>
               
               {/* Quote Text */}
               <div className="relative z-10">
                 <p className="text-white text-lg lg:text-xl leading-relaxed mb-6 font-light italic pl-6">
-                  Out last night discovering a new favourite place to eat! La Tropical 🫶🏻 All of the food was amazing, and we were there courtesy of Marc winning one of @Fluoverse language sprints. If you haven't already, you need to check out this brand new app, it's AI powered with real conversations & is making learning Spanish fun & interactive!
+                  Out last night discovering a new favourite place to eat! La Tropical 🫶🏻 All of the food was amazing, and we were there courtesy of Marc winning one of @Fluoverse language sprints. If you haven&apos;t already, you need to check out this brand new app, it&apos;s AI powered with real conversations & is making learning Spanish fun & interactive!
                 </p>
                 
                 {/* Author */}

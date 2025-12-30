@@ -13,7 +13,7 @@ export default function ContactPage() {
               Get in <span className="text-purple-400">Touch</span>
             </h1>
             <p className="text-white/70 text-lg">
-              Have a question? We'd love to hear from you.
+              Have a question? We&apos;d love to hear from you.
             </p>
           </div>
           <ContactForm />

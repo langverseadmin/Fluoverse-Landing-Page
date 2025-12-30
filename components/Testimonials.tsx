@@ -284,7 +284,7 @@ function TestimonialCard({ testimonial, stat, index, startWithStat }: { testimon
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 via-black/70 to-transparent pb-6 px-6 flex flex-col justify-end">
           {/* Quote */}
           <p className="text-white text-sm font-medium leading-relaxed mb-2">
-            "{testimonial.quote}"
+            &quot;{testimonial.quote}&quot;
           </p>
           
           {/* Author Name */}
