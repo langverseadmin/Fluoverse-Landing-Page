@@ -1,9 +1,56 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Star, User, MessageCircle, BookOpen, CheckCircle2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import { Star, User, MessageCircle, BookOpen, CheckCircle2, BarChart3, Share2, Settings, MessageSquare, Users, Plane, ShoppingCart, UtensilsCrossed } from "lucide-react";
 
 export default function Hero() {
+  const [selectedLanguage, setSelectedLanguage] = useState<"en" | "es" | "el">("en");
+  const cycleTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const languageConfig = {
+    en: {
+      name: "English",
+      image: "/benefits/English_City.jpg",
+      text: "Ready to speak English?",
+    },
+    es: {
+      name: "Spanish",
+      image: "/benefits/Spanish_City.jpg",
+      text: "Ready to speak Spanish?",
+    },
+    el: {
+      name: "Greek",
+      image: "/benefits/Greek_City.jpg",
+      text: "Ready to speak Greek?",
+    },
+  };
+
+  const languages: ("en" | "es" | "el")[] = ["en", "es", "el"];
+
+  // Auto-cycle through languages
+  useEffect(() => {
+    const cycleDuration = 3000; // Change language every 3 seconds
+
+    const cycle = () => {
+      setSelectedLanguage((prev) => {
+        const currentIndex = languages.indexOf(prev);
+        const nextIndex = (currentIndex + 1) % languages.length;
+        return languages[nextIndex];
+      });
+      cycleTimerRef.current = setTimeout(cycle, cycleDuration);
+    };
+
+    cycleTimerRef.current = setTimeout(cycle, cycleDuration);
+
+    return () => {
+      if (cycleTimerRef.current) {
+        clearTimeout(cycleTimerRef.current);
+        cycleTimerRef.current = null;
+      }
+    };
+  }, []);
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 hero-texture">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
@@ -125,54 +172,126 @@ export default function Hero() {
               <div style={{ transform: 'scale(0.75)', transformOrigin: 'center' }}>
                 <div className="device device-iphone-14 device-silver">
                   <div className="device-frame">
-                    <div className="device-screen bg-gradient-to-br from-primary-50 to-accent-50">
-                      {/* App Content */}
-                      <div className="px-4 py-3 min-h-full">
-                        {/* Navigation */}
-                        <div className="flex items-center justify-between mb-4 pt-2">
-                          <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-accent-400 flex items-center justify-center text-white text-xs font-bold">
-                              F
+                    <div className="device-screen overflow-hidden" style={{ backgroundColor: '#6b21a8' }}>
+                      {/* App Content - Premium Fluoverse Design */}
+                      <div className="min-h-full flex flex-col" style={{ backgroundColor: '#6b21a8' }}>
+                        {/* Welcome Header with Language City Background */}
+                        <div className="relative h-56 overflow-hidden">
+                          {/* Language City Background Image - Cycling */}
+                          <AnimatePresence mode="wait">
+                            <motion.div
+                              key={selectedLanguage}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.5 }}
+                              className="absolute inset-0"
+                            >
+                              <Image
+                                src={languageConfig[selectedLanguage].image}
+                                alt={`${languageConfig[selectedLanguage].name} cityscape background`}
+                                fill
+                                className="object-cover"
+                                priority
+                              />
+                              {/* Purple/Pink Gradient Overlay */}
+                              <div className="absolute inset-0 bg-gradient-to-r from-purple-900/70 via-pink-900/60 to-purple-800/70"></div>
+                            </motion.div>
+                          </AnimatePresence>
+                          <div className="relative z-10 px-6 pt-12 pb-4 h-full flex flex-col justify-center items-center text-center">
+                            <h2 className="text-white text-2xl font-bold mb-1">Welcome to</h2>
+                            <h1 className="text-white text-3xl font-black mb-2">Fluoverse</h1>
+                            <AnimatePresence mode="wait">
+                              <motion.p
+                                key={selectedLanguage}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.3 }}
+                                className="text-white/90 text-sm"
+                              >
+                                {languageConfig[selectedLanguage].text}
+                              </motion.p>
+                            </AnimatePresence>
+                          </div>
+                        </div>
+
+                        {/* Main Content - Fluency Bites Card */}
+                        <div className="flex-1 px-4 py-4 overflow-y-auto flex items-center justify-center">
+                          <div className="bg-white rounded-3xl p-5 mb-3 shadow-lg relative overflow-hidden w-full max-w-sm">
+                            {/* Subtle background pattern */}
+                            <div className="absolute inset-0 opacity-5">
+                              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-300 rounded-full blur-3xl"></div>
+                              <div className="absolute bottom-0 left-0 w-24 h-24 bg-pink-300 rounded-full blur-2xl"></div>
                             </div>
-                            <span className="text-sm font-semibold text-gray-900">Welcome John</span>
-                          </div>
-                          <MessageCircle className="w-5 h-5 text-gray-600" />
-                        </div>
-
-                        {/* Search Bar */}
-                        <div className="bg-white rounded-xl px-4 py-2.5 mb-4 shadow-sm">
-                          <div className="flex items-center space-x-2">
-                            <div className="w-4 h-4 rounded-full bg-primary-200"></div>
-                            <span className="text-xs text-gray-500">Your search</span>
-                          </div>
-                        </div>
-
-                        {/* Categories */}
-                        <div className="mb-4">
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-sm font-bold text-gray-900">Category</span>
-                            <span className="text-xs text-primary-600">See all</span>
-                          </div>
-                          <div className="flex space-x-3 overflow-x-auto pb-2">
-                            {[1, 2, 3].map((i) => (
-                              <div key={i} className="flex-shrink-0 w-20 bg-white rounded-xl p-2 shadow-sm">
-                                <div className="w-12 h-12 bg-gradient-to-br from-primary-200 to-accent-200 rounded-lg mb-2 mx-auto"></div>
-                                <div className="h-2 bg-gray-200 rounded w-12 mx-auto"></div>
+                            
+                            <div className="relative z-10">
+                              {/* Header */}
+                              <div className="flex items-center gap-3 mb-3">
+                                <div className="w-12 h-12 bg-[#a855f7] rounded-xl flex items-center justify-center">
+                                  <MessageSquare className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                  <h3 className="text-lg font-bold text-gray-900">Fluency Bites</h3>
+                                  <p className="text-xs text-[#a855f7]">Quick practice sessions</p>
+                                </div>
                               </div>
-                            ))}
+
+                              {/* Description */}
+                              <p className="text-sm text-gray-700 mb-4 leading-relaxed">
+                                Practice real-world situations with 2-4 line conversations. Perfect for building confidence in specific scenarios.
+                              </p>
+
+                              {/* Scenarios */}
+                              <div className="space-y-3 mb-4">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-10 h-10 bg-[#a855f7] rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <MessageSquare className="w-5 h-5 text-white" />
+                                  </div>
+                                  <span className="text-sm font-medium text-gray-900">Restaurant & Cafe</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <div className="w-10 h-10 bg-[#a855f7] rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <Plane className="w-5 h-5 text-white" />
+                                  </div>
+                                  <span className="text-sm font-medium text-gray-900">Airports & Flights</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <div className="w-10 h-10 bg-[#a855f7] rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <ShoppingCart className="w-5 h-5 text-white" />
+                                  </div>
+                                  <span className="text-sm font-medium text-gray-900">Shopping & Services</span>
+                                </div>
+                              </div>
+
+                              {/* Start Bites Button */}
+                              <div className="w-full bg-[#a855f7] text-white font-semibold py-3 rounded-2xl shadow-lg transition-all text-center pointer-events-none">
+                                Start Bites
+                              </div>
+                            </div>
                           </div>
                         </div>
 
-                        {/* Lesson Card */}
-                        <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
-                          <div className="flex items-center space-x-3 mb-2">
-                            <BookOpen className="w-5 h-5 text-primary-600" />
-                            <span className="text-sm font-semibold text-gray-900">Daily Lesson</span>
+                        {/* Bottom Navigation Bar */}
+                        <div className="bg-[#3b0764] px-6 py-3 flex items-center justify-around border-t border-purple-700/50">
+                          <div className="flex flex-col items-center gap-1">
+                            <div className="w-10 h-10 bg-[#a855f7] rounded-xl flex items-center justify-center">
+                              <BarChart3 className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="text-xs text-white/80">Leaderboard</span>
                           </div>
-                          <div className="h-2 bg-gray-200 rounded-full mb-2">
-                            <div className="h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full w-3/4"></div>
+                          <div className="flex flex-col items-center gap-1">
+                            <div className="w-10 h-10 bg-[#a855f7] rounded-xl flex items-center justify-center">
+                              <Share2 className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="text-xs text-white/80">Share</span>
                           </div>
-                          <span className="text-xs text-gray-600">75% Complete</span>
+                          <div className="flex flex-col items-center gap-1">
+                            <div className="w-10 h-10 bg-[#a855f7] rounded-xl flex items-center justify-center">
+                              <Settings className="w-5 h-5 text-white" />
+                            </div>
+                            <span className="text-xs text-white/80">Settings</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -189,88 +308,201 @@ export default function Hero() {
             {/* Floating UI Elements */}
             {/* Rating Card - Top Left */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="absolute top-8 left-4 sm:left-8 bg-white rounded-2xl p-4 shadow-xl border border-gray-100 z-20"
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
+              className="absolute top-8 left-4 sm:left-8 z-20 hidden sm:block"
+              style={{
+                '--bg': '#ffffff',
+                '--contrast': '#f8f9fa',
+                '--grey': '#e9ecef',
+                padding: '9px',
+                backgroundColor: 'var(--bg)',
+                borderRadius: '35px',
+                boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset',
+              } as React.CSSProperties}
             >
-              <div className="flex items-center space-x-2">
-                <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+              <div 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: 'repeating-conic-gradient(var(--bg) 0.0000001%, var(--grey) 0.000104%) 60% 60%/600% 600%',
+                  filter: 'opacity(10%) contrast(105%)',
+                  borderRadius: '35px'
+                }}
+              />
+              <div 
+                className="relative flex items-center space-x-2 p-2 sm:p-3"
+                style={{
+                  backgroundColor: 'var(--contrast)',
+                  borderRadius: '30px',
+                  minWidth: 'fit-content'
+                }}
+              >
+                <div className="w-8 h-8 bg-gradient-to-br from-[#a855f7] to-[#7c3aed] rounded-xl flex items-center justify-center" style={{ boxShadow: '0 4px 14px rgba(168, 85, 247, 0.4)' }}>
+                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                </div>
                 <div>
-                  <div className="text-lg font-bold text-gray-900">4.9</div>
-                  <div className="text-xs text-gray-600">Rating</div>
+                  <div className="text-base font-black text-gray-900">5.0</div>
+                  <div className="text-[10px] text-gray-500 font-medium">App Store & Play Store</div>
                 </div>
               </div>
             </motion.div>
 
-            {/* AI Coach Card - Left Middle */}
+            {/* Fluency Rooms Card - Left Middle */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 1 }}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 sm:-translate-x-1/4 bg-white rounded-2xl p-4 shadow-xl border-2 border-primary-200 z-20 w-[200px]"
+              transition={{ duration: 0.6, delay: 1, ease: "easeOut" }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 sm:-translate-x-1/4 z-20 w-[150px] hidden sm:block"
+              style={{
+                '--bg': '#ffffff',
+                '--contrast': '#f8f9fa',
+                '--grey': '#e9ecef',
+                padding: '9px',
+                backgroundColor: 'var(--bg)',
+                borderRadius: '35px',
+                boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset',
+              } as React.CSSProperties}
             >
-              <div className="flex items-center space-x-3 mb-2">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-400 to-accent-400 flex items-center justify-center text-white font-bold">
-                  AI
+              <div 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: 'repeating-conic-gradient(var(--bg) 0.0000001%, var(--grey) 0.000104%) 60% 60%/600% 600%',
+                  filter: 'opacity(10%) contrast(105%)',
+                  borderRadius: '35px'
+                }}
+              />
+              <div 
+                className="relative p-3 sm:p-4"
+                style={{
+                  backgroundColor: 'var(--contrast)',
+                  borderRadius: '30px',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                <div className="flex items-center space-x-2 mb-3">
+                  <div className="w-9 h-9 bg-gradient-to-br from-[#a855f7] to-[#7c3aed] rounded-xl flex items-center justify-center" style={{ boxShadow: '0 4px 14px rgba(168, 85, 247, 0.4)' }}>
+                    <Users className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900">Fluency Rooms</div>
+                    <div className="text-[9px] text-[#a855f7] font-medium">Live practice</div>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <div className="text-sm font-semibold text-gray-900">AI Coach</div>
-                  <div className="text-xs text-gray-600">Language Expert</div>
+                <div className="w-full bg-gradient-to-r from-[#a855f7] to-[#7c3aed] text-white text-[10px] font-bold py-2 rounded-xl text-center pointer-events-none" style={{ boxShadow: '0 4px 14px rgba(168, 85, 247, 0.35)' }}>
+                  Join Now
                 </div>
               </div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-gray-600">Session Ready</span>
-                <span className="text-sm font-bold text-primary-600">Free</span>
-              </div>
-              <div className="flex items-center space-x-1 mb-2">
-                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                <span className="text-xs font-semibold text-gray-900">5.0</span>
-                <span className="text-xs text-gray-600">(2k Reviews)</span>
-              </div>
-              <button className="w-full bg-gradient-to-r from-primary-500 to-accent-500 text-white text-xs font-semibold py-2 rounded-lg">
-                Start Session
-              </button>
             </motion.div>
 
-            {/* Tutors Row - Right Middle */}
+            {/* Scenarios Card - Right Middle */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 1.2 }}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 sm:translate-x-1/4 bg-white rounded-2xl p-3 shadow-xl border border-gray-100 z-20"
+              transition={{ duration: 0.6, delay: 1.2, ease: "easeOut" }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 sm:translate-x-1/4 z-20 w-[130px] hidden sm:block"
+              style={{
+                '--bg': '#ffffff',
+                '--contrast': '#f8f9fa',
+                '--grey': '#e9ecef',
+                padding: '9px',
+                backgroundColor: 'var(--bg)',
+                borderRadius: '35px',
+                boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset',
+              } as React.CSSProperties}
             >
-              <div className="text-xs font-semibold text-gray-900 mb-2">Top Tutors</div>
-              <div className="flex -space-x-2">
-                {["M", "A", "L", "L"].map((letter, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.3, delay: 1.3 + i * 0.1 }}
-                    className={`w-10 h-10 rounded-full bg-gradient-to-br ${
-                      i === 1 ? "from-primary-400 to-accent-400 ring-4 ring-primary-200" : "from-gray-300 to-gray-400"
-                    } flex items-center justify-center text-white text-xs font-bold border-2 border-white`}
-                  >
-                    {letter}
-                  </motion.div>
-                ))}
+              <div 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: 'repeating-conic-gradient(var(--bg) 0.0000001%, var(--grey) 0.000104%) 60% 60%/600% 600%',
+                  filter: 'opacity(10%) contrast(105%)',
+                  borderRadius: '35px'
+                }}
+              />
+              <div 
+                className="relative p-3"
+                style={{
+                  backgroundColor: 'var(--contrast)',
+                  borderRadius: '30px',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                <div className="text-[10px] font-bold text-gray-900 mb-2">Top Scenarios</div>
+                <div className="space-y-2">
+                  {[
+                    { icon: UtensilsCrossed, label: "Taverna" },
+                    { icon: ShoppingCart, label: "Market" },
+                    { icon: Plane, label: "Airport" }
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: 1.3 + i * 0.1 }}
+                      className="flex items-center gap-2"
+                    >
+                      <div className="w-7 h-7 bg-gradient-to-br from-[#a855f7] to-[#7c3aed] rounded-lg flex items-center justify-center flex-shrink-0" style={{ boxShadow: '0 2px 8px rgba(168, 85, 247, 0.3)' }}>
+                        <item.icon className="w-3.5 h-3.5 text-white" />
+                      </div>
+                      <span className="text-[10px] font-semibold text-gray-800">{item.label}</span>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </motion.div>
 
-            {/* Progress Card - Bottom Right */}
+            {/* Confidence Card - Bottom Right */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.4 }}
-              className="absolute bottom-8 right-4 sm:right-8 bg-white rounded-2xl p-4 shadow-xl border border-gray-100 z-20"
+              transition={{ duration: 0.6, delay: 1.4, ease: "easeOut" }}
+              className="absolute bottom-8 right-4 sm:right-8 z-20 hidden sm:block"
+              style={{
+                '--bg': '#ffffff',
+                '--contrast': '#f8f9fa',
+                '--grey': '#e9ecef',
+                padding: '7px',
+                backgroundColor: 'var(--bg)',
+                borderRadius: '28px',
+                boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset',
+              } as React.CSSProperties}
             >
-              <div className="flex items-center space-x-2 mb-2">
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
-                <span className="text-sm font-semibold text-gray-900">Progress</span>
+              <div 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: 'repeating-conic-gradient(var(--bg) 0.0000001%, var(--grey) 0.000104%) 60% 60%/600% 600%',
+                  filter: 'opacity(10%) contrast(105%)',
+                  borderRadius: '28px'
+                }}
+              />
+              <div 
+                className="relative p-2.5"
+                style={{
+                  backgroundColor: 'var(--contrast)',
+                  borderRadius: '24px',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                <div className="flex items-center space-x-1.5 mb-1.5">
+                  <div className="w-6 h-6 bg-gradient-to-br from-[#a855f7] to-[#7c3aed] rounded-lg flex items-center justify-center" style={{ boxShadow: '0 3px 10px rgba(168, 85, 247, 0.4)' }}>
+                    <Star className="w-3 h-3 text-white fill-white" />
+                  </div>
+                  <span className="text-[10px] font-bold text-gray-900">Confidence</span>
+                </div>
+                <div className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-[#a855f7] to-[#7c3aed] mb-0.5">92%</div>
+                <div className="text-[9px] text-gray-500 font-medium mb-1.5">Speaking</div>
+                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: '92%' }}
+                    transition={{ duration: 1, delay: 1.6 }}
+                    className="h-full bg-gradient-to-r from-[#a855f7] via-[#7c3aed] to-green-500 rounded-full"
+                  />
+                </div>
               </div>
-              <div className="text-2xl font-bold gradient-text mb-1">85%</div>
-              <div className="text-xs text-gray-600">Fluency Level</div>
             </motion.div>
           </motion.div>
         </div>
@@ -278,4 +510,5 @@ export default function Hero() {
     </section>
   );
 }
+
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ComposableMap,
   Geographies,
@@ -46,6 +46,16 @@ const countryMarkers: Array<{ name: string; coordinates: [number, number] }> = [
 
 export default function UserMap() {
   const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   return (
     <div className="relative w-full max-w-5xl mx-auto">
@@ -54,13 +64,13 @@ export default function UserMap() {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="relative bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-sm rounded-3xl p-4 sm:p-6 lg:p-8 border border-white/10 overflow-hidden"
       >
         {/* Map Container */}
-        <div className="relative w-full" style={{ height: "500px" }}>
+        <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px]">
           <ComposableMap
             projectionConfig={{
-              scale: 200,
+              scale: isMobile ? 180 : 200,
               center: [0, 10],
             }}
             style={{ width: "100%", height: "100%" }}
@@ -71,14 +81,15 @@ export default function UserMap() {
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
-                    fill="rgba(168, 85, 247, 0.05)"
-                    stroke="rgba(168, 85, 247, 0.1)"
-                    strokeWidth={0.5}
+                    fill="rgba(168, 85, 247, 0.15)"
+                    stroke="rgba(168, 85, 247, 0.4)"
+                    strokeWidth={1}
                     style={{
                       default: {
                         outline: "none",
                       },
                       hover: {
+                        fill: "rgba(168, 85, 247, 0.25)",
                         outline: "none",
                       },
                       pressed: {
@@ -98,10 +109,10 @@ export default function UserMap() {
                 onMouseLeave={() => setSelectedMarker(null)}
               >
                 <circle
-                  r={selectedMarker === index ? 8 : 6}
+                  r={selectedMarker === index ? (isMobile ? 6 : 8) : (isMobile ? 4 : 6)}
                   fill="#a855f7"
                   stroke="#fff"
-                  strokeWidth={2}
+                  strokeWidth={isMobile ? 1.5 : 2}
                   style={{
                     cursor: "pointer",
                     transition: "all 0.2s",
@@ -122,9 +133,9 @@ export default function UserMap() {
               bottom: '1rem',
               left: '50%',
             }}
-            className="bg-white/10 backdrop-blur-md rounded-xl px-6 py-3 border border-white/20 z-10"
+            className="bg-white/10 backdrop-blur-md rounded-xl px-4 py-2 sm:px-6 sm:py-3 border border-white/20 z-10"
           >
-            <div className="text-white font-semibold text-lg text-center whitespace-nowrap">
+            <div className="text-white font-semibold text-sm sm:text-lg text-center whitespace-nowrap">
               {countryMarkers[selectedMarker].name}
             </div>
           </motion.div>

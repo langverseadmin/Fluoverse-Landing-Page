@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useMemo, useState, useEffect, useRef } from "react";
-import { GraduationCap, Users, Globe, Sparkles, Mic, BarChart3, TrendingUp, Target, Zap, Coffee, ShoppingCart, Snowflake, UtensilsCrossed, Apple, Gift, Volume2, Lightbulb, X, Send, ArrowLeft, Phone, Play } from "lucide-react";
+import { GraduationCap, Users, Globe, Sparkles, Mic, BarChart3, TrendingUp, Target, Zap, Coffee, ShoppingCart, Snowflake, UtensilsCrossed, Apple, Gift, Volume2, Lightbulb, X, Send, ArrowLeft, Phone, Play, Flame, Clock, Blocks, CheckCircle2, Rocket, MessageCircle, Bolt, Star } from "lucide-react";
 import Image from "next/image";
 import "flag-icons/css/flag-icons.min.css";
 import { getFluoverseUrl } from "@/lib/utils";
@@ -32,19 +32,19 @@ const tutorBenefits = [
   {
     icon: Sparkles,
     title: "More Engaged, Better-Prepared Students",
-    description: "For the first time, tutors can assign real speaking practice at home. Students arrive to sessions already warmed up, more confident, and actively using the language — making live lessons far more effective.",
+    description: "For the first time, tutors can assign real speaking practice at home. Students arrive to sessions already warmed up, more confident, and actively using the language, making live lessons far more effective.",
     mockupType: "students",
   },
   {
     icon: BarChart3,
     title: "Intuitive Analytics That Highlight Exactly What to Teach",
-    description: "Fluoverse provides a simple, easy-to-use dashboard that clearly surfaces each learner's weak points. Tutors spend less time on tracking and logistics, and more time doing what matters most: teaching.",
+    description: "Fluoverse provides a simple, easy-to-use dashboard that clearly surfaces each learner's weak points. Tutors spend less time on tracking and logistics, and more time doing what matters most: teaching!",
     mockupType: "analytics",
   },
   {
     icon: TrendingUp,
     title: "Higher Demand Through Technology That Works for You",
-    description: "Tutors gain a competitive edge with immersive voice technology, fast scenario creation, and lightning-quick support. This keeps students motivated, satisfied, and coming back — while helping tutors grow their reputation and demand.",
+    description: "Tutors gain a competitive edge with immersive voice technology, fast scenario creation, and lightning-quick support. This keeps students motivated, satisfied, and coming back, while helping tutors grow their reputation and demand.",
     mockupType: "growth",
   },
 ];
@@ -140,25 +140,36 @@ function VoiceTester() {
   };
 
   return (
-    <div className="relative w-full max-w-xl mx-auto rounded-2xl overflow-hidden aspect-[4/3] border-0">
+    <div className="relative w-full max-w-xl mx-auto rounded-2xl overflow-hidden aspect-[4/3] sm:aspect-[4/3] border-0">
       {/* Background Image */}
       <div className="absolute inset-0 rounded-2xl overflow-hidden">
-        <Image
-          src={languageConfig[selectedLanguage].image}
-          alt={`${languageConfig[selectedLanguage].name} cityscape background for authentic speaking practice in Fluoverse language learning app`}
-          fill
-          className="object-cover transition-opacity duration-500"
-          priority
-          style={{ borderRadius: '1rem' }}
-        />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={selectedLanguage}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0"
+          >
+            <Image
+              src={languageConfig[selectedLanguage].image}
+              alt={`${languageConfig[selectedLanguage].name} cityscape background for authentic speaking practice in Fluoverse language learning app`}
+              fill
+              className="object-cover"
+              priority
+              style={{ borderRadius: '1rem' }}
+            />
+          </motion.div>
+        </AnimatePresence>
         {/* Dark Overlay for Readability */}
         <div className="absolute inset-0 bg-black/20 rounded-2xl"></div>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center p-8 h-full flex flex-col">
+      <div className="relative z-10 text-center p-4 sm:p-6 lg:p-8 h-full flex flex-col">
         {/* Language Selector */}
-        <div className="flex justify-center gap-3 mb-6">
+        <div className="flex justify-center gap-2 sm:gap-3 mb-4 sm:mb-6 flex-wrap">
           {(["en", "es", "el"] as const).map((lang) => (
             <button
               key={lang}
@@ -166,26 +177,26 @@ function VoiceTester() {
                 if (isPlaying) handleStop();
                 setSelectedLanguage(lang);
               }}
-              className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 backdrop-blur-sm flex items-center gap-2 ${
+              className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg font-medium text-xs sm:text-sm transition-all duration-300 backdrop-blur-sm flex items-center gap-1.5 sm:gap-2 ${
                 selectedLanguage === lang
                   ? "bg-purple-600 text-white shadow-lg"
                   : "bg-white/10 text-white/90 hover:bg-white/20 border border-white/20"
               }`}
             >
-              <span className={`fi fi-${languageConfig[lang].flagCode} text-xl`}></span>
-              <span>{languageConfig[lang].name}</span>
+              <span className={`fi fi-${languageConfig[lang].flagCode} text-lg sm:text-xl`}></span>
+              <span className="whitespace-nowrap">{languageConfig[lang].name}</span>
             </button>
           ))}
         </div>
 
         {/* Audio Visualizer and Button Container */}
-        <div className="mt-auto space-y-6">
+        <div className="mt-auto space-y-4 sm:space-y-6">
           {/* Simple Audio Visualizer */}
-          <div className="flex justify-center items-end gap-1 h-16">
+          <div className="flex justify-center items-end gap-0.5 sm:gap-1 h-12 sm:h-16">
             {audioBars.map((height, i) => (
               <motion.div
                 key={i}
-                className="w-1.5 rounded-full bg-purple-500"
+                className="w-1 sm:w-1.5 rounded-full bg-purple-500"
                 animate={{
                   height: `${height}px`,
                   opacity: isPlaying ? 1 : 0.4,
@@ -535,51 +546,168 @@ function BenefitMockup({ type, isReversed }: { type: string; isReversed: boolean
           )}
 
           {type === "analytics" && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 mb-4">
-                <BarChart3 className="w-5 h-5 text-purple-400" />
-                <p className="text-white/80 font-medium">Weak Points Detected</p>
-              </div>
-              {[
-                { skill: "Verb Conjugation", score: 45, color: "from-red-500 to-orange-500" },
-                { skill: "Pronunciation", score: 68, color: "from-yellow-500 to-amber-500" },
-                { skill: "Vocabulary", score: 82, color: "from-green-500 to-emerald-500" },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div className="flex-1">
-                    <div className="flex justify-between mb-1">
-                      <span className="text-white/70 text-sm">{item.skill}</span>
-                      <span className="text-white/60 text-xs">{item.score}%</span>
+            <div className="space-y-5">
+              {/* Statistics Cards */}
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                {[
+                  { icon: Flame, value: "24", label: "Micro scenarios completed", color: "text-purple-400" },
+                  { icon: Clock, value: "47", label: "Minutes spent speaking", color: "text-purple-400" },
+                  { icon: Blocks, value: "156", label: "Unique words used", color: "text-purple-400" },
+                  { icon: BarChart3, value: "28%", label: "Progress", color: "text-purple-400" },
+                ].map((stat, i) => {
+                  const Icon = stat.icon;
+                  return (
+                    <div key={i} className="bg-white/5 rounded-xl p-3 border border-white/10">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Icon className={`w-4 h-4 ${stat.color}`} />
+                      </div>
+                      <div className="text-xl font-bold text-white mb-0.5">{stat.value}</div>
+                      <div className="text-white/60 text-xs leading-tight">{stat.label}</div>
                     </div>
-                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full bg-gradient-to-r ${item.color} rounded-full`}
-                        style={{ width: `${item.score}%` }}
-                      ></div>
+                  );
+                })}
+              </div>
+
+              {/* Progress Graph */}
+              <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-white/80 font-medium text-sm">Student Progress</p>
+                  <div className="flex items-center gap-3 text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-2 h-2 rounded-full bg-black"></div>
+                      <span className="text-white/60">Class Average</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                      <span className="text-white/60">Selected Student</span>
                     </div>
                   </div>
                 </div>
-              ))}
+                {/* Simple Line Graph */}
+                <div className="relative h-32">
+                  {/* Y-axis labels */}
+                  <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-white/40 pr-2">
+                    <span>5</span>
+                    <span>4</span>
+                    <span>3</span>
+                    <span>2</span>
+                    <span>1</span>
+                    <span>0</span>
+                  </div>
+                  {/* Graph area */}
+                  <div className="ml-8 h-full relative">
+                    {/* Grid lines */}
+                    <div className="absolute inset-0 flex flex-col justify-between">
+                      {[0, 1, 2, 3, 4, 5].map((i) => (
+                        <div key={i} className="h-px bg-white/10"></div>
+                      ))}
+                    </div>
+                    {/* Graph lines */}
+                    <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 120" preserveAspectRatio="none">
+                      {/* Class Average line (black) - more varied */}
+                      <polyline
+                        points="0,110 28,105 60,100 85,95 115,88 142,75 180,65"
+                        fill="none"
+                        stroke="rgba(0,0,0,0.8)"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      {/* Selected Student line (orange) - more active with peaks and valleys */}
+                      <polyline
+                        points="0,112 25,98 50,85 75,72 100,65 125,55 150,45 175,28 200,18"
+                        fill="none"
+                        stroke="rgb(249, 115, 22)"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    {/* X-axis labels */}
+                    <div className="absolute -bottom-5 left-0 right-0 flex justify-between text-xs text-white/40">
+                      <span>Wed</span>
+                      <span>Thu</span>
+                      <span>Fri</span>
+                      <span>Sat</span>
+                      <span>Sun</span>
+                      <span>Mon</span>
+                      <span>Tue</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Student Info */}
+              <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold text-sm">
+                    MS
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-medium text-sm">Maria S.</div>
+                    <div className="text-white/60 text-xs">maria.s@example.com</div>
+                  </div>
+                </div>
+                <div className="text-white/60 text-xs bg-white/5 rounded-lg px-2 py-1.5 inline-block">
+                  Language: Greek
+                </div>
+              </div>
             </div>
           )}
 
           {type === "growth" && (
-            <div className="text-center py-4">
-              <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="space-y-5">
+              {/* Value Proposition Cards */}
+              <div className="grid grid-cols-1 gap-4">
                 {[
-                  { value: "94%", label: "Retention" },
-                  { value: "4.9", label: "Rating" },
-                  { value: "+40%", label: "Bookings" },
-                ].map((stat, i) => (
-                  <div key={i} className="bg-white/5 rounded-xl p-3">
-                    <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-                    <div className="text-white/60 text-xs">{stat.label}</div>
-                  </div>
-                ))}
+                  { 
+                    icon: Volume2, 
+                    title: "Immersive Voice Technology", 
+                    description: "Cutting-edge AI voices that set you apart",
+                    gradient: "from-purple-500/20 to-blue-500/20",
+                    iconColor: "text-purple-400"
+                  },
+                  { 
+                    icon: Zap, 
+                    title: "Fast Scenario Creation", 
+                    description: "Create custom practice scenarios in seconds",
+                    gradient: "from-blue-500/20 to-purple-500/20",
+                    iconColor: "text-blue-400"
+                  },
+                  { 
+                    icon: MessageCircle, 
+                    title: "Lightning-Quick Support", 
+                    description: "Responsive support when you need it",
+                    gradient: "from-purple-500/20 to-indigo-500/20",
+                    iconColor: "text-purple-400"
+                  },
+                ].map((benefit, i) => {
+                  const Icon = benefit.icon;
+                  return (
+                    <div key={i} className={`bg-gradient-to-br ${benefit.gradient} rounded-xl p-4 border border-white/10`}>
+                      <div className="flex items-start gap-3">
+                        <div className={`flex-shrink-0 w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center`}>
+                          <Icon className={`w-5 h-5 ${benefit.iconColor}`} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-white font-semibold text-sm mb-1">{benefit.title}</h4>
+                          <p className="text-white/70 text-xs leading-relaxed">{benefit.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-              <div className="flex items-center justify-center gap-2 text-green-400">
-                <TrendingUp className="w-5 h-5" />
-                <span className="font-medium">Growing demand</span>
+
+              {/* Competitive Edge Highlight */}
+              <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl p-4 border border-green-500/20">
+                <div className="flex items-center justify-center gap-2">
+                  <Rocket className="w-5 h-5 text-green-400" />
+                  <span className="text-green-400 font-medium text-sm">Gain a competitive edge</span>
+                </div>
+                <p className="text-white/70 text-xs text-center mt-2 leading-relaxed">
+                  Keep students motivated and satisfied with technology that works for you
+                </p>
               </div>
             </div>
           )}
