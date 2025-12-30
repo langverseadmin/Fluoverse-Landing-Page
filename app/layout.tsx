@@ -61,11 +61,11 @@ export const metadata: Metadata = {
     description: "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking exercises at home and practice with real people or the AI. Build fluency through authentic conversations.",
     images: [
       {
-        url: "https://fluoverse.com/logo.svg",
-        width: 1200,
-        height: 630,
+        url: "https://fluoverse.com/android-chrome-512x512.png",
+        width: 512,
+        height: 512,
         alt: "Fluoverse - Authentic Speaking Practice Platform for English, Spanish, and Greek",
-        type: "image/svg+xml",
+        type: "image/png",
       },
     ],
   },
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Fluoverse - Empowering every voice to speak with confidence",
     description: "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking at home and practice with real people or the AI to build fluency.",
-    images: ["https://fluoverse.com/logo.svg"],
+    images: ["https://fluoverse.com/android-chrome-512x512.png"],
     creator: "@fluoverse",
   },
   alternates: {
@@ -83,19 +83,20 @@ export const metadata: Metadata = {
   classification: "Language Learning Application",
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/logo.svg", type: "image/svg+xml" },
-      { url: "/web/icons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/web/icons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
     ],
     apple: [
-      { url: "/web/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
     other: [
-      { rel: "android-chrome", url: "/web/icons/android-chrome-192x192.png", sizes: "192x192" },
-      { rel: "android-chrome", url: "/web/icons/android-chrome-512x512.png", sizes: "512x512" },
+      { rel: "android-chrome", url: "/android-chrome-192x192.png", sizes: "192x192" },
+      { rel: "android-chrome", url: "/android-chrome-512x512.png", sizes: "512x512" },
     ],
   },
-  manifest: "/web/manifest.json",
+  manifest: "/site.webmanifest",
   verification: {
     // Add your verification codes here when available
     // google: "your-google-verification-code",
@@ -115,7 +116,7 @@ export default function RootLayout({
     "@type": "Organization",
     "name": "Fluoverse",
     "url": "https://fluoverse.com",
-    "logo": "https://fluoverse.com/logo.svg",
+    "logo": "https://fluoverse.com/android-chrome-512x512.png",
     "description": "Empowering every voice to speak with confidence. Experience authentic speaking practice in English, Spanish, and Greek through immersive, interactive conversations with real people or the AI.",
     "foundingDate": "2024",
     "sameAs": [
@@ -150,7 +151,7 @@ export default function RootLayout({
       "worstRating": "1"
     },
     "description": "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking exercises at home, practice with real people, and build fluency through authentic conversations.",
-    "screenshot": "https://fluoverse.com/logo.svg",
+    "screenshot": "https://fluoverse.com/android-chrome-512x512.png",
     "featureList": [
       "Authentic Speaking Practice",
       "Assign Speaking at Home",
@@ -208,6 +209,10 @@ export default function RootLayout({
         <meta name="theme-color" content="#7c3aed" />
         <meta name="format-detection" content="telephone=no" />
         <link rel="canonical" href="https://fluoverse.com" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+        <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:700|Pacifico" />
         <script
           type="application/ld+json"
