@@ -5,7 +5,7 @@ import { useMemo, useState, useEffect, useRef } from "react";
 import { GraduationCap, Users, Globe, Sparkles, Mic, BarChart3, TrendingUp, Target, Zap, Coffee, ShoppingCart, Snowflake, UtensilsCrossed, Apple, Gift, Volume2, Lightbulb, X, Send, ArrowLeft, Phone, Play, Flame, Clock, Blocks, CheckCircle2, Rocket, MessageCircle, Bolt, Star } from "lucide-react";
 import Image from "next/image";
 import "flag-icons/css/flag-icons.min.css";
-import { getFluoverseUrl } from "@/lib/utils";
+import { getFluoverseUrl, isMobileDevice, openFluoverseApp } from "@/lib/utils";
 
 const learnerBenefits = [
   {
@@ -850,9 +850,15 @@ export default function Benefits() {
         >
           {activeTab === "learners" ? (
             <a
-              href={getFluoverseUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={isMobileDevice() ? "#" : getFluoverseUrl()}
+              target={isMobileDevice() ? undefined : "_blank"}
+              rel={isMobileDevice() ? undefined : "noopener noreferrer"}
+              onClick={(e) => {
+                if (isMobileDevice()) {
+                  e.preventDefault();
+                  openFluoverseApp();
+                }
+              }}
               className="premium-cta-button"
             >
               <div className="dots_border"></div>

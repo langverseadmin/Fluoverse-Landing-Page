@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getFluoverseUrl } from "@/lib/utils";
+import { getFluoverseUrl, isMobileDevice, openFluoverseApp } from "@/lib/utils";
 import Image from "next/image";
 
 export default function Navigation() {
@@ -75,9 +75,15 @@ export default function Navigation() {
                 Book a call
               </a>
               <a
-                href={getFluoverseUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={isMobileDevice() ? "#" : getFluoverseUrl()}
+                target={isMobileDevice() ? undefined : "_blank"}
+                rel={isMobileDevice() ? undefined : "noopener noreferrer"}
+                onClick={(e) => {
+                  if (isMobileDevice()) {
+                    e.preventDefault();
+                    openFluoverseApp();
+                  }
+                }}
                 className="rounded-full bg-[#a855f7] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_40px_rgba(168,85,247,0.35)] transition-all duration-200 hover:shadow-[0_12px_50px_rgba(168,85,247,0.45)]"
               >
                 Get started
@@ -133,11 +139,17 @@ export default function Navigation() {
                   Book a call
                 </a>
                 <a
-                  href={getFluoverseUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={isMobileDevice() ? "#" : getFluoverseUrl()}
+                  target={isMobileDevice() ? undefined : "_blank"}
+                  rel={isMobileDevice() ? undefined : "noopener noreferrer"}
                   className="block rounded-full bg-[#a855f7] px-5 py-3 text-center text-sm font-semibold text-white shadow-[0_10px_40px_rgba(168,85,247,0.4)] transition-all duration-200"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    if (isMobileDevice()) {
+                      e.preventDefault();
+                      openFluoverseApp();
+                    }
+                    setIsMobileMenuOpen(false);
+                  }}
                 >
                   Get started
                 </a>

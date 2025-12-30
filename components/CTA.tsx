@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { getFluoverseUrl } from "@/lib/utils";
+import { getFluoverseUrl, isMobileDevice, openFluoverseApp } from "@/lib/utils";
 
 export default function CTA() {
   return (
@@ -47,9 +47,15 @@ export default function CTA() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <motion.a
-              href={getFluoverseUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={isMobileDevice() ? "#" : getFluoverseUrl()}
+              target={isMobileDevice() ? undefined : "_blank"}
+              rel={isMobileDevice() ? undefined : "noopener noreferrer"}
+              onClick={(e) => {
+                if (isMobileDevice()) {
+                  e.preventDefault();
+                  openFluoverseApp();
+                }
+              }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-white text-primary-600 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transition-all duration-200 flex items-center space-x-2"
