@@ -108,25 +108,36 @@ function VoiceTester() {
     }, 100);
   };
 
-  const handlePlay = () => {
+  const handlePlay = async () => {
     if (!audioRef.current) return;
 
-    audioRef.current.src = languageConfig[selectedLanguage].audioFile;
-    audioRef.current.play();
-    setIsPlaying(true);
-    animateAudioBars();
+    try {
+      audioRef.current.src = languageConfig[selectedLanguage].audioFile;
+      // Load the audio first
+      audioRef.current.load();
+      // Play with promise handling for mobile browsers
+      await audioRef.current.play();
+      setIsPlaying(true);
+      animateAudioBars();
 
-    audioRef.current.addEventListener("ended", () => {
+      audioRef.current.addEventListener("ended", () => {
+        setIsPlaying(false);
+        setAudioBars(Array(12).fill(8));
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      }, { once: true });
+
+      audioRef.current.addEventListener("error", () => {
+        setIsPlaying(false);
+        setAudioBars(Array(12).fill(8));
+        if (intervalRef.current) clearInterval(intervalRef.current);
+      }, { once: true });
+    } catch (error) {
+      // Handle play() promise rejection (e.g., autoplay blocked)
+      console.error("Audio play failed:", error);
       setIsPlaying(false);
       setAudioBars(Array(12).fill(8));
       if (intervalRef.current) clearInterval(intervalRef.current);
-    });
-
-    audioRef.current.addEventListener("error", () => {
-      setIsPlaying(false);
-      setAudioBars(Array(12).fill(8));
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    });
+    }
   };
 
   const handleStop = () => {
@@ -214,7 +225,12 @@ function VoiceTester() {
           <div className={`expanding-button-wrapper ${isPlaying ? 'is-playing' : ''}`}>
             <button
               onClick={isPlaying ? handleStop : handlePlay}
+              onTouchStart={(e) => {
+                // Prevent double-tap zoom on mobile
+                e.currentTarget.style.touchAction = 'manipulation';
+              }}
               className="expanding-button"
+              type="button"
             >
               {isPlaying ? (
                 <>
@@ -508,9 +524,24 @@ function BenefitMockup({ type, isReversed }: { type: string; isReversed: boolean
                   </div>
                   <h3 className="scenario-success-title">Awesome!</h3>
                   <p className="scenario-success-subtitle">Great scenario idea! Open Fluoverse and submit this scenario request through the app.</p>
-                  <button className="scenario-success-button">
+                  <motion.a
+                    href={isMobileDevice() ? "#" : getFluoverseUrl()}
+                    target={isMobileDevice() ? undefined : "_blank"}
+                    rel={isMobileDevice() ? undefined : "noopener noreferrer"}
+                    onClick={(e) => {
+                      if (isMobileDevice()) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        openFluoverseApp();
+                      }
+                    }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="scenario-success-button"
+                    style={{ pointerEvents: 'auto' }}
+                  >
                     Open Fluoverse
-                  </button>
+                  </motion.a>
                 </div>
               </div>
             </div>

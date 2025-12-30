@@ -245,17 +245,24 @@ body {
 
   /* Expanding Circle Button Styles */
   .expanding-button-wrapper {
-    width: 140px;
-    height: 50px;
+    width: 110px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
   }
 
+  @media (max-width: 768px) {
+    .expanding-button-wrapper {
+      width: 120px;
+      height: 40px;
+    }
+  }
+
   .expanding-button {
-    width: 140px;
-    height: 50px;
+    width: 110px;
+    height: 40px;
     border-radius: 50px;
     background-color: rgb(147, 51, 234);
     border: none;
@@ -263,30 +270,54 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 0px 0px 4px rgba(180, 160, 255, 0.253);
+    box-shadow: 0px 0px 0px 3px rgba(180, 160, 255, 0.253);
     cursor: pointer;
     transition-duration: 0.3s;
     overflow: hidden;
     position: relative;
     margin: 0 auto;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+  }
+
+  @media (max-width: 768px) {
+    .expanding-button {
+      width: 120px;
+      height: 40px;
+      min-height: 40px; /* Ensure minimum touch target size */
+    }
   }
 
   .expanding-button-wrapper:hover .expanding-button,
   .expanding-button-wrapper.is-playing .expanding-button {
-    width: 50px;
+    width: 40px;
     border-radius: 50%;
     transition-duration: 0.3s;
     background-color: rgb(181, 160, 255);
     align-items: center;
   }
 
+  @media (max-width: 768px) {
+    .expanding-button-wrapper.is-playing .expanding-button {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
   .expanding-button-text {
     color: white;
-    font-size: 13px;
+    font-size: 11px;
     transition-duration: 0.3s;
     white-space: nowrap;
     position: absolute;
     opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    .expanding-button-text {
+      font-size: 10px;
+    }
   }
 
   .expanding-button-wrapper:hover .expanding-button-text,
@@ -297,8 +328,8 @@ body {
   }
 
   .expanding-button-icon {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     transition-duration: 0.3s;
     position: absolute;
     stroke: white;
@@ -319,9 +350,9 @@ body {
     content: "";
     top: 50%;
     left: 50%;
-    width: 50px;
-    height: 50px;
-    margin: -25px 0 0 -25px;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
     border: solid 3px rgb(181, 160, 255);
     border-radius: 50%;
     pointer-events: none;
@@ -669,6 +700,21 @@ body {
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  .scenario-success-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+  }
+
+  .scenario-success-button:active {
+    transform: translateY(0);
   }
 
   .ribbon {

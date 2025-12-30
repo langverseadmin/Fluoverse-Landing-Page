@@ -5,10 +5,13 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getFluoverseUrl, isMobileDevice, openFluoverseApp } from "@/lib/utils";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +20,50 @@ export default function Navigation() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleHashLink = (e: React.MouseEvent<HTMLAnchorElement>, hash: string, closeMenu: boolean = false) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Close menu first if needed
+    if (closeMenu) {
+      setIsMobileMenuOpen(false);
+    }
+    
+    // If we're not on the home page, navigate to home page with hash
+    if (pathname !== "/") {
+      // Use window.location to navigate with hash (causes full reload but ensures hash works)
+      window.location.href = `/${hash}`;
+    } else {
+      // If we're on the home page, scroll to the section
+      const scrollToElement = () => {
+        const element = document.querySelector(hash);
+        if (element) {
+          // Update URL hash first
+          window.history.pushState(null, '', hash);
+          
+          // Get element position accounting for fixed navbar
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - 80; // Account for navbar height
+          
+          // Use window.scrollTo for better mobile compatibility
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      };
+      
+      // Use setTimeout to ensure menu is closed and DOM is ready
+      if (closeMenu) {
+        // Wait for menu animation to complete
+        setTimeout(scrollToElement, 200);
+      } else {
+        // Immediate scroll for desktop
+        scrollToElement();
+      }
+    }
+  };
 
   const navItems = [
     { name: "Benefits", href: "#benefits" },
@@ -59,6 +106,7 @@ export default function Navigation() {
                 href={item.href}
                 target={item.external ? "_blank" : undefined}
                 rel={item.external ? "noopener noreferrer" : undefined}
+                onClick={item.external ? undefined : (e) => handleHashLink(e, item.href, false)}
                 className="group relative text-sm font-semibold tracking-tight text-white/70 transition-all duration-200 hover:text-white"
               >
                 {item.name}
@@ -114,27 +162,65 @@ export default function Navigation() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden bg-[#0f031d]/90 backdrop-blur-2xl border-t border-white/10"
+            style={{ pointerEvents: 'auto' }}
           >
-            <div className="px-4 pt-4 pb-6 space-y-3">
-              {navItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  target={item.external ? "_blank" : undefined}
-                  rel={item.external ? "noopener noreferrer" : undefined}
-                  className="block rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-sm font-semibold text-white/85 transition-all duration-200 hover:border-white/15 hover:bg-white/10"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </a>
-              ))}
+            <div className="px-4 pt-4 pb-6 space-y-3" style={{ touchAction: 'manipulation' }}>
+              {navItems.map((item) => {
+                const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  
+                  if (!item.external) {
+                    handleHashLink(e, item.href, true);
+                  } else {
+                    window.open(item.href, '_blank', 'noopener,noreferrer');
+                    setIsMobileMenuOpen(false);
+                  }
+                };
+
+                return (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    target={item.external ? "_blank" : undefined}
+                    rel={item.external ? "noopener noreferrer" : undefined}
+                    onClick={handleClick}
+                    className="block rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-sm font-semibold text-white/85 transition-all duration-200 hover:border-white/15 hover:bg-white/10 active:bg-white/15"
+                    style={{ 
+                      touchAction: 'manipulation', 
+                      WebkitTapHighlightColor: 'transparent',
+                      cursor: 'pointer',
+                      userSelect: 'none',
+                      WebkitUserSelect: 'none',
+                      minHeight: '44px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      WebkitTouchCallout: 'none'
+                    }}
+                  >
+                    {item.name}
+                  </a>
+                );
+              })}
               <div className="grid grid-cols-1 gap-3 pt-1">
                 <a
                   href="https://calendly.com/panosmoschos7/30min"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block rounded-full border border-white/10 bg-white/5 px-5 py-3 text-center text-sm font-semibold text-white/90 transition-all duration-200 hover:border-white/25 hover:bg-white/10"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.open('https://calendly.com/panosmoschos7/30min', '_blank', 'noopener,noreferrer');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="block rounded-full border border-white/10 bg-white/5 px-5 py-3 text-center text-sm font-semibold text-white/90 transition-all duration-200 hover:border-white/25 hover:bg-white/10 active:bg-white/15"
+                  style={{ 
+                    touchAction: 'manipulation', 
+                    WebkitTapHighlightColor: 'transparent',
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                    WebkitTouchCallout: 'none'
+                  }}
                 >
                   Book a call
                 </a>
@@ -142,13 +228,23 @@ export default function Navigation() {
                   href={isMobileDevice() ? "#" : getFluoverseUrl()}
                   target={isMobileDevice() ? undefined : "_blank"}
                   rel={isMobileDevice() ? undefined : "noopener noreferrer"}
-                  className="block rounded-full bg-[#a855f7] px-5 py-3 text-center text-sm font-semibold text-white shadow-[0_10px_40px_rgba(168,85,247,0.4)] transition-all duration-200"
                   onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     if (isMobileDevice()) {
-                      e.preventDefault();
                       openFluoverseApp();
+                    } else {
+                      window.open(getFluoverseUrl(), '_blank', 'noopener,noreferrer');
                     }
                     setIsMobileMenuOpen(false);
+                  }}
+                  className="block rounded-full bg-[#a855f7] px-5 py-3 text-center text-sm font-semibold text-white shadow-[0_10px_40px_rgba(168,85,247,0.4)] transition-all duration-200 active:bg-[#9333ea]"
+                  style={{ 
+                    touchAction: 'manipulation', 
+                    WebkitTapHighlightColor: 'transparent',
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                    WebkitTouchCallout: 'none'
                   }}
                 >
                   Get started

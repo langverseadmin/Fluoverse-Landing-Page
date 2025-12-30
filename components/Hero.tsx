@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Star, User, MessageCircle, BookOpen, CheckCircle2, BarChart3, Share2, Settings, MessageSquare, Users, Plane, ShoppingCart, UtensilsCrossed } from "lucide-react";
+import { Star, User, MessageCircle, BookOpen, CheckCircle2, BarChart3, Share2, Settings, MessageSquare, Users, Plane, ShoppingCart, UtensilsCrossed, Pill } from "lucide-react";
 
 export default function Hero() {
   const [selectedLanguage, setSelectedLanguage] = useState<"en" | "es" | "el">("en");
@@ -434,7 +434,7 @@ export default function Hero() {
                   {[
                     { icon: UtensilsCrossed, label: "Taverna" },
                     { icon: ShoppingCart, label: "Market" },
-                    { icon: Plane, label: "Airport" }
+                    { icon: Pill, label: "Pharmacist" }
                   ].map((item, i) => (
                     <motion.div
                       key={i}
