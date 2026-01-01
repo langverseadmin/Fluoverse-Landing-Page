@@ -78,12 +78,6 @@ export default function NotFound() {
             <Link href="/" className="text-white/80 hover:text-white transition-colors">
               Home
             </Link>
-            <Link href="/#features" className="text-white/80 hover:text-white transition-colors">
-              Features
-            </Link>
-            <Link href="/#how-it-works" className="text-white/80 hover:text-white transition-colors">
-              How It Works
-            </Link>
             <Link href="/contact" className="text-white/80 hover:text-white transition-colors">
               Contact
             </Link>

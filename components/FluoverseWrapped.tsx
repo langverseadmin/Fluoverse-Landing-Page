@@ -646,7 +646,7 @@ const TotalMinutesSlide = ({ totalMinutes, userName }: { totalMinutes: number; u
           transition={{ duration: 0.6, delay: 0.7 }}
           className="text-3xl md:text-4xl text-white mb-4 font-bold tracking-tight"
         >
-          Minutes Learned
+          {totalMinutes === 0 ? 'Your Journey Starts Here!' : 'Minutes Learned'}
         </motion.p>
         
         <motion.p
@@ -656,9 +656,11 @@ const TotalMinutesSlide = ({ totalMinutes, userName }: { totalMinutes: number; u
           className="text-xl md:text-2xl text-white/80 font-medium"
           style={{ textShadow: '0 1px 10px rgba(0, 0, 0, 0.3)' }}
         >
-          {userName === 'Your Class' 
-            ? `Your class is in the top ${topPercentage}% of learners on Fluoverse!`
-            : `You were in the top ${topPercentage}% of learners on Fluoverse!`}
+          {totalMinutes === 0 
+            ? `2026 is your year to shine! 🌟 Start practicing on Fluoverse and watch your minutes add up. Every expert was once a beginner!`
+            : userName === 'Your Class' 
+              ? `Your class is in the top ${topPercentage}% of learners on Fluoverse!`
+              : `You were in the top ${topPercentage}% of learners on Fluoverse!`}
         </motion.p>
       </div>
     </div>
@@ -845,7 +847,7 @@ const LearningAgeSlide = ({ days }: { days: number }) => {
           <div className="relative mx-auto">
             <div className="calendar-page">
               <div className="calendar-inner">
-                <h1>{displayValue.toString()}</h1>
+                <h1>{days === 0 ? '✨' : displayValue.toString()}</h1>
               </div>
               <div className="calendar-pin calendar-left-pin"></div>
               <div className="calendar-pin calendar-right-pin"></div>
@@ -859,7 +861,7 @@ const LearningAgeSlide = ({ days }: { days: number }) => {
           transition={{ duration: 0.6, delay: 0.7 }}
           className="text-3xl md:text-4xl text-white mb-4 font-bold tracking-tight"
         >
-          Days Learning on <span className="text-purple-300">Fluoverse</span>
+          {days === 0 ? 'Your First Day Awaits!' : <>Days Learning on <span className="text-purple-300">Fluoverse</span></>}
         </motion.p>
         
         <motion.p
@@ -869,7 +871,9 @@ const LearningAgeSlide = ({ days }: { days: number }) => {
           className="text-xl md:text-2xl text-white/80 font-medium"
           style={{ textShadow: '0 1px 10px rgba(0, 0, 0, 0.3)' }}
         >
-          Every day counts. Keep pushing forward!
+          {days === 0 
+            ? `Today is the perfect day to start! 🚀 Join Fluoverse and begin your language learning adventure. Your future self will thank you!`
+            : `Every day counts. Keep pushing forward!`}
         </motion.p>
       </motion.div>
     </div>
@@ -1108,7 +1112,7 @@ const TotalScenariosSlide = ({ count, userName }: { count: number; userName?: st
               zIndex: 1,
             }}
           >
-            {displayValue.toLocaleString()}
+            {count === 0 ? '∞' : displayValue.toLocaleString()}
           </div>
         </motion.div>
         
@@ -1119,7 +1123,7 @@ const TotalScenariosSlide = ({ count, userName }: { count: number; userName?: st
           className="text-3xl md:text-4xl text-white mb-4 font-bold tracking-tight"
           style={{ textShadow: '0 2px 15px rgba(0, 0, 0, 0.4)' }}
         >
-          Sessions Completed
+          {count === 0 ? 'Unlimited Potential!' : 'Sessions Completed'}
         </motion.p>
         
         <motion.p
@@ -1128,9 +1132,11 @@ const TotalScenariosSlide = ({ count, userName }: { count: number; userName?: st
           transition={{ duration: 0.6, delay: 0.9 }}
           className="text-xl md:text-2xl text-white/80 font-medium"
         >
-          {userName === 'Your Class'
-            ? `Your class completed ${count} ${count === 1 ? 'session' : 'sessions'}. They were on fire!`
-            : `You completed ${count} ${count === 1 ? 'session' : 'sessions'}. You were on fire!`}
+          {count === 0
+            ? `Your first session is waiting for you! 🎯 Start practicing on Fluoverse and unlock your language learning potential. The journey of a thousand miles begins with a single step!`
+            : userName === 'Your Class'
+              ? `Your class completed ${count} ${count === 1 ? 'session' : 'sessions'}. They were on fire!`
+              : `You completed ${count} ${count === 1 ? 'session' : 'sessions'}. You were on fire!`}
         </motion.p>
         </div>
       </div>
@@ -1160,6 +1166,44 @@ const SelectScenarioSlide = ({
     onSelect(lessonId);
   };
 
+  // Check if all scenarios have zero completions
+  const allZeros = scenarios.length > 0 && scenarios.every(s => s.completionCount === 0 && s.totalTimeSpent === 0);
+  
+  if (allZeros || scenarios.length === 0) {
+    return (
+      <div className="text-center px-6 py-8 w-full relative">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="w-32 h-32 mx-auto mb-8 rounded-full flex items-center justify-center bg-gradient-to-br from-yellow-400 to-orange-500 shadow-2xl"
+        >
+          <Sparkles className="w-16 h-16 text-white" />
+        </motion.div>
+        
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="text-4xl md:text-5xl text-white mb-6 font-bold tracking-tight"
+          style={{ textShadow: '0 2px 20px rgba(0, 0, 0, 0.3)' }}
+        >
+          Your First Scenario Awaits! 🎯
+        </motion.p>
+        
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          className="text-xl md:text-2xl text-white/90 font-medium max-w-2xl mx-auto"
+          style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)' }}
+        >
+          Start your language learning journey on Fluoverse! Your first scenario is waiting for you. Every expert was once a beginner - your journey to fluency starts now! 🚀
+        </motion.p>
+      </div>
+    );
+  }
+  
   return (
     <div className="text-center px-6 py-8 w-full relative">
       <motion.p
@@ -1234,7 +1278,47 @@ const TopLessonPreviewSlide = ({
   scenario: FluoverseWrappedData['topScenarios'][0] | undefined;
   userName?: string;
 }) => {
-  if (!scenario) return null;
+  // If no scenario or all zeros, show encouraging message
+  if (!scenario || (scenario.completionCount === 0 && scenario.totalTimeSpent === 0)) {
+    return (
+      <div className="relative w-full h-full min-h-screen flex flex-col items-center justify-center px-6 py-8 overflow-hidden">
+        {/* Gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-600 to-orange-600" />
+        
+        {/* Content */}
+        <div className="relative z-10 w-full text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="w-32 h-32 mx-auto mb-8 rounded-full flex items-center justify-center bg-gradient-to-br from-yellow-400 to-orange-500 shadow-2xl"
+          >
+            <Sparkles className="w-16 h-16 text-white" />
+          </motion.div>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.5 }}
+            className="text-4xl md:text-5xl text-white mb-6 font-black tracking-tight"
+            style={{ textShadow: '0 2px 20px rgba(0, 0, 0, 0.3)' }}
+          >
+            Your First Scenario Awaits! 🎯
+          </motion.p>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.7 }}
+            className="text-xl md:text-2xl text-white/90 font-medium max-w-2xl mx-auto"
+            style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)' }}
+          >
+            Start your language learning journey on Fluoverse! Your first scenario is waiting for you. Every expert was once a beginner - your journey to fluency starts now! 🚀
+          </motion.p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full h-full min-h-screen flex flex-col items-center justify-center px-6 py-8 overflow-hidden">
@@ -1308,18 +1392,130 @@ const TopLessonPreviewSlide = ({
   );
 };
 
+// 5c. Scenarios to Start With - For users with zero stats (encouragement mode)
+const ScenariosToStartSlide = ({ scenarios, userName }: { scenarios: FluoverseWrappedData['topScenarios']; userName?: string }) => {
+  // Show first 3 scenarios
+  const displayScenarios = scenarios.slice(0, 3);
+  
+  return (
+    <div className="text-center px-4 py-4 w-full relative min-h-screen flex flex-col items-center justify-center">
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="text-2xl md:text-3xl text-white mb-4 font-bold tracking-tight"
+        style={{ textShadow: '0 2px 20px rgba(0, 0, 0, 0.3)' }}
+      >
+        Scenarios You Can Start With! 🎯
+      </motion.p>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full max-w-3xl mb-4">
+        {displayScenarios.map((scenario, index) => (
+          <motion.div
+            key={scenario.lessonId}
+            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 + index * 0.2, type: "spring" }}
+            className="relative bg-white/10 backdrop-blur-md rounded-xl overflow-hidden border-2 border-white/20 shadow-xl"
+          >
+            {/* Scenario Image */}
+            <div className="relative h-48 w-full">
+              <Image
+                src={getScenarioImage(scenario.lessonTitle)}
+                alt={scenario.lessonTitle}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 300px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            </div>
+            
+            {/* Scenario Title */}
+            <div className="p-2">
+              <p className="text-sm font-bold text-white" style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.5)' }}>
+                {scenario.lessonTitle}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+      
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 1.0 }}
+        className="text-base md:text-lg text-white/90 font-medium max-w-2xl"
+        style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)' }}
+      >
+        Start practicing these scenarios on Fluoverse today! 🚀
+      </motion.p>
+    </div>
+  );
+};
+
 // 6. #1 Scenario + Completion Stats
-const TopScenarioSlide = ({ scenario, userName }: { scenario: FluoverseWrappedData['topScenarios'][0]; userName?: string }) => (
-  <div className="text-center px-6 py-8 w-full max-w-md mx-auto relative">
-    <motion.p
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.2 }}
-      className="text-4xl md:text-5xl text-white mb-10 font-bold tracking-tight"
-      style={{ textShadow: '0 2px 20px rgba(0, 0, 0, 0.3)' }}
-    >
-      {userName === 'Your Class' ? "Your Class's #1 Scenario" : "Your #1 Scenario"}
-    </motion.p>
+const TopScenarioSlide = ({ scenario, userName }: { scenario: FluoverseWrappedData['topScenarios'][0]; userName?: string }) => {
+  // If scenario has no completions, show encouraging message
+  if (scenario.completionCount === 0 && scenario.totalTimeSpent === 0) {
+    return (
+      <div className="text-center px-6 py-8 w-full max-w-md mx-auto relative">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="w-32 h-32 mx-auto mb-8 rounded-full flex items-center justify-center bg-gradient-to-br from-yellow-400 to-orange-500 shadow-2xl"
+        >
+          <Sparkles className="w-16 h-16 text-white" />
+        </motion.div>
+        
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="text-4xl md:text-5xl text-white mb-6 font-bold tracking-tight"
+          style={{ textShadow: '0 2px 20px rgba(0, 0, 0, 0.3)' }}
+        >
+          Your First Scenario Awaits! 🎯
+        </motion.p>
+        
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          className="text-xl md:text-2xl text-white/90 font-medium mb-6"
+          style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)' }}
+        >
+          Start your language learning journey on Fluoverse! Your first scenario is waiting for you. Every expert was once a beginner - your journey to fluency starts now! 🚀
+        </motion.p>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
+          className="bg-white/15 backdrop-blur-xl rounded-3xl p-8 border-2 border-white/20 shadow-2xl"
+        >
+          <p className="text-2xl md:text-3xl font-bold text-white mb-4">
+            {scenario.lessonTitle}
+          </p>
+          <p className="text-lg text-white/80">
+            Ready to start? This could be your first completed scenario! 🌟
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="text-center px-6 py-8 w-full max-w-md mx-auto relative">
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="text-4xl md:text-5xl text-white mb-10 font-bold tracking-tight"
+        style={{ textShadow: '0 2px 20px rgba(0, 0, 0, 0.3)' }}
+      >
+        {userName === 'Your Class' ? "Your Class's #1 Scenario" : "Your #1 Scenario"}
+      </motion.p>
     <motion.div
       initial={{ opacity: 0, scale: 0.95, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -1384,7 +1580,8 @@ const TopScenarioSlide = ({ scenario, userName }: { scenario: FluoverseWrappedDa
       </div>
     </motion.div>
   </div>
-);
+  );
+};
 
 // Popping Words Component
 const PoppingWords = ({ count }: { count: number }) => {
@@ -1607,7 +1804,7 @@ const UniqueWordsSlide = ({ count, userName }: { count: number; userName?: strin
               zIndex: 1,
             }}
           >
-            {displayValue.toLocaleString()}
+            {count === 0 ? '∞' : displayValue.toLocaleString()}
           </div>
         </motion.div>
         
@@ -1618,7 +1815,7 @@ const UniqueWordsSlide = ({ count, userName }: { count: number; userName?: strin
           className="text-3xl md:text-4xl text-white mb-4 font-bold tracking-tight"
           style={{ textShadow: '0 2px 15px rgba(0, 0, 0, 0.4)' }}
         >
-          Unique Words Used
+          {count === 0 ? 'Words Await You!' : 'Unique Words Used'}
         </motion.p>
         
         <motion.p
@@ -1627,9 +1824,11 @@ const UniqueWordsSlide = ({ count, userName }: { count: number; userName?: strin
           transition={{ duration: 0.6, delay: 0.9 }}
           className="text-xl md:text-2xl text-white/80 font-medium"
         >
-          {userName === 'Your Class'
-            ? "Your students are on their way to becoming dictionaries!"
-            : "You're on your way to becoming a dictionary!"}
+          {count === 0
+            ? `Start learning on Fluoverse and watch your vocabulary grow! 📚 Every word you learn opens new doors. Your journey to fluency begins with your first word!`
+            : userName === 'Your Class'
+              ? "Your students are on their way to becoming dictionaries!"
+              : "You're on your way to becoming a dictionary!"}
         </motion.p>
       </div>
     </div>
@@ -1740,58 +1939,77 @@ const NewYearAnimation = () => {
 const PersonalizedMessageSlide = ({ 
   userName, 
   message, 
-  achievement 
+  achievement,
+  totalMinutes = 0,
+  totalScenariosCompleted = 0
 }: { 
   userName: string; 
   message?: string;
   achievement?: string;
-}) => (
-  <div className="text-center px-6 py-8 w-full relative min-h-screen flex flex-col items-center justify-center">
-    {/* Starry background - appears immediately */}
-    <StarryBackground />
-    
-    {/* Content */}
-    <div className="relative z-10 flex-1 flex flex-col items-center justify-center">
-      {/* Logo at the top with champagne glasses */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
+  totalMinutes?: number;
+  totalScenariosCompleted?: number;
+}) => {
+  // Check if user has zero stats (encouragement mode)
+  const isEncouragementMode = totalMinutes === 0 && totalScenariosCompleted === 0;
+  
+  return (
+    <div className="text-center px-6 py-8 w-full relative min-h-screen flex flex-col items-center justify-center">
+      {/* Starry background - appears immediately */}
+      <StarryBackground />
+      
+      {/* Content */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center">
+        {/* Logo at the top with champagne glasses */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-8 flex justify-center items-center gap-6 relative"
+        >
+          <ChampagneGlass position="left" />
+          <Image
+            src="/logo.svg"
+            alt="Fluoverse"
+            width={243}
+            height={84}
+          className="h-20 w-auto rounded-lg relative z-10"
+          style={{ transform: 'none' }}
+        />
+        <ChampagneGlass position="right" />
+      </motion.div>
+      
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="mb-8 flex justify-center items-center gap-6 relative"
+        transition={{ duration: 0.7, delay: 0.4 }}
+        className="text-4xl md:text-5xl font-bold text-white mb-8"
+        style={{ textShadow: '0 2px 20px rgba(0, 0, 0, 0.4)' }}
       >
-        <ChampagneGlass position="left" />
-        <Image
-          src="/logo.svg"
-          alt="Fluoverse"
-          width={243}
-          height={84}
-        className="h-20 w-auto rounded-lg relative z-10"
-        style={{ transform: 'none' }}
-      />
-      <ChampagneGlass position="right" />
-    </motion.div>
-    
-    <motion.h2
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, delay: 0.4 }}
-      className="text-4xl md:text-5xl font-bold text-white mb-8"
-      style={{ textShadow: '0 2px 20px rgba(0, 0, 0, 0.4)' }}
-    >
-      {userName === 'Your Class' ? 'Thanks for teaching with Fluoverse' : 'Thanks for learning with Fluoverse'}
-    </motion.h2>
-    
-    <motion.div
-      initial={{ opacity: 0, y: 15, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.6, delay: 0.6 }}
-      className="bg-white/10 backdrop-blur-md rounded-2xl p-7 border border-white/20 shadow-xl"
-    >
-      <p className="text-2xl md:text-3xl text-white/95 font-semibold leading-relaxed">
-          {userName === 'Your Class' 
-            ? 'Your students are making great progress and we are proud to support their learning journey'
-            : 'Your skills are improving day by day and we are improving with you'}
+        {isEncouragementMode 
+          ? '2026 is Your Year to Shine! 🌟'
+          : userName === 'Your Class' 
+            ? 'Thanks for teaching with Fluoverse' 
+            : 'Thanks for learning with Fluoverse'}
+      </motion.h2>
+      
+      <motion.div
+        initial={{ opacity: 0, y: 15, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, delay: 0.6 }}
+        className="bg-white/10 backdrop-blur-md rounded-2xl p-7 border border-white/20 shadow-xl"
+      >
+        <p className="text-2xl md:text-3xl text-white/95 font-semibold leading-relaxed">
+          {isEncouragementMode
+            ? message || 'Start your language learning journey on Fluoverse today! 🚀'
+            : userName === 'Your Class' 
+              ? 'Your students are making great progress and we are proud to support their learning journey'
+              : message || 'Your skills are improving day by day and we are improving with you'}
         </p>
+        {isEncouragementMode && achievement && (
+          <p className="text-xl md:text-2xl text-white/85 font-medium mt-4 leading-relaxed">
+            {achievement}
+          </p>
+        )}
       </motion.div>
     </div>
     
@@ -1800,7 +2018,8 @@ const PersonalizedMessageSlide = ({
       <NewYearAnimation />
     </div>
   </div>
-);
+  );
+};
 
 export default function FluoverseWrapped({ 
   data, 
@@ -1841,6 +2060,9 @@ export default function FluoverseWrapped({
     }
   }, [currentSlide, isPlaying]);
 
+  // Check if user has zero stats (encouragement mode)
+  const isEncouragementMode = data.totalMinutes === 0 && data.totalScenariosCompleted === 0;
+  
   // Find selected scenario for slide 6
   const selectedScenarioData = data.topScenarios.find(s => s.lessonId === selectedScenario) || data.topScenarios[0];
 
@@ -1869,36 +2091,61 @@ export default function FluoverseWrapped({
     }, 1000);
   }, [onScenarioSelect, autoPlay, captureMode]);
 
-  const slides = useMemo(() => [
-    <WelcomeSlide key="welcome" userName={data.userName} year={data.year} />,
-    <TotalMinutesSlide key="minutes" totalMinutes={data.totalMinutes} userName={data.userName} />,
-    <LearningAgeSlide key="age" days={data.learningAgeDays} />,
-    <TotalScenariosSlide key="scenarios" count={data.totalScenariosCompleted} userName={data.userName} />,
-    // Use static preview slide in capture mode or when controls are hidden, interactive slide otherwise
-    (captureMode || hideControls) ? (
-      <TopLessonPreviewSlide 
-        key="top-preview" 
-        scenario={data.topScenarios[0]}
+  const slides = useMemo(() => {
+    // For encouragement mode (zero stats), show single scenario showcase slide
+    if (isEncouragementMode) {
+      return [
+        <WelcomeSlide key="welcome" userName={data.userName} year={data.year} />,
+        <TotalMinutesSlide key="minutes" totalMinutes={data.totalMinutes} userName={data.userName} />,
+        <LearningAgeSlide key="age" days={data.learningAgeDays} />,
+        <TotalScenariosSlide key="scenarios" count={data.totalScenariosCompleted} userName={data.userName} />,
+        <ScenariosToStartSlide key="scenarios-start" scenarios={data.topScenarios} userName={data.userName} />,
+        <UniqueWordsSlide key="words" count={data.uniqueWordsMastered} userName={data.userName} />,
+        <PersonalizedMessageSlide 
+          key="thanks" 
+          userName={data.userName}
+          message={data.personalizedMessage}
+          achievement={data.biggestAchievement}
+          totalMinutes={data.totalMinutes}
+          totalScenariosCompleted={data.totalScenariosCompleted}
+        />,
+      ];
+    }
+    
+    // Normal mode - show selection and detailed scenario slides
+    return [
+      <WelcomeSlide key="welcome" userName={data.userName} year={data.year} />,
+      <TotalMinutesSlide key="minutes" totalMinutes={data.totalMinutes} userName={data.userName} />,
+      <LearningAgeSlide key="age" days={data.learningAgeDays} />,
+      <TotalScenariosSlide key="scenarios" count={data.totalScenariosCompleted} userName={data.userName} />,
+      // Use static preview slide in capture mode or when controls are hidden, interactive slide otherwise
+      (captureMode || hideControls) ? (
+        <TopLessonPreviewSlide 
+          key="top-preview" 
+          scenario={data.topScenarios[0]}
+          userName={data.userName}
+        />
+      ) : (
+        <SelectScenarioSlide 
+          key="select" 
+          scenarios={data.topScenarios}
+          onSelect={handleScenarioSelect}
+          selectedId={selectedScenario || undefined}
+          userName={data.userName}
+        />
+      ),
+      <TopScenarioSlide key="top-scenario" scenario={selectedScenarioData} userName={data.userName} />,
+      <UniqueWordsSlide key="words" count={data.uniqueWordsMastered} userName={data.userName} />,
+      <PersonalizedMessageSlide 
+        key="thanks" 
         userName={data.userName}
-      />
-    ) : (
-      <SelectScenarioSlide 
-        key="select" 
-        scenarios={data.topScenarios}
-        onSelect={handleScenarioSelect}
-        selectedId={selectedScenario || undefined}
-        userName={data.userName}
-      />
-    ),
-    <TopScenarioSlide key="top-scenario" scenario={selectedScenarioData} userName={data.userName} />,
-    <UniqueWordsSlide key="words" count={data.uniqueWordsMastered} userName={data.userName} />,
-    <PersonalizedMessageSlide 
-      key="thanks" 
-      userName={data.userName}
-      message={data.personalizedMessage}
-      achievement={data.biggestAchievement}
-    />,
-  ], [data, selectedScenario, selectedScenarioData, handleScenarioSelect, captureMode, hideControls]);
+        message={data.personalizedMessage}
+        achievement={data.biggestAchievement}
+        totalMinutes={data.totalMinutes}
+        totalScenariosCompleted={data.totalScenariosCompleted}
+      />,
+    ];
+  }, [data, selectedScenario, selectedScenarioData, handleScenarioSelect, captureMode, hideControls, isEncouragementMode]);
 
   // Auto-select scenario when reaching selection slide in auto-play mode
   // Skip this if we're using the static preview slide (hideControls or captureMode)
@@ -2239,7 +2486,9 @@ export default function FluoverseWrapped({
               animate={{
                 width: currentSlide === index ? 24 : 6,
                 opacity: currentSlide === index ? 1 : 0.5,
-                backgroundColor: currentSlide === index ? "white" : "rgba(255, 255, 255, 0.5)",
+              }}
+              style={{
+                backgroundColor: currentSlide === index ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.5)",
               }}
               transition={{ duration: 0.3 }}
               onClick={() => {

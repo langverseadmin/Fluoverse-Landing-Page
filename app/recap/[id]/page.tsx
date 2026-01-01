@@ -1,18 +1,20 @@
 "use client";
 
-import RecapMobile from '@/components/RecapMobile';
-import type { RecapData } from '@/components/RecapMobile';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import RecapModal from '@/components/RecapModal';
+import type { RecapEmbeddedData } from '@/components/RecapEmbedded';
 
-// This would come from your API/database
-async function fetchRecapData(userId: string): Promise<RecapData | null> {
+// This is an example - replace with your actual data fetching
+async function fetchUserRecap(): Promise<RecapEmbeddedData | null> {
   // TODO: Replace with actual API call
-  // const response = await fetch(`/api/recap/${userId}`);
+  // const response = await fetch('/api/user/recap');
   // return await response.json();
-  
-  // Example data for now
+
+  // Example data
   return {
     userName: "Alex",
+    year: 2025,
     totalMinutes: 1250,
     totalSessions: 85,
     languagesLearned: ["English", "Spanish", "Greek"],
@@ -21,56 +23,55 @@ async function fetchRecapData(userId: string): Promise<RecapData | null> {
     totalConversations: 320,
     favoriteScenario: "Restaurant Ordering",
     levelProgress: 78,
-    year: 2025,
   };
 }
 
-export default function RecapPage({ params }: { params: { id: string } }) {
-  const [data, setData] = useState<RecapData | null>(null);
+export default function DashboardRecapPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const [showRecap, setShowRecap] = useState(true);
+  const [recapData, setRecapData] = useState<RecapEmbeddedData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchRecapData(params.id)
-      .then((recapData) => {
-        if (recapData) {
-          setData(recapData);
-        } else {
-          setError('Recap not found');
-        }
+    fetchUserRecap()
+      .then((data) => {
+        setRecapData(data);
         setLoading(false);
       })
-      .catch((err) => {
-        setError('Failed to load recap');
+      .catch((error) => {
+        console.error('Failed to load recap:', error);
         setLoading(false);
       });
-  }, [params.id]);
+  }, []);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading your recap...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">Loading your recap...</div>
       </div>
     );
   }
 
-  if (error || !data) {
+  if (!recapData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900 flex items-center justify-center">
-        <div className="text-white text-xl">{error || 'Recap not found'}</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">Unable to load recap</div>
       </div>
     );
   }
 
   return (
-    <RecapMobile 
-      data={data}
-      shareable={true}
+    <RecapModal
+      data={recapData}
+      isOpen={showRecap}
+      onClose={() => {
+        setShowRecap(false);
+        router.push('/dashboard'); // Navigate back to dashboard
+      }}
       onComplete={() => {
-        // Optional: Track completion
-        console.log('Recap completed');
+        console.log('Recap completed!');
+        // You can add analytics tracking here
       }}
     />
   );
 }
-

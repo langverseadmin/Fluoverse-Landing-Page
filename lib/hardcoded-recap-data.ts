@@ -95,6 +95,76 @@ export const HARDCODED_RECAP_DATA: Record<string, FluoverseWrappedData> = {
     personalizedMessage: 'Your class has made incredible progress this year!',
     biggestAchievement: 'Next year will be even greater!',
   },
+
+  // Konstantinos - Student who didn't do anything in 2025, encouraging for 2026
+  'konstantinos': {
+    userName: 'Konstantinos',
+    year: 2026, // Looking forward to 2026
+    totalMinutes: 0, // No minutes yet - but 2026 is the year to start!
+    learningAgeDays: 0, // Just starting the journey
+    totalScenariosCompleted: 0, // Ready to begin
+    topScenarios: [
+      {
+        lessonId: 'lesson-restaurant',
+        lessonTitle: 'First Dinner at a Local Restaurant',
+        completionCount: 0,
+        averageScore: 0,
+        totalTimeSpent: 0,
+      },
+      {
+        lessonId: 'lesson-supermarket',
+        lessonTitle: 'Shopping at the Supermarket',
+        completionCount: 0,
+        averageScore: 0,
+        totalTimeSpent: 0,
+      },
+      {
+        lessonId: 'lesson-christmas',
+        lessonTitle: 'Christmas Celebration',
+        completionCount: 0,
+        averageScore: 0,
+        totalTimeSpent: 0,
+      },
+    ],
+    uniqueWordsMastered: 0, // First words await you!
+    personalizedMessage: '2026 is your year to shine! 🌟 Join Fluoverse and start your language learning journey today!',
+    biggestAchievement: 'Your biggest achievement is yet to come! 🚀',
+  },
+
+  // Joey - Student who didn't do anything in 2025, encouraging for 2026
+  'joey': {
+    userName: 'Joey',
+    year: 2026, // Looking forward to 2026
+    totalMinutes: 0, // No minutes yet - but 2026 is the year to start!
+    learningAgeDays: 0, // Just starting the journey
+    totalScenariosCompleted: 0, // Ready to begin
+    topScenarios: [
+      {
+        lessonId: 'lesson-restaurant',
+        lessonTitle: 'First Dinner at a Local Restaurant',
+        completionCount: 0,
+        averageScore: 0,
+        totalTimeSpent: 0,
+      },
+      {
+        lessonId: 'lesson-supermarket',
+        lessonTitle: 'Shopping at the Supermarket',
+        completionCount: 0,
+        averageScore: 0,
+        totalTimeSpent: 0,
+      },
+      {
+        lessonId: 'lesson-christmas',
+        lessonTitle: 'Christmas Celebration',
+        completionCount: 0,
+        averageScore: 0,
+        totalTimeSpent: 0,
+      },
+    ],
+    uniqueWordsMastered: 0, // First words await you!
+    personalizedMessage: '2026 is your year to shine! 🌟 Join Fluoverse and start your language learning journey today!',
+    biggestAchievement: 'Your biggest achievement is yet to come! 🚀',
+  },
 };
 
 /**

@@ -33,7 +33,7 @@ const testimonials = [
 
 const stats = [
   {
-    value: "200+",
+    value: "300+",
     label: "Language Learners",
   },
   {

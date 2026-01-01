@@ -9,7 +9,7 @@ const stats = [
     label: "Minutes Spoken",
   },
   {
-    value: "200+",
+    value: "300+",
     label: "Active Learners",
   },
   {
