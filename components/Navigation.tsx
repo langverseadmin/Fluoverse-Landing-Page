@@ -21,6 +21,30 @@ export default function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Handle hash scrolling when page loads with a hash
+  useEffect(() => {
+    if (pathname === "/" && window.location.hash) {
+      const hash = window.location.hash;
+      const scrollToElement = () => {
+        const element = document.querySelector(hash);
+        if (element) {
+          // Get element position accounting for fixed navbar
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - 80; // Account for navbar height
+          
+          // Use window.scrollTo for better mobile compatibility
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      };
+      
+      // Wait for page to fully render
+      setTimeout(scrollToElement, 100);
+    }
+  }, [pathname]);
+
   const handleHashLink = (e: React.MouseEvent<HTMLAnchorElement>, hash: string, closeMenu: boolean = false) => {
     e.preventDefault();
     e.stopPropagation();
@@ -32,7 +56,7 @@ export default function Navigation() {
     
     // If we're not on the home page, navigate to home page with hash
     if (pathname !== "/") {
-      // Use window.location to navigate with hash (causes full reload but ensures hash works)
+      // Use window.location to navigate with hash (ensures hash is preserved and page scrolls)
       window.location.href = `/${hash}`;
     } else {
       // If we're on the home page, scroll to the section
@@ -69,6 +93,7 @@ export default function Navigation() {
     { name: "Benefits", href: "#benefits" },
     { name: "Community", href: "#community" },
     { name: "Testimonials", href: "#testimonials" },
+    { name: "Pricing", href: "/pricing" },
     { name: "Blog", href: "https://blog.fluoverse.com", external: true },
   ];
 
@@ -100,19 +125,24 @@ export default function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-7">
-            {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                target={item.external ? "_blank" : undefined}
-                rel={item.external ? "noopener noreferrer" : undefined}
-                onClick={item.external ? undefined : (e) => handleHashLink(e, item.href, false)}
-                className="group relative text-sm font-semibold tracking-tight text-white/70 transition-all duration-200 hover:text-white"
-              >
-                {item.name}
-                <span className="absolute left-0 -bottom-2 h-px w-full scale-0 bg-gradient-to-r from-accent-200 via-white to-primary-200 opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100" />
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const isHashLink = item.href.startsWith("#");
+              const isPageLink = !item.external && !isHashLink;
+              
+              return (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
+                  onClick={isHashLink ? (e) => handleHashLink(e, item.href, false) : undefined}
+                  className="group relative text-sm font-semibold tracking-tight text-white/70 transition-all duration-200 hover:text-white"
+                >
+                  {item.name}
+                  <span className="absolute left-0 -bottom-2 h-px w-full scale-0 bg-gradient-to-r from-accent-200 via-white to-primary-200 opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100" />
+                </a>
+              );
+            })}
             <div className="flex items-center space-x-3">
               <a
                 href="https://calendly.com/panosmoschos7/30min"
@@ -166,14 +196,21 @@ export default function Navigation() {
           >
             <div className="px-4 pt-4 pb-6 space-y-3" style={{ touchAction: 'manipulation' }}>
               {navItems.map((item) => {
+                const isHashLink = item.href.startsWith("#");
+                const isPageLink = !item.external && !isHashLink;
+                
                 const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
                   e.preventDefault();
                   e.stopPropagation();
                   
-                  if (!item.external) {
-                    handleHashLink(e, item.href, true);
-                  } else {
+                  if (item.external) {
                     window.open(item.href, '_blank', 'noopener,noreferrer');
+                    setIsMobileMenuOpen(false);
+                  } else if (isHashLink) {
+                    handleHashLink(e, item.href, true);
+                  } else if (isPageLink) {
+                    // Regular page link
+                    router.push(item.href);
                     setIsMobileMenuOpen(false);
                   }
                 };

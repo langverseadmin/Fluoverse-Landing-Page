@@ -33,20 +33,20 @@ const testimonials = [
 
 const stats = [
   {
-    value: "300+",
+    value: "500+",
     label: "Language Learners",
   },
   {
-    value: "10+",
+    value: "20+",
     label: "Tutors",
   },
   {
-    value: "1,500+",
+    value: "2,500+",
     label: "Conversations Started",
   },
   {
-    value: "70%+",
-    label: "Median Confidence Boost",
+    value: "7,500+",
+    label: "Minutes Spoken",
   },
 ];
 

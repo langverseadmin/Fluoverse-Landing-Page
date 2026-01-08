@@ -5,15 +5,15 @@ import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 
 const stats = [
   {
-    value: "5,000+",
+    value: "7,500+",
     label: "Minutes Spoken",
   },
   {
-    value: "300+",
+    value: "500+",
     label: "Active Learners",
   },
   {
-    value: "1,500+",
+    value: "2,500+",
     label: "Conversations Started",
   },
 ];
