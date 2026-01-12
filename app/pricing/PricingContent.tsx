@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Mail } from "lucide-react";
 import Link from "next/link";
+import { getAppUrl, getPricingRedirectUrl, getTutorCheckoutUrl } from "@/lib/config";
 
 const learnerPlans = [
   {
@@ -14,11 +15,10 @@ const learnerPlans = [
     features: [
       "Access to basic speaking practice",
       "Limited conversations per month",
-      "Community support",
-      "Basic progress tracking",
+      "Community scenarios",
     ],
     cta: "Get Started",
-    ctaLink: "https://fluoverseapp.netlify.app",
+    ctaLink: getAppUrl(),
     popular: false,
   },
   {
@@ -28,14 +28,14 @@ const learnerPlans = [
     description: "For serious learners",
     features: [
       "Unlimited conversations",
-      "Priority AI practice",
-      "Advanced progress analytics",
+      "Advanced speaking practice",
+      "Create custom scenarios",
+      "Access to Fluency Rooms for real speaking practice",
       "Priority support",
-      "Access to all premium features",
-      "Custom learning paths",
+      "Ability to shape the product",
     ],
-    cta: "Start Free Trial",
-    ctaLink: "#",
+    cta: "Experience Real Fluency",
+    ctaLink: getPricingRedirectUrl(),
     popular: true,
   },
 ];
@@ -46,15 +46,17 @@ const tutorPlan = {
   period: "per student",
   description: "Perfect for language tutors and educators",
   features: [
-    "Manage unlimited students",
-    "Student progress analytics",
-    "Assign custom scenarios",
-    "Track student performance",
-    "Classroom management tools",
+    "Assign speaking practice to your studentsbusiness write Unmatched Value ",
+    "Access to all premium features",
+    "Seamless dashboard analytics",
+    "Know what each student lacks",
+    "Save time with automated insights",
+    "Custom scenarios for the whole class",
     "Priority support",
   ],
-  cta: "Get Started",
-  ctaLink: "#",
+  cta: "Empower your students",
+  ctaLink: getTutorCheckoutUrl(),
+  badgeText: "Real Fluency",
 };
 
 const businessPlan = {
@@ -63,16 +65,20 @@ const businessPlan = {
   period: "pricing",
   description: "Tailored solutions for your organization",
   features: [
-    "Custom integrations",
-    "Dedicated account manager",
-    "Team management dashboard",
-    "Advanced analytics & reporting",
-    "Custom training programs",
-    "SLA guarantee",
+    "Access to all premium features",
+    "Seamless dashboard analytics",
+    "Unmatched pricing",
+    "Custom integrations with your tools",
+    "Priority custom scenario creation",
+    "Custom demos for your team",
+    "The full Fluoverse experience",
+    "Lightning fast support",
+    "Exclusive perks and features",
   ],
   cta: "Contact Us",
   ctaLink: "/contact",
   isContact: true,
+  badgeText: "Unmatched Value",
 };
 
 type TabType = "learners" | "tutors" | "businesses";
@@ -298,6 +304,7 @@ interface Plan {
   ctaLink: string;
   popular?: boolean;
   isContact?: boolean;
+  badgeText?: string;
 }
 
 function PricingCard({ plan, index, theme = "learners" }: { plan: Plan; index: number; theme?: TabType }) {
@@ -332,6 +339,19 @@ function PricingCard({ plan, index, theme = "learners" }: { plan: Plan; index: n
           }}
         >
           Most Popular
+        </div>
+      )}
+      {/* Custom Badge (e.g., Real Fluency for tutors) */}
+      {plan.badgeText && !plan.popular && (
+        <div
+          className="absolute top-0 right-0 text-white text-xs font-semibold px-4 py-1 rounded-bl-2xl rounded-tr-2xl"
+          style={{
+            background: themeColors.metallicGradient,
+            boxShadow: themeColors.metallicGlow,
+            textShadow: "0 0 10px rgba(0,0,0,0.5)",
+          }}
+        >
+          {plan.badgeText}
         </div>
       )}
 
@@ -404,12 +424,12 @@ function PricingCard({ plan, index, theme = "learners" }: { plan: Plan; index: n
           target={plan.ctaLink.startsWith("http") ? "_blank" : undefined}
           rel={plan.ctaLink.startsWith("http") ? "noopener noreferrer" : undefined}
           className={`block w-full text-center rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200 ${
-            plan.popular || plan.isContact
+            plan.popular || plan.isContact || plan.badgeText
               ? "text-white relative overflow-hidden"
               : "border border-white/15 bg-white/5 text-white/80 hover:border-white/30 hover:text-white hover:shadow-[0_10px_40px_rgba(255,255,255,0.08)]"
           }`}
           style={
-            plan.popular || plan.isContact
+            plan.popular || plan.isContact || plan.badgeText
               ? {
                   background: themeColors.metallicGradient,
                   boxShadow: `${themeColors.metallicGlow}, 0 10px 40px ${themeColors.buttonShadow}`,
@@ -418,12 +438,12 @@ function PricingCard({ plan, index, theme = "learners" }: { plan: Plan; index: n
               : undefined
           }
           onMouseEnter={(e) => {
-            if (plan.popular || plan.isContact) {
+            if (plan.popular || plan.isContact || plan.badgeText) {
               e.currentTarget.style.boxShadow = `${themeColors.metallicGlow}, 0 12px 50px ${themeColors.buttonHoverShadow}`;
             }
           }}
           onMouseLeave={(e) => {
-            if (plan.popular || plan.isContact) {
+            if (plan.popular || plan.isContact || plan.badgeText) {
               e.currentTarget.style.boxShadow = `${themeColors.metallicGlow}, 0 10px 40px ${themeColors.buttonShadow}`;
             }
           }}

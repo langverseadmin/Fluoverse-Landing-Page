@@ -1,3 +1,5 @@
+import { getAppUrl, APP_STORE_URLS } from './config';
+
 /**
  * Check if the device is mobile or tablet
  */
@@ -17,7 +19,7 @@ export function isMobileDevice(): boolean {
  */
 export function getFluoverseUrl(): string {
   if (typeof window === 'undefined') {
-    return 'https://fluoverseapp.netlify.app/';
+    return getAppUrl();
   }
 
   const userAgent = window.navigator.userAgent.toLowerCase();
@@ -26,17 +28,16 @@ export function getFluoverseUrl(): string {
 
   if (isIOS) {
     // iOS App Store link - will open app if installed, store if not
-    return 'https://apps.apple.com/gr/app/fluoverse/id6755234538';
+    return APP_STORE_URLS.ios;
   } else if (isAndroid) {
     // Try direct Play Store link first (if package name is correct)
     // Falls back to search if package not found
     // Note: If app is installed and App Links are configured, this will open the app
-    const packageName = 'com.fluoverse.app';
-    return `https://play.google.com/store/apps/details?id=${packageName}`;
+    return APP_STORE_URLS.android;
   }
 
   // Desktop or unknown - use web app
-  return 'https://fluoverseapp.netlify.app/';
+  return getAppUrl();
 }
 
 /**
@@ -55,12 +56,11 @@ export function openFluoverseApp(): void {
     // Note: Custom URL schemes (fluoverse://) require configuration in the iOS app's Info.plist
     // Since the scheme isn't registered, we use the App Store link
     // If the app is installed, the App Store page will show an "Open" button
-    const appStoreUrl = 'https://apps.apple.com/gr/app/fluoverse/id6755234538';
-    window.location.href = appStoreUrl;
+    window.location.href = APP_STORE_URLS.ios;
   } else if (isAndroid) {
     // Use Android Intent URL which handles fallback automatically
     const packageName = 'com.fluoverse.app';
-    const playStoreUrl = `https://play.google.com/store/apps/details?id=${packageName}`;
+    const playStoreUrl = APP_STORE_URLS.android;
     
     // Intent URL tries app first, then falls back to Play Store
     const intentUrl = `intent://open#Intent;scheme=fluoverse;package=${packageName};S.browser_fallback_url=${encodeURIComponent(playStoreUrl)};end`;
@@ -68,6 +68,6 @@ export function openFluoverseApp(): void {
     window.location.href = intentUrl;
   } else {
     // Desktop - just open web app
-    window.open('https://fluoverseapp.netlify.app/', '_blank');
+    window.open(getAppUrl(), '_blank');
   }
 }
