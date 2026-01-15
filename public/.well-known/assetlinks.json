@@ -1,0 +1,14 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.fluoverse.app",
+      "sha256_cert_fingerprints": [
+        "FE:66:C9:0B:A8:E5:30:74:AC:FC:B2:73:73:F3:69:1F:A7:C2:5B:BD:E2:30:E3:DC:E7:10:79:96:BB:B7:42:8C"
+      ]
+    }
+  }
+]
+
+
