@@ -19,6 +19,18 @@
   to = "/.well-known/assetlinks.json"
   status = 200
 
+[[redirects]]
+  from = "/r"
+  to = "https://fluoverseapp.netlify.app"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/r/*"
+  to = "https://fluoverseapp.netlify.app/:splat"
+  status = 302
+  force = true
+
 [[headers]]
   for = "/_next/static/*"
   [headers.values]
