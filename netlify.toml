@@ -9,6 +9,16 @@
 [build.environment]
   NODE_VERSION = "18"
 
+[[redirects]]
+  from = "/.well-known/apple-app-site-association"
+  to = "/.well-known/apple-app-site-association"
+  status = 200
+
+[[redirects]]
+  from = "/.well-known/assetlinks.json"
+  to = "/.well-known/assetlinks.json"
+  status = 200
+
 [[headers]]
   for = "/_next/static/*"
   [headers.values]
