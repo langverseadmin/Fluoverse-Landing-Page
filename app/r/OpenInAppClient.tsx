@@ -1,6 +1,6 @@
 'use client'
 
-import { APP_STORE_URLS, getAppUrl } from '@/lib/config'
+import { getAppUrl } from '@/lib/config'
 import { useMemo } from 'react'
 
 function isIOS(): boolean {
@@ -22,6 +22,7 @@ export default function OpenInAppClient({ path }: { path: string }) {
 
   const onOpen = () => {
     const deepPath = path.startsWith('/') ? path : `/${path}`
+    const universalUrl = `https://fluoverse.com${deepPath}`
 
     // Try to open the native app (best-effort). If it fails, we fall back.
     if (isAndroid()) {
@@ -33,13 +34,13 @@ export default function OpenInAppClient({ path }: { path: string }) {
     }
 
     if (isIOS()) {
-      // iOS Universal Links should open automatically in Safari if configured.
-      // This is a best-effort explicit deep link attempt (requires the app to register the scheme).
-      const schemeUrl = `fluoverse://${deepPath.replace(/^\//, '')}`
-      window.location.href = schemeUrl
-      window.setTimeout(() => {
-        window.location.href = APP_STORE_URLS.ios
-      }, 1200)
+      // iOS: use the Universal Link itself (no custom scheme).
+      // If we're already on it, reload to re-trigger OS handling in some contexts.
+      if (window.location.href === universalUrl) {
+        window.location.reload()
+      } else {
+        window.location.href = universalUrl
+      }
       return
     }
 
@@ -48,7 +49,7 @@ export default function OpenInAppClient({ path }: { path: string }) {
   }
 
   return (
-    <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+    <div className="flex flex-col gap-3 sm:flex-row">
       <button
         type="button"
         onClick={onOpen}
@@ -61,12 +62,6 @@ export default function OpenInAppClient({ path }: { path: string }) {
         className="inline-flex items-center justify-center rounded-xl border border-black/15 bg-white px-5 py-3 text-black hover:bg-black/5"
       >
         Continue on web
-      </a>
-      <a
-        href={isIOS() ? APP_STORE_URLS.ios : APP_STORE_URLS.android}
-        className="inline-flex items-center justify-center rounded-xl border border-black/15 bg-white px-5 py-3 text-black hover:bg-black/5"
-      >
-        Get the app
       </a>
     </div>
   )
