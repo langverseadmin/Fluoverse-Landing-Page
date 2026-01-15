@@ -14,20 +14,30 @@ function isAndroid(): boolean {
 }
 
 export default function OpenInAppClient({ path }: { path: string }) {
+  const fallbackPath = useMemo(() => {
+    // Our website deep links are under /r/..., but the Flutter web app typically routes without /r.
+    // Example: /r/micro -> /micro
+    if (path === '/r') return '/'
+    if (path.startsWith('/r/')) return path.replace(/^\/r/, '')
+    return path.startsWith('/') ? path : `/${path}`
+  }, [path])
+
   const continueUrl = useMemo(() => {
     const base = getAppUrl()
-    const cleanPath = path.startsWith('/') ? path : `/${path}`
-    return `${base}${cleanPath}`
-  }, [path])
+    return `${base}${fallbackPath}`
+  }, [fallbackPath])
 
   const onOpen = () => {
     const deepPath = path.startsWith('/') ? path : `/${path}`
-    const universalUrl = `https://fluoverse.com${deepPath}`
+    const search = typeof window !== 'undefined' ? window.location.search : ''
+    const universalUrl = `https://fluoverse.com${deepPath}${search}`
+    const continueUrlWithQuery = `${continueUrl}${search}`
+    const deepPathWithQuery = `${deepPath}${search}`
 
     // Try to open the native app (best-effort). If it fails, we fall back.
     if (isAndroid()) {
-      const intentUrl = `intent://fluoverse.com${deepPath}#Intent;scheme=https;package=com.fluoverse.app;S.browser_fallback_url=${encodeURIComponent(
-        continueUrl,
+      const intentUrl = `intent://fluoverse.com${deepPathWithQuery}#Intent;scheme=https;package=com.fluoverse.app;S.browser_fallback_url=${encodeURIComponent(
+        continueUrlWithQuery,
       )};end`
       window.location.href = intentUrl
       return
@@ -45,7 +55,7 @@ export default function OpenInAppClient({ path }: { path: string }) {
     }
 
     // Desktop/other: go to the web experience.
-    window.location.href = continueUrl
+    window.location.href = continueUrlWithQuery
   }
 
   return (
@@ -58,7 +68,7 @@ export default function OpenInAppClient({ path }: { path: string }) {
         Open Fluoverse
       </button>
       <a
-        href={continueUrl}
+        href={`${continueUrl}${typeof window !== 'undefined' ? window.location.search : ''}`}
         className="inline-flex items-center justify-center rounded-xl border border-black/15 bg-white px-5 py-3 text-black hover:bg-black/5"
       >
         Continue on web
