@@ -4,7 +4,9 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 
-const testimonials = [
+type TestimonialsTab = "learners" | "tutors";
+
+const baseTestimonials = [
   {
     name: "Hassan El Sayed",
     role: "Language Learner",
@@ -31,26 +33,36 @@ const testimonials = [
   },
 ];
 
+const tutorTestimonial = {
+  name: "Konstantinos Krouskas",
+  role: "Greek Language Teacher",
+  image: "/testimonials/Konstantinos_Krouskas.jpg",
+  quote: "Fluoverse has been an excellent discovery. I have recommended Fluoverse to many of my students, and the feedback has been overwhelmingly positive.",
+
+};
+
 const stats = [
   {
-    value: "500+",
+    value: "1000+",
     label: "Language Learners",
   },
   {
-    value: "20+",
+    value: "40+",
     label: "Tutors",
   },
   {
-    value: "2,500+",
+    value: "5,000+",
     label: "Conversations Started",
   },
   {
-    value: "7,500+",
+    value: "10,000+",
     label: "Minutes Spoken",
   },
 ];
 
-export default function Testimonials() {
+export default function Testimonials({ activeTab = "learners" }: { activeTab?: TestimonialsTab }) {
+  const testimonials = activeTab === "tutors" ? [tutorTestimonial, ...baseTestimonials.slice(1)] : baseTestimonials;
+
   return (
     <section id="testimonials" className="py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -247,7 +259,7 @@ function StatCard({ stat, index }: { stat: { value: string; label: string }; ind
   );
 }
 
-function TestimonialCard({ testimonial, stat, index, startWithStat }: { testimonial: typeof testimonials[0], stat: typeof stats[0], index: number, startWithStat: boolean }) {
+function TestimonialCard({ testimonial, stat, index, startWithStat }: { testimonial: typeof baseTestimonials[0], stat: typeof stats[0], index: number, startWithStat: boolean }) {
   const [imageError, setImageError] = useState(false);
   
   return (

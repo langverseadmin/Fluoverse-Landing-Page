@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     default: "Fluoverse - Empowering every voice to speak with confidence | Authentic Speaking Practice",
     template: "%s | Fluoverse",
   },
-  description: "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking exercises at home, practice with real people or the AI, and build fluency through authentic conversations. Join 300+ active learners speaking with confidence.",
+  description: "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking exercises at home, practice with real people or the AI, and build fluency through authentic conversations. Join 1000+ active learners speaking with confidence.",
   keywords: [
     "Fluoverse",
     "Spanish Learning",

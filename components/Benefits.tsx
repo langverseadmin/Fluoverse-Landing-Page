@@ -18,7 +18,7 @@ interface ConfidenceUser {
 // Carousel Card Component - Static display for infinite scroll (no gaps, no shadows)
 function CarouselCard({ user }: { user: ConfidenceUser }) {
   return (
-    <div className="flex-shrink-0 w-24 sm:w-28 md:w-32 relative">
+    <div className="flex-shrink-0 w-32 sm:w-36 md:w-40 relative">
       <div className="relative w-full aspect-square overflow-hidden">
         <Image 
           src={user.src} 
@@ -27,6 +27,18 @@ function CarouselCard({ user }: { user: ConfidenceUser }) {
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
+        
+        {/* Confidence Boost Badge */}
+        <div className="absolute top-2 right-2 z-10">
+          <div className="bg-gradient-to-br from-green-400 via-green-500 to-emerald-600 text-white text-[10px] sm:text-[11px] font-black px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md">
+            <span className="flex items-center gap-0.5">
+              <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clipRule="evenodd" />
+              </svg>
+              <span className="tabular-nums">{user.boost}%</span>
+            </span>
+          </div>
+        </div>
         
         {/* User Info with Progress Bar */}
         <div className="absolute bottom-0 left-0 right-0 p-2">
@@ -41,8 +53,8 @@ function CarouselCard({ user }: { user: ConfidenceUser }) {
           <p className="text-white font-semibold text-[11px] sm:text-xs truncate">{user.name}</p>
           
           {/* Progress Bar */}
-          <div className="mt-1 flex items-center gap-2">
-            <div className="flex-1 h-1.5 sm:h-2 bg-black/40 rounded-full overflow-hidden relative">
+          <div className="mt-1 relative">
+            <div className="h-1.5 sm:h-2 bg-black/40 rounded-full overflow-hidden">
               <div 
                 className="h-full rounded-full"
                 style={{ 
@@ -51,7 +63,6 @@ function CarouselCard({ user }: { user: ConfidenceUser }) {
                 }}
               />
             </div>
-            <span className="text-white text-[10px] sm:text-[11px] font-bold tabular-nums whitespace-nowrap">{user.boost}%</span>
           </div>
         </div>
       </div>
@@ -208,6 +219,8 @@ function ConfidenceCard({ user, index }: { user: ConfidenceUser; index: number }
     </motion.div>
   );
 }
+
+type TabType = "learners" | "tutors";
 
 const learnerBenefits = [
   {
@@ -950,9 +963,24 @@ function BenefitMockup({ type, isReversed }: { type: string; isReversed: boolean
   );
 }
 
-export default function Benefits() {
-  const [activeTab, setActiveTab] = useState<"learners" | "tutors">("learners");
-  const benefits = activeTab === "learners" ? learnerBenefits : tutorBenefits;
+type BenefitsProps = {
+  activeTab?: TabType;
+  onTabChange?: (tab: TabType) => void;
+};
+
+export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
+  const [internalTab, setInternalTab] = useState<TabType>("learners");
+  const currentTab = activeTab ?? internalTab;
+  const setTab = (tab: TabType) => {
+    if (!activeTab) {
+      setInternalTab(tab);
+    }
+    if (onTabChange) {
+      onTabChange(tab);
+    }
+  };
+
+  const benefits = currentTab === "learners" ? learnerBenefits : tutorBenefits;
 
   return (
     <section id="benefits" className="py-24 overflow-hidden">
@@ -976,9 +1004,9 @@ export default function Benefits() {
           {/* Tab Switcher */}
           <div className="inline-flex items-center p-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mt-2">
             <button
-              onClick={() => setActiveTab("learners")}
+              onClick={() => setTab("learners")}
               className={`relative flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                activeTab === "learners"
+                currentTab === "learners"
                   ? "text-white"
                   : "text-white/60 hover:text-white/80"
               }`}
@@ -994,9 +1022,9 @@ export default function Benefits() {
               <span className="relative z-10">For Learners</span>
             </button>
             <button
-              onClick={() => setActiveTab("tutors")}
+              onClick={() => setTab("tutors")}
               className={`relative flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                activeTab === "tutors"
+                currentTab === "tutors"
                   ? "text-white"
                   : "text-white/60 hover:text-white/80"
               }`}
@@ -1169,7 +1197,7 @@ export default function Benefits() {
                     <div className="dots_border"></div>
                     <div className="sparkle premium-icon-wrapper">
                       <div className="icon-glow"></div>
-                      <Play className="premium-icon" />
+                      <Play className="w-7 h-7 premium-icon" />
                     </div>
                     <span className="text_button">
                       Try Fluoverse
@@ -1185,7 +1213,7 @@ export default function Benefits() {
                     <div className="dots_border"></div>
                     <div className="sparkle premium-icon-wrapper">
                       <div className="icon-glow"></div>
-                      <Phone className="premium-icon" />
+                      <Phone className="w-7 h-7 premium-icon" />
                     </div>
                     <span className="text_button">
                       Book a Call
