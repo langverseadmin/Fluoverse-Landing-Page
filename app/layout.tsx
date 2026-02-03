@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 export const metadata: Metadata = {
   metadataBase: new URL("https://fluoverse.com"),
   title: {
-    default: "Fluoverse - Empowering every voice to speak with confidence | Authentic Speaking Practice",
+    default: "Fluoverse - Language Learning for the Real World | Authentic Speaking Practice",
     template: "%s | Fluoverse",
   },
   description: "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking exercises at home, practice with real people or the AI, and build fluency through authentic conversations. Join 1000+ active learners speaking with confidence.",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://fluoverse.com",
     siteName: "Fluoverse",
-    title: "Fluoverse - Empowering every voice to speak with confidence | Authentic Speaking Practice",
+    title: "Fluoverse - Language Learning for the Real World | Authentic Speaking Practice",
     description: "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking exercises at home and practice with real people or the AI. Build fluency through authentic conversations.",
     images: [
       {
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fluoverse - Empowering every voice to speak with confidence",
+    title: "Fluoverse - Language Learning for the Real World",
     description: "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking at home and practice with real people or the AI to build fluency.",
     images: ["https://fluoverse.com/android-chrome-512x512.png"],
     creator: "@fluoverse",
@@ -117,7 +117,7 @@ export default function RootLayout({
     "name": "Fluoverse",
     "url": "https://fluoverse.com",
     "logo": "https://fluoverse.com/android-chrome-512x512.png",
-    "description": "Empowering every voice to speak with confidence. Experience authentic speaking practice in English, Spanish, and Greek through immersive, interactive conversations with real people or the AI.",
+    "description": "Language Learning for the Real World. Experience authentic speaking practice in English, Spanish, and Greek through immersive, interactive conversations with real people or the AI.",
     "foundingDate": "2024",
     "sameAs": [
       "https://twitter.com/fluoverse",

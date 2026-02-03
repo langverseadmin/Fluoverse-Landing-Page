@@ -105,9 +105,9 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-semibold mb-16 text-white/90 leading-tight"
             >
-              Empowering Every Voice to{" "}
+              Language Learning for the{" "}
               <br />
-              Speak with <span className="text-purple-400">Confidence</span>
+              <span className="text-purple-400">Real World</span>
             </motion.h1>
 
             {/* App Download Buttons */}
