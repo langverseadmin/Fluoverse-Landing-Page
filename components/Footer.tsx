@@ -22,6 +22,17 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  // Track external link clicks in GA
+  const trackLinkClick = (linkName: string, linkUrl: string) => {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "link_click", {
+        event_category: "engagement",
+        event_label: linkName,
+        link_url: linkUrl,
+        link_domain: new URL(linkUrl).hostname,
+      });
+    }
+  };
   return (
     <footer className="relative bg-white/5 backdrop-blur-sm border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -112,6 +123,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
+                  onClick={() => trackLinkClick(social.label, social.href)}
                   className={`social-icon relative w-11 h-11 rounded-full border border-white/20 flex items-center justify-center transition-colors duration-300 overflow-hidden ${
                     isTikTok ? "text-white" : "text-white/70"
                   }`}

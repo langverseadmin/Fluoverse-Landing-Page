@@ -13,6 +13,18 @@ export default function Navigation() {
   const pathname = usePathname();
   const router = useRouter();
 
+  // Track external link clicks in GA
+  const trackLinkClick = (linkName: string, linkUrl: string) => {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "link_click", {
+        event_category: "engagement",
+        event_label: linkName,
+        link_url: linkUrl,
+        link_domain: new URL(linkUrl).hostname,
+      });
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -135,7 +147,13 @@ export default function Navigation() {
                   href={item.href}
                   target={item.external ? "_blank" : undefined}
                   rel={item.external ? "noopener noreferrer" : undefined}
-                  onClick={isHashLink ? (e) => handleHashLink(e, item.href, false) : undefined}
+                  onClick={(e) => {
+                    if (isHashLink) {
+                      handleHashLink(e, item.href, false);
+                    } else if (item.external) {
+                      trackLinkClick(item.name, item.href);
+                    }
+                  }}
                   className="group relative text-sm font-semibold tracking-tight text-white/70 transition-all duration-200 hover:text-white"
                 >
                   {item.name}
@@ -148,6 +166,7 @@ export default function Navigation() {
                 href="https://calendly.com/panosmoschos7/30min"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackLinkClick("Book a call", "https://calendly.com/panosmoschos7/30min")}
                 className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 transition-all duration-200 hover:border-white/30 hover:text-white hover:shadow-[0_10px_40px_rgba(255,255,255,0.08)]"
               >
                 Book a call
@@ -204,6 +223,7 @@ export default function Navigation() {
                   e.stopPropagation();
                   
                   if (item.external) {
+                    trackLinkClick(item.name, item.href);
                     window.open(item.href, '_blank', 'noopener,noreferrer');
                     setIsMobileMenuOpen(false);
                   } else if (isHashLink) {
@@ -247,6 +267,7 @@ export default function Navigation() {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
+                    trackLinkClick("Book a call", "https://calendly.com/panosmoschos7/30min");
                     window.open('https://calendly.com/panosmoschos7/30min', '_blank', 'noopener,noreferrer');
                     setIsMobileMenuOpen(false);
                   }}
