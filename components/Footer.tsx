@@ -24,8 +24,9 @@ const socialLinks = [
 export default function Footer() {
   // Track external link clicks in GA
   const trackLinkClick = (linkName: string, linkUrl: string) => {
-    if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("event", "link_click", {
+    const w = window as typeof window & { gtag?: (...args: unknown[]) => void };
+    if (typeof window !== "undefined" && w.gtag) {
+      w.gtag("event", "link_click", {
         event_category: "engagement",
         event_label: linkName,
         link_url: linkUrl,
