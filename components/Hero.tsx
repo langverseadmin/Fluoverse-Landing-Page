@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Star, User, MessageCircle, BookOpen, CheckCircle2, BarChart3, Share2, Settings, MessageSquare, Users, Plane, ShoppingCart, UtensilsCrossed, Pill } from "lucide-react";
+import { trackHeroDownloadAppStore, trackHeroDownloadGooglePlay } from "@/lib/analytics";
 
 export default function Hero() {
   const [selectedLanguage, setSelectedLanguage] = useState<"en" | "es" | "el">("en");
@@ -122,6 +123,7 @@ export default function Hero() {
                 href="https://fluoverse.onelink.me/zcI3/9242fe8w"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackHeroDownloadAppStore()}
                 className="group bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-200 flex items-center shadow-lg hover:shadow-xl overflow-hidden h-14 px-4"
                 style={{ boxShadow: '0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1)' }}
               >
@@ -143,6 +145,7 @@ export default function Hero() {
                 href="https://fluoverse.onelink.me/zcI3/9242fe8w"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackHeroDownloadGooglePlay()}
                 className="group bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-200 flex items-center shadow-lg hover:shadow-xl overflow-hidden h-14"
                 style={{ boxShadow: '0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1)' }}
               >

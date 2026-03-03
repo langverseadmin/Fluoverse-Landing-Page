@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Mail, Youtube, Linkedin, Instagram } from "lucide-react";
 import { motion } from "framer-motion";
+import { trackFooterSocialClick } from "@/lib/analytics";
 
 const socialLinks = [
   { icon: Linkedin, href: "https://www.linkedin.com/company/fluoverse", label: "LinkedIn", color: "#0077B5" },
@@ -22,18 +23,6 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  // Track external link clicks in GA
-  const trackLinkClick = (linkName: string, linkUrl: string) => {
-    const w = window as typeof window & { gtag?: (...args: unknown[]) => void };
-    if (typeof window !== "undefined" && w.gtag) {
-      w.gtag("event", "link_click", {
-        event_category: "engagement",
-        event_label: linkName,
-        link_url: linkUrl,
-        link_domain: new URL(linkUrl).hostname,
-      });
-    }
-  };
   return (
     <footer className="relative bg-white/5 backdrop-blur-sm border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -124,7 +113,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  onClick={() => trackLinkClick(social.label, social.href)}
+                  onClick={() => trackFooterSocialClick(social.label)}
                   className={`social-icon relative w-11 h-11 rounded-full border border-white/20 flex items-center justify-center transition-colors duration-300 overflow-hidden ${
                     isTikTok ? "text-white" : "text-white/70"
                   }`}

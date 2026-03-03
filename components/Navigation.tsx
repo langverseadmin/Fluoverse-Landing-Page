@@ -6,6 +6,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { getFluoverseUrl, isMobileDevice, openFluoverseApp } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import {
+  trackNavGetStarted,
+  trackNavBookCall,
+  trackNavLink,
+  trackNavMobileMenuToggle,
+} from "@/lib/analytics";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -13,18 +19,6 @@ export default function Navigation() {
   const pathname = usePathname();
   const router = useRouter();
 
-  // Track external link clicks in GA
-  const trackLinkClick = (linkName: string, linkUrl: string) => {
-    const w = window as typeof window & { gtag?: (...args: unknown[]) => void };
-    if (typeof window !== "undefined" && w.gtag) {
-      w.gtag("event", "link_click", {
-        event_category: "engagement",
-        event_label: linkName,
-        link_url: linkUrl,
-        link_domain: new URL(linkUrl).hostname,
-      });
-    }
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -150,9 +144,12 @@ export default function Navigation() {
                   rel={item.external ? "noopener noreferrer" : undefined}
                   onClick={(e) => {
                     if (isHashLink) {
+                      trackNavLink(item.name, "desktop");
                       handleHashLink(e, item.href, false);
                     } else if (item.external) {
-                      trackLinkClick(item.name, item.href);
+                      trackNavLink(item.name, "desktop");
+                    } else {
+                      trackNavLink(item.name, "desktop");
                     }
                   }}
                   className="group relative text-sm font-semibold tracking-tight text-white/70 transition-all duration-200 hover:text-white"
@@ -167,7 +164,7 @@ export default function Navigation() {
                 href="https://calendly.com/panosmoschos7/30min"
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => trackLinkClick("Book a call", "https://calendly.com/panosmoschos7/30min")}
+                onClick={() => trackNavBookCall("desktop")}
                 className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 transition-all duration-200 hover:border-white/30 hover:text-white hover:shadow-[0_10px_40px_rgba(255,255,255,0.08)]"
               >
                 Book a call
@@ -177,6 +174,7 @@ export default function Navigation() {
                 target={isMobileDevice() ? undefined : "_blank"}
                 rel={isMobileDevice() ? undefined : "noopener noreferrer"}
                 onClick={(e) => {
+                  trackNavGetStarted("desktop");
                   if (isMobileDevice()) {
                     e.preventDefault();
                     openFluoverseApp();
@@ -192,7 +190,11 @@ export default function Navigation() {
           {/* Mobile Menu Button */}
           <button
             className="md:hidden p-2 text-white"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={() => {
+              const next = !isMobileMenuOpen;
+              setIsMobileMenuOpen(next);
+              trackNavMobileMenuToggle(next);
+            }}
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? (
@@ -222,15 +224,14 @@ export default function Navigation() {
                 const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  trackNavLink(item.name, "mobile");
                   
                   if (item.external) {
-                    trackLinkClick(item.name, item.href);
                     window.open(item.href, '_blank', 'noopener,noreferrer');
                     setIsMobileMenuOpen(false);
                   } else if (isHashLink) {
                     handleHashLink(e, item.href, true);
                   } else if (isPageLink) {
-                    // Regular page link
                     router.push(item.href);
                     setIsMobileMenuOpen(false);
                   }
@@ -268,7 +269,7 @@ export default function Navigation() {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    trackLinkClick("Book a call", "https://calendly.com/panosmoschos7/30min");
+                    trackNavBookCall("mobile");
                     window.open('https://calendly.com/panosmoschos7/30min', '_blank', 'noopener,noreferrer');
                     setIsMobileMenuOpen(false);
                   }}
@@ -290,6 +291,7 @@ export default function Navigation() {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
+                    trackNavGetStarted("mobile");
                     if (isMobileDevice()) {
                       openFluoverseApp();
                     } else {
