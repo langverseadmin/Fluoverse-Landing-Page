@@ -166,8 +166,8 @@ export default function RootLayout({
     ],
     "inLanguage": ["en", "es", "el"],
     "downloadUrl": [
-      "https://apps.apple.com/gr/app/fluoverse/id6755234538",
-      "https://play.google.com/store/search?q=Fluoverse&c=apps&hl=en"
+      "https://fluoverse.onelink.me/zcI3/9242fe8w",
+      "https://fluoverse.onelink.me/zcI3/9242fe8w"
     ]
   };
 

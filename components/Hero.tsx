@@ -119,7 +119,7 @@ export default function Hero() {
             >
               {/* App Store Button - Official Badge */}
               <a
-                href="https://apps.apple.com/gr/app/fluoverse/id6755234538"
+                href="https://fluoverse.onelink.me/zcI3/9242fe8w"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-200 flex items-center shadow-lg hover:shadow-xl overflow-hidden h-14 px-4"
@@ -140,7 +140,7 @@ export default function Hero() {
 
               {/* Google Play Button */}
               <a
-                href="https://play.google.com/store/search?q=Fluoverse&c=apps&hl=en"
+                href="https://fluoverse.onelink.me/zcI3/9242fe8w"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-200 flex items-center shadow-lg hover:shadow-xl overflow-hidden h-14"

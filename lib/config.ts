@@ -45,7 +45,7 @@ export function getTutorCheckoutUrl(): string {
  * App Store and Play Store URLs
  */
 export const APP_STORE_URLS = {
-  ios: 'https://apps.apple.com/gr/app/fluoverse/id6755234538',
-  android: 'https://play.google.com/store/apps/details?id=com.fluoverse.app',
+  ios: 'https://fluoverse.onelink.me/zcI3/9242fe8w',
+  android: 'https://fluoverse.onelink.me/zcI3/9242fe8w',
 } as const;
 
