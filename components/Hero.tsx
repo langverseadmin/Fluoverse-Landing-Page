@@ -5,10 +5,25 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Star, User, MessageCircle, BookOpen, CheckCircle2, BarChart3, Share2, Settings, MessageSquare, Users, Plane, ShoppingCart, UtensilsCrossed, Pill } from "lucide-react";
 import { trackHeroDownloadAppStore, trackHeroDownloadGooglePlay } from "@/lib/analytics";
+import { APP_ONELINK_URL, APP_STORE_WEB_URLS } from "@/lib/config";
+import { isMobileDevice } from "@/lib/utils";
 
 export default function Hero() {
   const [selectedLanguage, setSelectedLanguage] = useState<"en" | "es" | "el">("en");
+  const [appStoreHref, setAppStoreHref] = useState<string>(
+    APP_STORE_WEB_URLS.ios
+  );
+  const [playStoreHref, setPlayStoreHref] = useState<string>(
+    APP_STORE_WEB_URLS.android
+  );
   const cycleTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (isMobileDevice()) {
+      setAppStoreHref(APP_ONELINK_URL);
+      setPlayStoreHref(APP_ONELINK_URL);
+    }
+  }, []);
 
   const languageConfig = {
     en: {
@@ -120,7 +135,7 @@ export default function Hero() {
             >
               {/* App Store Button - Official Badge */}
               <a
-                href="https://fluoverse.onelink.me/zcI3/9242fe8w"
+                href={appStoreHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackHeroDownloadAppStore()}
@@ -142,7 +157,7 @@ export default function Hero() {
 
               {/* Google Play Button */}
               <a
-                href="https://fluoverse.onelink.me/zcI3/9242fe8w"
+                href={playStoreHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackHeroDownloadGooglePlay()}
