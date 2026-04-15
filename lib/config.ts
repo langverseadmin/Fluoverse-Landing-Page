@@ -41,24 +41,19 @@ export function getTutorCheckoutUrl(): string {
   return getAppUrlWithPath('/#/tutor-license-checkout');
 }
 
-/** AppsFlyer one-link used on mobile web (hero + deep links). */
-export const APP_ONELINK_URL =
-  'https://fluoverse.onelink.me/zcI3/9242fe8w' as const;
-
 /**
- * App Store and Play Store URLs (mobile “open app” / one-link flows)
- */
-export const APP_STORE_URLS = {
-  ios: APP_ONELINK_URL,
-  android: APP_ONELINK_URL,
-} as const;
-
-/**
- * Direct store listings for desktop browsers (hero store badges)
+ * Direct store listings used across all browser/device flows.
+ * Keep these URLs in sync with the live app store listings.
  */
 export const APP_STORE_WEB_URLS = {
   ios: 'https://apps.apple.com/il/app/fluoverse/id6755234538',
   android:
     'https://play.google.com/store/apps/details?id=com.fluoverse.app&hl=en',
 } as const;
+
+/**
+ * App Store and Play Store URLs used by mobile open-app helpers.
+ * Intentionally mirrors APP_STORE_WEB_URLS to avoid one-link routing.
+ */
+export const APP_STORE_URLS = APP_STORE_WEB_URLS;
 
