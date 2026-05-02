@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { getFluoverseUrl, isMobileDevice, openFluoverseApp } from "@/lib/utils";
+import { trackCtaStartLearningFree } from "@/lib/analytics";
 
 export default function CTA() {
   return (
@@ -51,6 +52,7 @@ export default function CTA() {
               target={isMobileDevice() ? undefined : "_blank"}
               rel={isMobileDevice() ? undefined : "noopener noreferrer"}
               onClick={(e) => {
+                trackCtaStartLearningFree();
                 if (isMobileDevice()) {
                   e.preventDefault();
                   openFluoverseApp();

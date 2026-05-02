@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Mail, Youtube, Linkedin, Instagram } from "lucide-react";
 import { motion } from "framer-motion";
+import { trackFooterSocialClick } from "@/lib/analytics";
 
 const socialLinks = [
   { icon: Linkedin, href: "https://www.linkedin.com/company/fluoverse", label: "LinkedIn", color: "#0077B5" },
@@ -112,6 +113,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
+                  onClick={() => trackFooterSocialClick(social.label)}
                   className={`social-icon relative w-11 h-11 rounded-full border border-white/20 flex items-center justify-center transition-colors duration-300 overflow-hidden ${
                     isTikTok ? "text-white" : "text-white/70"
                   }`}

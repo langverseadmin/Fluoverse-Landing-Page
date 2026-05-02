@@ -6,6 +6,15 @@ import { GraduationCap, Users, Globe, Sparkles, Mic, BarChart3, TrendingUp, Targ
 import Image from "next/image";
 import "flag-icons/css/flag-icons.min.css";
 import { getFluoverseUrl, isMobileDevice, openFluoverseApp } from "@/lib/utils";
+import {
+  trackBenefitsTabSwitch,
+  trackBenefitsCtaTryFluoverse,
+  trackBenefitsCtaBookCall,
+  trackBenefitsScenarioOpenFluoverse,
+  trackBenefitsVoiceTestPlay,
+  trackBenefitsVoiceTestStop,
+  trackBenefitsVoiceLanguageSelect,
+} from "@/lib/analytics";
 
 // User type for confidence cards
 interface ConfidenceUser {
@@ -328,12 +337,11 @@ function VoiceTester() {
 
     try {
       audioRef.current.src = languageConfig[selectedLanguage].audioFile;
-      // Load the audio first
       audioRef.current.load();
-      // Play with promise handling for mobile browsers
       await audioRef.current.play();
       setIsPlaying(true);
       animateAudioBars();
+      trackBenefitsVoiceTestPlay(selectedLanguage);
 
       audioRef.current.addEventListener("ended", () => {
         setIsPlaying(false);
@@ -363,6 +371,7 @@ function VoiceTester() {
     setIsPlaying(false);
     setAudioBars(Array(12).fill(8));
     if (intervalRef.current) clearInterval(intervalRef.current);
+    trackBenefitsVoiceTestStop(selectedLanguage);
   };
 
   return (
@@ -402,6 +411,7 @@ function VoiceTester() {
               onClick={() => {
                 if (isPlaying) handleStop();
                 setSelectedLanguage(lang);
+                trackBenefitsVoiceLanguageSelect(lang);
               }}
               className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg font-medium text-xs sm:text-sm transition-all duration-300 backdrop-blur-sm flex items-center gap-1.5 sm:gap-2 ${
                 selectedLanguage === lang
@@ -744,6 +754,7 @@ function BenefitMockup({ type, isReversed }: { type: string; isReversed: boolean
                     target={isMobileDevice() ? undefined : "_blank"}
                     rel={isMobileDevice() ? undefined : "noopener noreferrer"}
                     onClick={(e) => {
+                      trackBenefitsScenarioOpenFluoverse();
                       if (isMobileDevice()) {
                         e.preventDefault();
                         e.stopPropagation();
@@ -1004,7 +1015,7 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
           {/* Tab Switcher */}
           <div className="inline-flex items-center p-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mt-2">
             <button
-              onClick={() => setTab("learners")}
+              onClick={() => { setTab("learners"); trackBenefitsTabSwitch("learners"); }}
               className={`relative flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300 ${
                 currentTab === "learners"
                   ? "text-white"
@@ -1022,7 +1033,7 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
               <span className="relative z-10">For Learners</span>
             </button>
             <button
-              onClick={() => setTab("tutors")}
+              onClick={() => { setTab("tutors"); trackBenefitsTabSwitch("tutors"); }}
               className={`relative flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300 ${
                 currentTab === "tutors"
                   ? "text-white"
@@ -1187,6 +1198,7 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
                     target={isMobileDevice() ? undefined : "_blank"}
                     rel={isMobileDevice() ? undefined : "noopener noreferrer"}
                     onClick={(e) => {
+                      trackBenefitsCtaTryFluoverse();
                       if (isMobileDevice()) {
                         e.preventDefault();
                         openFluoverseApp();
@@ -1208,6 +1220,7 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
                     href="https://calendly.com/panosmoschos7/30min" 
                     target="_blank" 
                     rel="noopener noreferrer"
+                    onClick={() => trackBenefitsCtaBookCall()}
                     className="premium-cta-button"
                   >
                     <div className="dots_border"></div>

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, Mail } from "lucide-react";
 import Link from "next/link";
 import { getAppUrl, getPricingRedirectUrl, getTutorCheckoutUrl } from "@/lib/config";
+import { trackPricingTabSwitch, trackPricingCtaClick } from "@/lib/analytics";
 
 const learnerPlans = [
   {
@@ -166,7 +167,7 @@ export default function PricingContent() {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => { setActiveTab(tab.id); trackPricingTabSwitch(tab.id); }}
               className={`relative px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 ${
                 activeTab === tab.id
                   ? "text-white"
@@ -423,6 +424,7 @@ function PricingCard({ plan, index, theme = "learners" }: { plan: Plan; index: n
           href={plan.ctaLink}
           target={plan.ctaLink.startsWith("http") ? "_blank" : undefined}
           rel={plan.ctaLink.startsWith("http") ? "noopener noreferrer" : undefined}
+          onClick={() => trackPricingCtaClick(plan.name)}
           className={`block w-full text-center rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200 ${
             plan.popular || plan.isContact || plan.badgeText
               ? "text-white relative overflow-hidden"

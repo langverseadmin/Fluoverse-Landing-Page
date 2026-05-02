@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Star, User, MessageCircle, BookOpen, CheckCircle2, BarChart3, Share2, Settings, MessageSquare, Users, Plane, ShoppingCart, UtensilsCrossed, Pill } from "lucide-react";
+import { trackHeroDownloadAppStore, trackHeroDownloadGooglePlay } from "@/lib/analytics";
+import { APP_STORE_WEB_URLS } from "@/lib/config";
 
 export default function Hero() {
   const [selectedLanguage, setSelectedLanguage] = useState<"en" | "es" | "el">("en");
@@ -119,9 +121,10 @@ export default function Hero() {
             >
               {/* App Store Button - Official Badge */}
               <a
-                href="https://apps.apple.com/gr/app/fluoverse/id6755234538"
+                href={APP_STORE_WEB_URLS.ios}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackHeroDownloadAppStore()}
                 className="group bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-200 flex items-center shadow-lg hover:shadow-xl overflow-hidden h-14 px-4"
                 style={{ boxShadow: '0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1)' }}
               >
@@ -140,9 +143,10 @@ export default function Hero() {
 
               {/* Google Play Button */}
               <a
-                href="https://play.google.com/store/search?q=Fluoverse&c=apps&hl=en"
+                href={APP_STORE_WEB_URLS.android}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackHeroDownloadGooglePlay()}
                 className="group bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-200 flex items-center shadow-lg hover:shadow-xl overflow-hidden h-14"
                 style={{ boxShadow: '0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1)' }}
               >

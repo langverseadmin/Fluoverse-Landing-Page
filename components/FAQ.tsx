@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Minus, Plus } from "lucide-react";
+import { trackFaqOpen } from "@/lib/analytics";
 
 const faqs = [
   {
@@ -39,7 +40,11 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
+    const isOpening = openIndex !== index;
+    setOpenIndex(isOpening ? index : null);
+    if (isOpening) {
+      trackFaqOpen(faqs[index].question);
+    }
   };
 
   return (
