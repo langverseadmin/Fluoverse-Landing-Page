@@ -5,9 +5,7 @@
       {
         "appID": "4K26MASNJV.com.fluoverse.app",
         "paths": [
-          "/r/*",
-          "/auth/email-confirm",
-          "/auth/email-confirm*"
+          "/r/*"
         ]
       }
     ]
