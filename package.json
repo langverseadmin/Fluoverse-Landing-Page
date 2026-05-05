@@ -10,6 +10,7 @@
     "generate:video": "tsx scripts/generateVideo.ts"
   },
   "dependencies": {
+    "@mawtech/glass-ui": "^0.2.1",
     "clsx": "^2.1.0",
     "devices.css": "^0.2.0",
     "flag-icons": "^7.5.0",

@@ -1,11 +1,12 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Minus, Plus } from "lucide-react";
 import { trackFaqOpen } from "@/lib/analytics";
+import { LEARNERS_ONLY_SITE } from "@/lib/config";
 
-const faqs = [
+const faqsAll = [
   {
     question: "What is Fluoverse?",
     answer: "Fluoverse is a speak-first language learning app where you practice with real-world scenarios and guided conversations.",
@@ -37,6 +38,13 @@ const faqs = [
 ];
 
 export default function FAQ() {
+  const faqs = useMemo(
+    () =>
+      LEARNERS_ONLY_SITE
+        ? faqsAll.filter((f) => !f.question.includes("teachers or schools"))
+        : faqsAll,
+    []
+  );
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggleFAQ = (index: number) => {

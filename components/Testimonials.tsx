@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState, useRef, useMemo, useCallback, useEffect } from "react";
+import { LEARNERS_ONLY_SITE } from "@/lib/config";
 
 type TestimonialsTab = "learners" | "tutors";
 
@@ -41,7 +42,7 @@ const tutorTestimonial = {
 
 };
 
-const stats = [
+const statsAll = [
   {
     value: "1000+",
     label: "Language Learners",
@@ -60,8 +61,16 @@ const stats = [
   },
 ];
 
+const stats =
+  LEARNERS_ONLY_SITE
+    ? statsAll.map((s) =>
+        s.label === "Tutors" ? { value: "50+", label: "Speaking topics" } : s
+      )
+    : statsAll;
+
 export default function Testimonials({ activeTab = "learners" }: { activeTab?: TestimonialsTab }) {
-  const testimonials = activeTab === "tutors" ? [tutorTestimonial, ...baseTestimonials.slice(1)] : baseTestimonials;
+  const showTutorVariant = !LEARNERS_ONLY_SITE && activeTab === "tutors";
+  const testimonials = showTutorVariant ? [tutorTestimonial, ...baseTestimonials.slice(1)] : baseTestimonials;
 
   return (
     <section id="testimonials" className="py-24">

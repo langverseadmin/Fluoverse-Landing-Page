@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PricingContent from "./PricingContent";
+import { LEARNERS_ONLY_SITE } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: "Pricing",
-  description: "Choose the perfect plan for learners, tutors, or businesses. Flexible pricing options to suit your needs.",
+  description: LEARNERS_ONLY_SITE
+    ? "Simple, transparent pricing for learners. Start free or upgrade to Premium for unlimited speaking practice."
+    : "Choose the perfect plan for learners, tutors, or businesses. Flexible pricing options to suit your needs.",
 };
 
 export default function PricingPage() {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Mail } from "lucide-react";
 import Link from "next/link";
-import { getAppUrl, getPricingRedirectUrl, getTutorCheckoutUrl } from "@/lib/config";
+import { getAppUrl, getPricingRedirectUrl, getTutorCheckoutUrl, LEARNERS_ONLY_SITE } from "@/lib/config";
 import { trackPricingTabSwitch, trackPricingCtaClick } from "@/lib/analytics";
 
 const learnerPlans = [
@@ -145,17 +145,19 @@ const getThemeColors = (tab: TabType) => {
 
 export default function PricingContent() {
   const [activeTab, setActiveTab] = useState<TabType>("learners");
-  const theme = getThemeColors(activeTab);
 
-  const tabs = [
+  const allTabs = [
     { id: "learners" as TabType, label: "For Learners" },
     { id: "tutors" as TabType, label: "For Tutors" },
     { id: "businesses" as TabType, label: "For Businesses" },
   ];
 
+  const tabs = LEARNERS_ONLY_SITE ? allTabs.filter((t) => t.id === "learners") : allTabs;
+
   return (
     <div>
       {/* Tabs */}
+      {tabs.length > 1 && (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -190,6 +192,7 @@ export default function PricingContent() {
           ))}
         </div>
       </motion.div>
+      )}
 
       {/* Tab Content */}
       <AnimatePresence mode="wait">

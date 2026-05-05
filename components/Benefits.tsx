@@ -6,6 +6,7 @@ import { GraduationCap, Users, Globe, Sparkles, Mic, BarChart3, TrendingUp, Targ
 import Image from "next/image";
 import "flag-icons/css/flag-icons.min.css";
 import { getFluoverseUrl, isMobileDevice, openFluoverseApp } from "@/lib/utils";
+import { LEARNERS_ONLY_SITE } from "@/lib/config";
 import {
   trackBenefitsTabSwitch,
   trackBenefitsCtaTryFluoverse,
@@ -991,7 +992,9 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
     }
   };
 
-  const benefits = currentTab === "learners" ? learnerBenefits : tutorBenefits;
+  const effectiveTab: TabType = LEARNERS_ONLY_SITE ? "learners" : currentTab;
+
+  const benefits = effectiveTab === "learners" ? learnerBenefits : tutorBenefits;
 
   return (
     <section id="benefits" className="py-24 overflow-hidden">
@@ -1012,7 +1015,8 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
             Designed for <span className="text-purple-400">Real Results</span>
           </h2>
           
-          {/* Tab Switcher */}
+          {/* Tab Switcher — hidden in learners-only mode (tutor UX preserved in code) */}
+          {!LEARNERS_ONLY_SITE && (
           <div className="inline-flex items-center p-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mt-2">
             <button
               onClick={() => { setTab("learners"); trackBenefitsTabSwitch("learners"); }}
@@ -1022,7 +1026,7 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
                   : "text-white/60 hover:text-white/80"
               }`}
             >
-              {activeTab === "learners" && (
+              {currentTab === "learners" && (
                 <motion.div
                   layoutId="activeTab"
                   className="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-500 rounded-full"
@@ -1040,7 +1044,7 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
                   : "text-white/60 hover:text-white/80"
               }`}
             >
-              {activeTab === "tutors" && (
+              {currentTab === "tutors" && (
                 <motion.div
                   layoutId="activeTab"
                   className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-500 rounded-full"
@@ -1051,12 +1055,13 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
               <span className="relative z-10">For Tutors</span>
             </button>
           </div>
+          )}
         </motion.div>
 
         {/* Benefits List */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={activeTab}
+            key={effectiveTab}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -1083,12 +1088,12 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
                     {/* Number badge */}
                     <div className="inline-flex items-center gap-3 mb-6">
                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                        activeTab === "learners"
+                        effectiveTab === "learners"
                           ? "bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30"
                           : "bg-gradient-to-br from-blue-500/20 to-blue-400/20 border border-blue-500/30"
                       }`}>
                         <Icon className={`w-6 h-6 ${
-                          activeTab === "learners" ? "text-purple-400" : "text-blue-400"
+                          effectiveTab === "learners" ? "text-purple-400" : "text-blue-400"
                         }`} />
                       </div>
                       <span className="text-white/40 text-sm font-medium">0{index + 1}</span>
@@ -1159,7 +1164,7 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 leading-tight"
               >
-                {activeTab === "learners" ? (
+                {effectiveTab === "learners" ? (
                   <>Join them and start speaking with <span className="text-purple-400">confidence</span></>
                 ) : (
                   <>Give your students the tools to <span className="text-blue-400">succeed</span></>
@@ -1175,12 +1180,12 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
                 className="mb-10"
               >
                 <p className="text-white/70 text-lg sm:text-xl italic mb-2">
-                  {activeTab === "learners" 
+                  {effectiveTab === "learners" 
                     ? "\"I went from nervous to confident in just 2 weeks. The real conversations made all the difference!\"" 
                     : "\"My students are more engaged than ever. Their speaking confidence has skyrocketed.\""}
                 </p>
                 <p className="text-white/50 text-sm">
-                  — {activeTab === "learners" ? "Maria, +88% confidence boost" : "Mateo, Spanish Teacher"}
+                  — {effectiveTab === "learners" ? "Maria, +88% confidence boost" : "Mateo, Spanish Teacher"}
                 </p>
               </motion.div>
 
@@ -1192,7 +1197,7 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
                 transition={{ duration: 0.6, delay: 0.5 }}
                 className="flex justify-center mb-8"
               >
-                {activeTab === "learners" ? (
+                {effectiveTab === "learners" ? (
                   <a
                     href={isMobileDevice() ? "#" : getFluoverseUrl()}
                     target={isMobileDevice() ? undefined : "_blank"}

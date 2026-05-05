@@ -3,15 +3,14 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getFluoverseUrl, isMobileDevice, openFluoverseApp } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  trackNavGetStarted,
   trackNavBookCall,
   trackNavLink,
   trackNavMobileMenuToggle,
 } from "@/lib/analytics";
+import { LEARNERS_ONLY_SITE } from "@/lib/config";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -19,6 +18,8 @@ export default function Navigation() {
   const pathname = usePathname();
   const router = useRouter();
 
+  /** Top inset + bar height for hash scroll (floating glass nav) */
+  const navClearance = 100;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +38,7 @@ export default function Navigation() {
         if (element) {
           // Get element position accounting for fixed navbar
           const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-          const offsetPosition = elementPosition - 80; // Account for navbar height
+          const offsetPosition = elementPosition - navClearance;
           
           // Use window.scrollTo for better mobile compatibility
           window.scrollTo({
@@ -75,7 +76,7 @@ export default function Navigation() {
           
           // Get element position accounting for fixed navbar
           const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-          const offsetPosition = elementPosition - 80; // Account for navbar height
+          const offsetPosition = elementPosition - navClearance;
           
           // Use window.scrollTo for better mobile compatibility
           window.scrollTo({
@@ -105,118 +106,133 @@ export default function Navigation() {
   ];
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-[#3b0764]/85 backdrop-blur-2xl border-b border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.35)]"
-          : "bg-[#3b0764]/55 backdrop-blur-xl border-b border-white/5"
-      }`}
-    >
-      <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 pointer-events-none" />
+    <div className="fixed top-0 left-0 right-0 z-50 px-3 pt-3 pb-0 sm:px-5 sm:pt-4 md:px-8 md:pt-5 pointer-events-none">
+      <div className="pointer-events-auto mx-auto max-w-7xl">
+        <nav
+          className={`relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/25 shadow-[0_4px_24px_rgba(0,0,0,0.06),0_18px_48px_-8px_rgba(59,7,100,0.35),inset_0_1px_0_rgba(255,255,255,0.45),inset_0_0_0_1px_rgba(255,255,255,0.06)] transition-all duration-500 ease-out ${
+            isScrolled
+              ? "bg-[#3b0764]/55 backdrop-blur-[28px] backdrop-saturate-[1.35] shadow-[0_8px_32px_rgba(0,0,0,0.12),0_22px_56px_-10px_rgba(59,7,100,0.45),inset_0_1px_0_rgba(255,255,255,0.5)]"
+              : "bg-[#3b0764]/40 backdrop-blur-xl backdrop-saturate-125"
+          }`}
+        >
+          {/* Glass sheen + purple depth */}
+          <div
+            className="pointer-events-none absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-white/[0.12] via-white/[0.02] to-transparent"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-fuchsia-500/[0.07] via-transparent to-violet-950/[0.12]"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-white/45 to-transparent"
+            aria-hidden
+          />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <a href="/" className="flex items-center space-x-2">
-              <Image
-                src="/logo.svg"
-                alt="Fluoverse - Authentic Speaking Practice Platform for English, Spanish, and Greek"
-                width={160}
-                height={48}
-                className="h-12 w-auto rounded-lg"
-                priority
-              />
-            </a>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-7">
-            {navItems.map((item) => {
-              const isHashLink = item.href.startsWith("#");
-              const isPageLink = !item.external && !isHashLink;
-              
-              return (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  target={item.external ? "_blank" : undefined}
-                  rel={item.external ? "noopener noreferrer" : undefined}
-                  onClick={(e) => {
-                    if (isHashLink) {
-                      trackNavLink(item.name, "desktop");
-                      handleHashLink(e, item.href, false);
-                    } else if (item.external) {
-                      trackNavLink(item.name, "desktop");
-                    } else {
-                      trackNavLink(item.name, "desktop");
-                    }
-                  }}
-                  className="group relative text-sm font-semibold tracking-tight text-white/70 transition-all duration-200 hover:text-white"
-                >
-                  {item.name}
-                  <span className="absolute left-0 -bottom-2 h-px w-full scale-0 bg-gradient-to-r from-accent-200 via-white to-primary-200 opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100" />
+          <div className="relative px-4 sm:px-6 lg:px-8">
+            <div className="relative flex h-[4.25rem] items-center justify-between sm:h-20">
+              {/* Logo */}
+              <div className="relative z-10 flex shrink-0 items-center gap-3">
+                <a href="/" className="flex items-center space-x-2">
+                  <Image
+                    src="/logo.svg"
+                    alt="Fluoverse - Authentic Speaking Practice Platform for English, Spanish, and Greek"
+                    width={160}
+                    height={48}
+                    className="h-12 w-auto rounded-lg"
+                    priority
+                  />
                 </a>
-              );
-            })}
-            <div className="flex items-center space-x-3">
-              <a
-                href="https://calendly.com/panosmoschos7/30min"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackNavBookCall("desktop")}
-                className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 transition-all duration-200 hover:border-white/30 hover:text-white hover:shadow-[0_10px_40px_rgba(255,255,255,0.08)]"
+              </div>
+
+              {/* Desktop: links + secondary CTAs centered in the bar (not Download) */}
+              <nav
+                className="pointer-events-none absolute inset-0 z-0 hidden items-center justify-center md:flex"
+                aria-label="Main"
               >
-                Book a call
-              </a>
-              <a
-                href={isMobileDevice() ? "#" : getFluoverseUrl()}
-                target={isMobileDevice() ? undefined : "_blank"}
-                rel={isMobileDevice() ? undefined : "noopener noreferrer"}
-                onClick={(e) => {
-                  trackNavGetStarted("desktop");
-                  if (isMobileDevice()) {
-                    e.preventDefault();
-                    openFluoverseApp();
-                  }
-                }}
-                className="rounded-full bg-[#a855f7] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_40px_rgba(168,85,247,0.35)] transition-all duration-200 hover:shadow-[0_12px_50px_rgba(168,85,247,0.45)]"
-              >
-                Get started
-              </a>
+                <div className="flex items-center space-x-6 lg:space-x-7 pointer-events-auto">
+                  {navItems.map((item) => {
+                    const isHashLink = item.href.startsWith("#");
+                    const isPageLink = !item.external && !isHashLink;
+
+                    return (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        target={item.external ? "_blank" : undefined}
+                        rel={item.external ? "noopener noreferrer" : undefined}
+                        onClick={(e) => {
+                          if (isHashLink) {
+                            trackNavLink(item.name, "desktop");
+                            handleHashLink(e, item.href, false);
+                          } else if (item.external) {
+                            trackNavLink(item.name, "desktop");
+                          } else {
+                            trackNavLink(item.name, "desktop");
+                          }
+                        }}
+                        className="relative rounded-full px-3 py-2 text-sm font-semibold tracking-tight text-white/75 outline-none transition-colors duration-200 hover:bg-white/[0.12] hover:text-white focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+                      >
+                        {item.name}
+                      </a>
+                    );
+                  })}
+                  {!LEARNERS_ONLY_SITE && (
+                    <a
+                      href="https://calendly.com/panosmoschos7/30min"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackNavBookCall("desktop")}
+                      className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 transition-all duration-200 hover:border-white/30 hover:text-white hover:shadow-[0_10px_40px_rgba(255,255,255,0.08)]"
+                    >
+                      Book a call
+                    </a>
+                  )}
+                </div>
+              </nav>
+
+              {/* Download + mobile menu */}
+              <div className="relative z-10 ml-auto flex items-center gap-3">
+                <a
+                  href="#download"
+                  onClick={(e) => {
+                    trackNavLink("Download now", "desktop");
+                    handleHashLink(e, "#download", false);
+                  }}
+                  className="neon-cta-3d hidden px-5 py-2.5 text-sm font-semibold text-white md:inline-flex"
+                >
+                  Download now
+                </a>
+                <button
+                  type="button"
+                  className="p-2 text-white md:hidden"
+                  onClick={() => {
+                    const next = !isMobileMenuOpen;
+                    setIsMobileMenuOpen(next);
+                    trackNavMobileMenuToggle(next);
+                  }}
+                  aria-label="Toggle menu"
+                >
+                  {isMobileMenuOpen ? (
+                    <X className="h-6 w-6" />
+                  ) : (
+                    <Menu className="h-6 w-6" />
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2 text-white"
-            onClick={() => {
-              const next = !isMobileMenuOpen;
-              setIsMobileMenuOpen(next);
-              trackNavMobileMenuToggle(next);
-            }}
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[#0f031d]/90 backdrop-blur-2xl border-t border-white/10"
-            style={{ pointerEvents: 'auto' }}
-          >
-            <div className="px-4 pt-4 pb-6 space-y-3" style={{ touchAction: 'manipulation' }}>
+            {/* Mobile Menu — extends same glass pill */}
+            <AnimatePresence>
+              {isMobileMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="md:hidden border-t border-white/15 bg-black/[0.12] backdrop-blur-md"
+                  style={{ pointerEvents: "auto" }}
+                >
+                  <div className="px-4 pt-4 pb-6 space-y-3" style={{ touchAction: "manipulation" }}>
               {navItems.map((item) => {
                 const isHashLink = item.href.startsWith("#");
                 const isPageLink = !item.external && !isHashLink;
@@ -244,7 +260,7 @@ export default function Navigation() {
                     target={item.external ? "_blank" : undefined}
                     rel={item.external ? "noopener noreferrer" : undefined}
                     onClick={handleClick}
-                    className="block rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-sm font-semibold text-white/85 transition-all duration-200 hover:border-white/15 hover:bg-white/10 active:bg-white/15"
+                    className="block rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm font-semibold text-white/90 transition-all duration-200 hover:border-white/20 hover:bg-white/10 active:bg-white/15"
                     style={{ 
                       touchAction: 'manipulation', 
                       WebkitTapHighlightColor: 'transparent',
@@ -262,6 +278,7 @@ export default function Navigation() {
                 );
               })}
               <div className="grid grid-cols-1 gap-3 pt-1">
+                {!LEARNERS_ONLY_SITE && (
                 <a
                   href="https://calendly.com/panosmoschos7/30min"
                   target="_blank"
@@ -273,7 +290,7 @@ export default function Navigation() {
                     window.open('https://calendly.com/panosmoschos7/30min', '_blank', 'noopener,noreferrer');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="block rounded-full border border-white/10 bg-white/5 px-5 py-3 text-center text-sm font-semibold text-white/90 transition-all duration-200 hover:border-white/25 hover:bg-white/10 active:bg-white/15"
+                  className="block rounded-full border border-white/15 bg-white/[0.06] px-5 py-3 text-center text-sm font-semibold text-white/90 transition-all duration-200 hover:border-white/25 hover:bg-white/10 active:bg-white/15"
                   style={{ 
                     touchAction: 'manipulation', 
                     WebkitTapHighlightColor: 'transparent',
@@ -284,22 +301,16 @@ export default function Navigation() {
                 >
                   Book a call
                 </a>
+                )}
                 <a
-                  href={isMobileDevice() ? "#" : getFluoverseUrl()}
-                  target={isMobileDevice() ? undefined : "_blank"}
-                  rel={isMobileDevice() ? undefined : "noopener noreferrer"}
+                  href="#download"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    trackNavGetStarted("mobile");
-                    if (isMobileDevice()) {
-                      openFluoverseApp();
-                    } else {
-                      window.open(getFluoverseUrl(), '_blank', 'noopener,noreferrer');
-                    }
-                    setIsMobileMenuOpen(false);
+                    trackNavLink("Download now", "mobile");
+                    handleHashLink(e, "#download", true);
                   }}
-                  className="block rounded-full bg-[#a855f7] px-5 py-3 text-center text-sm font-semibold text-white shadow-[0_10px_40px_rgba(168,85,247,0.4)] transition-all duration-200 active:bg-[#9333ea]"
+                  className="neon-cta-3d flex w-full justify-center px-5 py-3 text-sm font-semibold text-white"
                   style={{ 
                     touchAction: 'manipulation', 
                     WebkitTapHighlightColor: 'transparent',
@@ -308,14 +319,16 @@ export default function Navigation() {
                     WebkitTouchCallout: 'none'
                   }}
                 >
-                  Get started
+                  Download now
                 </a>
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </nav>
+      </div>
+    </div>
   );
 }
-

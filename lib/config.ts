@@ -9,6 +9,12 @@
 export const APP_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://fluoverseapp.netlify.app';
 
 /**
+ * When true, the public marketing site hides tutor, teacher, and B2B entry points (benefits/pricing
+ * tabs, book-a-call, certain FAQs, stats). Routes and code stay in the repo — only presentation is gated.
+ */
+export const LEARNERS_ONLY_SITE = true;
+
+/**
  * Get the full app URL
  */
 export function getAppUrl(): string {

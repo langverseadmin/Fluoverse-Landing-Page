@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import VWO from "@/components/VWO";
+import { LEARNERS_ONLY_SITE } from "@/lib/config";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+
+/** Display / marketing headings — pairs with Inter body copy */
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+  weight: ["600", "700", "800"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://fluoverse.com"),
@@ -152,7 +161,8 @@ export default function RootLayout({
     },
     "description": "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking exercises at home, practice with real people, and build fluency through authentic conversations.",
     "screenshot": "https://fluoverse.com/android-chrome-512x512.png",
-    "featureList": [
+    "featureList": (() => {
+      const all = [
       "Authentic Speaking Practice",
       "Assign Speaking at Home",
       "Interactive Voice Conversations",
@@ -162,8 +172,16 @@ export default function RootLayout({
       "Progress Tracking",
       "Multi-Language Support (English, Spanish, Greek)",
       "Tutor Analytics Dashboard",
-      "Fluency Building Exercises"
-    ],
+      "Fluency Building Exercises",
+    ];
+      return LEARNERS_ONLY_SITE
+        ? all.filter(
+            (f) =>
+              f !== "Tutor Analytics Dashboard" &&
+              f !== "Assign Speaking at Home"
+          )
+        : all;
+    })(),
     "inLanguage": ["en", "es", "el"],
     "downloadUrl": [
       "https://fluoverse.onelink.me/zcI3/9242fe8w",
@@ -203,7 +221,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${plusJakarta.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="theme-color" content="#7c3aed" />
