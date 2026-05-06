@@ -148,7 +148,7 @@ export default function UserVideo({
               {/* Quote Text */}
               <div className="relative z-10">
                 <p className="text-white text-lg lg:text-xl leading-relaxed mb-6 font-light italic pl-6">
-                  Out last night discovering a new favourite place to eat! La Tropical 🫶🏻 All of the food was amazing, and we were there courtesy of Marc winning one of @Fluoverse language sprints. If you haven&apos;t already, you need to check out this brand new app, it&apos;s AI powered with real conversations & is making learning Spanish fun & interactive!
+                  Out last night discovering a new favourite place to eat! La Tropical 🫶🏻 All of the food was amazing, and we were there courtesy of Marc winning one of @Fluoverse language sprints. If you haven&apos;t already, you need to check out this brand new app!
                 </p>
                 
                 {/* Author */}

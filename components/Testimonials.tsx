@@ -12,13 +12,13 @@ const baseTestimonials = [
     name: "Hassan El Sayed",
     role: "Language Learner",
     image: "/testimonials/hassan.jpg", // Replace with actual image path
-    quote: "I love the concept behind Fluoverse. The Fluency Rooms are amazing for real conversation practice.",
+    quote: "I love the concept behind Fluoverse. It is amazing for real conversation practice.",
   },
   {
     name: "Alicia Seivers",
     role: "B2 Spanish Speaker",
     image: "/testimonials/Alicia.jpg",
-    quote: "As a B2 level Spanish speaker, I really enjoyed the unique experience using Fluoverse to increase my conversation skills.",
+    quote: "I really enjoyed the unique experience using Fluoverse to increase my conversation skills.",
   },
   {
     name: "Eleni Salapasidi",
@@ -30,7 +30,7 @@ const baseTestimonials = [
     name: "Aurora Tzouma",
     role: "Language Learner",
     image: "/testimonials/aurora.jpg", // Replace with actual image path
-    quote: "Fluoverse completely changed the way I practice speaking. For the first time, I actually feel confident using the language in real conversations.",
+    quote: "For the first time, I actually feel confident using the language in real conversations.",
   },
 ];
 
