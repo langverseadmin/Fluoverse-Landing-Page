@@ -2,11 +2,12 @@
 
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useMemo, useState, useEffect, useRef, useCallback } from "react";
-import { GraduationCap, Users, Globe, Sparkles, Mic, BarChart3, TrendingUp, Target, Zap, Coffee, ShoppingCart, Snowflake, UtensilsCrossed, Apple, Gift, Volume2, Lightbulb, X, Send, ArrowLeft, Phone, Play, Flame, Clock, Blocks, CheckCircle2, Rocket, MessageCircle, Bolt, Star } from "lucide-react";
+import { GraduationCap, Users, Globe, Sparkles, BarChart3, TrendingUp, Zap, Coffee, ShoppingCart, Snowflake, UtensilsCrossed, Apple, Gift, Volume2, Lightbulb, X, Send, ArrowLeft, Phone, Play, Flame, Clock, Blocks, CheckCircle2, Rocket, MessageCircle, Bolt, Star, Landmark } from "lucide-react";
 import Image from "next/image";
 import "flag-icons/css/flag-icons.min.css";
 import { getFluoverseUrl, isMobileDevice, openFluoverseApp } from "@/lib/utils";
 import { LEARNERS_ONLY_SITE } from "@/lib/config";
+import AppStoreBadgeLinks from "@/components/AppStoreBadgeLinks";
 import {
   trackBenefitsTabSwitch,
   trackBenefitsCtaTryFluoverse,
@@ -15,6 +16,8 @@ import {
   trackBenefitsVoiceTestPlay,
   trackBenefitsVoiceTestStop,
   trackBenefitsVoiceLanguageSelect,
+  trackStoreBadgeAppStore,
+  trackStoreBadgeGooglePlay,
 } from "@/lib/analytics";
 
 // User type for confidence cards
@@ -235,21 +238,23 @@ type TabType = "learners" | "tutors";
 const learnerBenefits = [
   {
     icon: Globe,
-    title: "Learn by Living the Language",
-    description: "Instead of drills and memorization, learners practice language exactly as it's used in real life through guided conversations, scenarios, and spontaneous interaction. This builds confidence, fluency, and natural flow.",
+    title: "Practice conversations in real-life situations with ease",
+    description: "Practice language exactly as it's used in real life through guided conversations, scenarios, and spontaneous interaction.",
     mockupType: "scenarios",
   },
   {
-    icon: Target,
-    title: "Create Custom Scenarios That Match Your Real Life",
-    description: "You can instantly generate speaking scenarios tailored to your goals, like job interviews, travel, dating, exams, or everyday conversations. You practice exactly what you need, not generic phrases.",
-    mockupType: "conversation",
+    icon: Landmark,
+    title: "Cultural bites that help you fit in",
+    description:
+      "Pick up traditions, etiquette, humor, and how people really talk in everyday life through short cultural bites.",
+    mockupType: "voicePhone",
   },
   {
-    icon: Mic,
-    title: "Full Immersion with the Most Realistic Voice Experience",
-    description: "Fluoverse places you inside lifelike conversations powered by one of the most natural, human-sounding AI voices available. It feels like speaking with a real person, helping you think and react in the language naturally.",
-    mockupType: "voice",
+    icon: Users,
+    title: "Easily connect with locals and build friendships",
+    description:
+      "Overcome language and cultural barriers and transform your social life in your new home.",
+    mockupType: "beforeAfterCompare",
   },
 ];
 
@@ -273,6 +278,9 @@ const tutorBenefits = [
     mockupType: "growth",
   },
 ];
+
+/** Full-width carousel + quote + “Try Fluoverse” / tutor CTA strip under benefit rows. Hidden when false; code retained. */
+const SHOW_BENEFITS_SOCIAL_CTA_BAND = false;
 
 function VoiceTester() {
   const [selectedLanguage, setSelectedLanguage] = useState<"en" | "es" | "el">("en");
@@ -684,6 +692,84 @@ function BenefitMockup({ type, isReversed }: { type: string; isReversed: boolean
           <div className="device-sensors"></div>
           <div className="device-btns"></div>
           <div className="device-power"></div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  /* Third learner benefit: static screenshot in same iPhone chrome as scenarios */
+  if (type === "voicePhone") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: isReversed ? -50 : 50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="flex justify-center items-center"
+      >
+        <div
+          className="device device-iphone-14 device-silver"
+          style={{ transform: "scale(0.65)", transformOrigin: "center" }}
+        >
+          <div className="device-frame">
+            <div className="device-screen relative overflow-hidden bg-[#230a37]">
+              <div className="absolute inset-0">
+                <Image
+                  src="/3rd_benefit.jpg"
+                  alt="Fluoverse cultural bites in the mobile app — learn culture alongside language"
+                  fill
+                  sizes="(max-width: 768px) 90vw, 400px"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="device-stripe"></div>
+          <div className="device-header"></div>
+          <div className="device-sensors"></div>
+          <div className="device-btns"></div>
+          <div className="device-power"></div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  if (type === "beforeAfterCompare") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: isReversed ? -50 : 50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="flex w-full justify-center px-2"
+      >
+        <div className="benefits-gallery-host">
+          <span className="benefits-gallery-label benefits-gallery-label--before" aria-hidden="true">
+            Before
+          </span>
+          <span className="benefits-gallery-label benefits-gallery-label--after" aria-hidden="true">
+            After
+          </span>
+          <div className="gallery" aria-label="Before and after using Fluoverse">
+            <img
+              src="/before.png"
+              alt="Before: overcoming language barriers and connecting socially can feel harder in a new home"
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+              width={350}
+              height={400}
+            />
+            <img
+              src="/after.png"
+              alt="After: building friendships and connecting easily with locals with Fluoverse"
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+              width={350}
+              height={400}
+            />
+          </div>
         </div>
       </motion.div>
     );
@@ -1117,8 +1203,24 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
           </motion.div>
         </AnimatePresence>
 
+        <div className="mx-auto mt-14 max-w-xl sm:mt-16">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, delay: 0.08 }}
+          >
+            <AppStoreBadgeLinks
+              onAppStoreClick={() => trackStoreBadgeAppStore("benefits")}
+              onGooglePlayClick={() => trackStoreBadgeGooglePlay("benefits")}
+            />
+          </motion.div>
+        </div>
+
       </div>
 
+      {SHOW_BENEFITS_SOCIAL_CTA_BAND && (
+        <>
       {/* Full-Width CTA Section - Carousel with Confidence Boost Cards */}
       <div className="w-full mt-20 lg:mt-28">
         {/* Top Border Line */}
@@ -1268,6 +1370,8 @@ export default function Benefits({ activeTab, onTabChange }: BenefitsProps) {
         {/* Bottom Border Line */}
         <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       </div>
+        </>
+      )}
     </section>
   );
 }

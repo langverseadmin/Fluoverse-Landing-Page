@@ -204,24 +204,6 @@ export default function PricingContent() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
-                For <span 
-                  className="text-purple-400"
-                  style={{
-                    background: getThemeColors("learners").metallicGradient,
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    filter: `drop-shadow(${getThemeColors("learners").borderGlow})`,
-                    textShadow: getThemeColors("learners").metallicGlow,
-                  }}
-                >Learners</span>
-              </h2>
-              <p className="text-white/70 text-lg">
-                Start your language learning journey today
-              </p>
-            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {learnerPlans.map((plan, index) => (
                 <PricingCard key={plan.name} plan={plan} index={index} theme="learners" />

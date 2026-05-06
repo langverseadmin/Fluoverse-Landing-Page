@@ -19,6 +19,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/faq`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    },
+    {
       url: `${baseUrl}/privacy`,
       lastModified: now,
       changeFrequency: 'monthly' as const,
@@ -47,10 +53,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Hash-based section URLs (homepage sections)
   const hashSections = [
     'benefits',
-    'community',
     'testimonials',
-    'faq',
-    'features',
     'how-it-works',
     'get-started',
     'user-video',

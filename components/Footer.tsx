@@ -79,6 +79,12 @@ export default function Footer() {
           >
             Contact
           </a>
+          <a
+            href="/faq"
+            className="px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-white text-sm font-medium hover:bg-white/15 hover:border-white/30 transition-all duration-300"
+          >
+            FAQ
+          </a>
         </motion.div>
 
         {/* Divider */}

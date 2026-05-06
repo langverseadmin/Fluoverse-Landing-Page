@@ -44,7 +44,7 @@ const tutorTestimonial = {
 
 const statsAll = [
   {
-    value: "1000+",
+    value: "5000+",
     label: "Language Learners",
   },
   {
@@ -52,11 +52,11 @@ const statsAll = [
     label: "Tutors",
   },
   {
-    value: "5,000+",
+    value: "30,000+",
     label: "Conversations Started",
   },
   {
-    value: "10,000+",
+    value: "50,000+",
     label: "Minutes Spoken",
   },
 ];

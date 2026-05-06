@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState, useRef } from "react";
-import { Play, Pause, Volume2, VolumeX, Trophy } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 import Image from "next/image";
 
 interface UserVideoProps {
@@ -44,21 +44,8 @@ export default function UserVideo({
   };
 
   return (
-    <section id="user-video" className="py-16 relative overflow-hidden">
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-center mb-32"
-        >
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2 leading-tight">
-            Hear From Our <span className="text-purple-400">Community</span>
-          </h2>
-        </motion.div>
-
+    <section id="user-video" className="relative overflow-hidden py-16">
+      <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         {/* Video and Quote Container */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

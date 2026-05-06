@@ -1,6 +1,6 @@
 /**
  * Centralized Google Analytics event tracking utility.
- * All events have distinct names so they can be analyzed independently in GA.
+ * Store badge clicks use stable event names + `placement` so GA4 can compare locations.
  */
 
 type GtagFn = (...args: unknown[]) => void;
@@ -31,13 +31,20 @@ export const trackNavLink = (name: string, location: "desktop" | "mobile") =>
 export const trackNavMobileMenuToggle = (opened: boolean) =>
   track(opened ? "nav_mobile_menu_open" : "nav_mobile_menu_close");
 
-// ─── Hero ─────────────────────────────────────────────────────────────────────
+// ─── Store badges (App Store / Google Play) ────────────────────────────────
+/** Badge row location — register `placement` as a GA4 custom dimension for breakdowns */
+export type StoreDownloadPlacement =
+  | "hero"
+  | "isolation_showcase"
+  | "benefits"
+  | "after_testimonials"
+  | "easy_steps_isolation_cta";
 
-export const trackHeroDownloadAppStore = () =>
-  track("hero_download_app_store");
+export const trackStoreBadgeAppStore = (placement: StoreDownloadPlacement) =>
+  track("download_app_store_click", { placement });
 
-export const trackHeroDownloadGooglePlay = () =>
-  track("hero_download_google_play");
+export const trackStoreBadgeGooglePlay = (placement: StoreDownloadPlacement) =>
+  track("download_google_play_click", { placement });
 
 // ─── Benefits ─────────────────────────────────────────────────────────────────
 

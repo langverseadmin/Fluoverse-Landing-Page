@@ -148,6 +148,201 @@ main h2 {
     outline-offset: 3px;
   }
 
+  /* Homepage — “Don’t face isolation alone” expandable image strip (reference layout) */
+  .isolation-showcase__strip {
+    display: flex;
+    width: 100%;
+    padding: 3% 1.75%;
+    box-sizing: border-box;
+    height: min(72vh, 640px);
+  }
+
+  @media (min-width: 768px) {
+    .isolation-showcase__strip {
+      max-width: min(100%, 1080px);
+      margin-inline: auto;
+    }
+  }
+
+  .isolation-showcase__box {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    transition:
+      flex-grow 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+      flex-shrink 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+      flex-basis 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+    margin: 0 1.35%;
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+    line-height: 0;
+  }
+
+  .isolation-showcase__box > img {
+    flex: 1;
+    min-height: 0;
+    width: 200%;
+    object-fit: cover;
+    transition:
+      width 1.05s cubic-bezier(0.22, 1, 0.36, 1),
+      height 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+    display: block;
+    max-width: none;
+  }
+
+  .isolation-showcase__box > span {
+    flex: none;
+    font-size: clamp(0.7rem, 1.85vh, 1rem);
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    text-align: center;
+    text-wrap: balance;
+    height: auto;
+    min-height: min(8vh, 3.25rem);
+    line-height: 1.3;
+    padding: 0.65vh 0.4rem;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 700;
+    background: rgba(55, 8, 90, 0.92);
+    box-sizing: border-box;
+  }
+
+  @media (hover: hover) and (pointer: fine) and (min-width: 768px) {
+    .isolation-showcase__box:hover {
+      flex: 1 1 50%;
+    }
+
+    .isolation-showcase__box:hover > img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  /* Mobiles: 2×2 grid of panels */
+  @media (max-width: 767px) {
+    .isolation-showcase__strip {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.625rem;
+      height: auto;
+      min-height: 0;
+      max-width: none;
+      margin-inline: 0;
+      padding: 3% 4%;
+    }
+
+    .isolation-showcase__box {
+      flex: none !important;
+      min-width: 0;
+      margin: 0;
+    }
+
+    .isolation-showcase__box > img {
+      flex: none;
+      width: 100% !important;
+      max-width: none;
+      height: auto;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+    }
+
+    .isolation-showcase__box > span {
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      font-size: clamp(0.65rem, 2.8vw, 0.8125rem);
+      height: auto;
+      min-height: 2.25rem;
+      line-height: 1.25;
+      padding: 0.35rem 0.3rem;
+      overflow-wrap: anywhere;
+      hyphens: auto;
+    }
+  }
+
+  /* Benefits — before/after compare; gap shows page backdrop (no teal fill) */
+  #benefits .benefits-gallery-host {
+    background: transparent;
+    padding: 0;
+    box-sizing: border-box;
+    display: inline-block;
+    position: relative;
+    width: max-content;
+    max-width: 100%;
+    vertical-align: top;
+  }
+
+  #benefits .benefits-gallery-label {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.95);
+    background: rgba(22, 6, 40, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 6px;
+    padding: 0.35rem 0.65rem;
+    line-height: 1;
+  }
+
+  #benefits .benefits-gallery-label--before {
+    top: 10px;
+    left: 10px;
+  }
+
+  #benefits .benefits-gallery-label--after {
+    bottom: 10px;
+    right: 10px;
+  }
+
+  #benefits .gallery {
+    --g: 8px; /* the gap */
+    display: grid;
+    clip-path: inset(1px); /* to avoid visual glitchs */
+    background-color: transparent;
+  }
+
+  #benefits .gallery > img {
+    --_p: calc(-1 * var(--g));
+    grid-area: 1/1;
+    width: 350px;
+    /* Taller than square: same width (~10% more height than 1:1) */
+    aspect-ratio: 350 / 400;
+    height: auto;
+    object-fit: cover;
+    cursor: pointer;
+    transition: 0.4s 0.1s;
+  }
+
+  #benefits .gallery > img:first-child {
+    clip-path: polygon(0 0, calc(100% + var(--_p)) 0, 0 calc(100% + var(--_p)));
+  }
+
+  #benefits .gallery > img:last-child {
+    clip-path: polygon(
+      100% 100%,
+      100% calc(0% - var(--_p)),
+      calc(0% - var(--_p)) 100%
+    );
+  }
+
+  #benefits .gallery:hover > img:last-child,
+  #benefits .gallery:hover > img:first-child:hover {
+    --_p: calc(50% - var(--g));
+  }
+
+  #benefits .gallery:hover > img:first-child,
+  #benefits .gallery:hover > img:first-child:hover + img {
+    --_p: calc(-50% - var(--g));
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero-store-badge-3d,
     .hero-store-badge-3d:hover,
@@ -158,7 +353,18 @@ main h2 {
       transform: none;
       transition: none;
     }
+
+    .isolation-showcase__box,
+    .isolation-showcase__box:hover,
+    .isolation-showcase__box > img {
+      transition: none !important;
+    }
+
+    #benefits .gallery > img {
+      transition: none !important;
+    }
   }
+
 }
 
 @layer utilities {
