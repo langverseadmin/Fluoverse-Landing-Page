@@ -67,13 +67,15 @@ export default function IsolationShowcase() {
         <div className="isolation-showcase__strip">
           {panels.map((panel, index) => (
             <div key={`${panel.src}-${index}`} className="isolation-showcase__box">
-              <img
-                src={panel.src}
-                alt={panel.alt}
-                style={{ objectPosition: panel.objectPosition }}
-                loading="lazy"
-                draggable={false}
-              />
+              <div className="isolation-showcase__image-wrap">
+                <img
+                  src={panel.src}
+                  alt={panel.alt}
+                  style={{ objectPosition: panel.objectPosition }}
+                  loading="lazy"
+                  draggable={false}
+                />
+              </div>
               <span>{panel.label}</span>
             </div>
           ))}

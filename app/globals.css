@@ -169,6 +169,7 @@ main h2 {
     flex-direction: column;
     flex: 1;
     overflow: hidden;
+    min-height: 0;
     transition:
       flex-grow 0.95s cubic-bezier(0.22, 1, 0.36, 1),
       flex-shrink 0.95s cubic-bezier(0.22, 1, 0.36, 1),
@@ -178,9 +179,19 @@ main h2 {
     line-height: 0;
   }
 
-  .isolation-showcase__box > img {
+  /* Wrapper avoids Safari/WebKit collapsing <img> flex items to 0 height */
+  .isolation-showcase__image-wrap {
     flex: 1;
     min-height: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .isolation-showcase__box > .isolation-showcase__image-wrap > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
     width: 200%;
     object-fit: cover;
     transition:
@@ -213,7 +224,7 @@ main h2 {
       flex: 1 1 50%;
     }
 
-    .isolation-showcase__box:hover > img {
+    .isolation-showcase__box:hover > .isolation-showcase__image-wrap > img {
       width: 100%;
       height: 100%;
     }
@@ -238,7 +249,14 @@ main h2 {
       margin: 0;
     }
 
-    .isolation-showcase__box > img {
+    .isolation-showcase__image-wrap {
+      flex: none;
+      width: 100%;
+      min-height: 0;
+    }
+
+    .isolation-showcase__box > .isolation-showcase__image-wrap > img {
+      position: static;
       flex: none;
       width: 100% !important;
       max-width: none;
@@ -302,23 +320,29 @@ main h2 {
     right: 10px;
   }
 
+  /* Position + explicit box size: WebKit often fails to size stacked grid-area imgs */
   #benefits .gallery {
     --g: 8px; /* the gap */
-    display: grid;
+    position: relative;
+    width: 350px;
+    max-width: 100%;
+    aspect-ratio: 350 / 400;
+    margin-inline: auto;
     clip-path: inset(1px); /* to avoid visual glitchs */
     background-color: transparent;
   }
 
   #benefits .gallery > img {
     --_p: calc(-1 * var(--g));
-    grid-area: 1/1;
-    width: 350px;
-    /* Taller than square: same width (~10% more height than 1:1) */
-    aspect-ratio: 350 / 400;
-    height: auto;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
     object-fit: cover;
     cursor: pointer;
     transition: 0.4s 0.1s;
+    display: block;
   }
 
   #benefits .gallery > img:first-child {
@@ -356,7 +380,7 @@ main h2 {
 
     .isolation-showcase__box,
     .isolation-showcase__box:hover,
-    .isolation-showcase__box > img {
+    .isolation-showcase__box > .isolation-showcase__image-wrap > img {
       transition: none !important;
     }
 

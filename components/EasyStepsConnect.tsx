@@ -121,8 +121,8 @@ export default function EasyStepsConnect() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.55 }}
           className="text-center"
@@ -173,22 +173,18 @@ export default function EasyStepsConnect() {
             className={[
               "-mx-4 px-4 sm:-mx-6 sm:px-6 md:mx-0 lg:px-0",
               "snap-x snap-mandatory overflow-x-auto overflow-y-visible pb-3",
-              "touch-pan-x scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+              "scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
               "[-webkit-overflow-scrolling:touch]",
-              "md:overflow-x-visible md:snap-none md:pb-0 md:touch-auto md:[scrollbar-width:auto]",
+              "md:overflow-x-visible md:snap-none md:pb-0 md:[scrollbar-width:auto]",
             ].join(" ")}
           >
             <ul className="m-0 flex w-max list-none flex-nowrap gap-6 md:grid md:w-full md:max-w-none md:grid-cols-3 md:flex-none md:gap-6 lg:gap-8">
               {steps.map((step, index) => (
-                <motion.li
+                <li
                   key={step.number}
                   ref={(node) => {
                     slideRefs.current[index] = node;
                   }}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.45, delay: index * 0.08 }}
                   className={[
                     "flex shrink-0 snap-center flex-col rounded-[1.75rem]",
                     "w-[min(22rem,calc(100vw-2.75rem))] max-w-none md:w-auto md:max-w-none",
@@ -217,15 +213,15 @@ export default function EasyStepsConnect() {
                   <p className="mt-2 text-center text-sm font-normal leading-relaxed text-zinc-600 sm:text-[0.9375rem]">
                     {step.description}
                   </p>
-                </motion.li>
+                </li>
               ))}
             </ul>
           </div>
 
           <div className="mx-auto mt-12 max-w-4xl sm:mt-14 lg:mt-16">
             <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.55, delay: 0.04 }}
               className="rounded-[1.75rem] border border-white/10 bg-white px-6 py-10 text-center shadow-[0_18px_50px_-24px_rgba(0,0,0,0.35)] sm:px-10 sm:py-12 lg:rounded-[2rem] lg:py-14"
