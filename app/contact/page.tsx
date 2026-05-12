@@ -1,6 +1,19 @@
+import type { Metadata } from "next";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ContactForm from "./ContactForm";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Contact Fluoverse — collaborations that help arrivals connect with locals, relocation & friendship initiatives, partnerships, press, and learner questions.",
+  alternates: { canonical: "https://fluoverse.com/contact" },
+  openGraph: {
+    url: "https://fluoverse.com/contact",
+    title: "Contact | Fluoverse",
+    description: "Questions about bridging language gaps, partnerships, or help connecting abroad—say hello here.",
+  },
+};
 
 export default function ContactPage() {
   return (
@@ -23,4 +36,3 @@ export default function ContactPage() {
     </main>
   );
 }
-

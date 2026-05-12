@@ -3,7 +3,7 @@ import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import VWO from "@/components/VWO";
-import { LEARNERS_ONLY_SITE } from "@/lib/config";
+import { APP_STORE_WEB_URLS, LEARNERS_ONLY_SITE } from "@/lib/config";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -18,34 +18,28 @@ const plusJakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://fluoverse.com"),
   title: {
-    default: "Fluoverse - Language Learning for the Real World | Authentic Speaking Practice",
+    default:
+      "Fluoverse — Connect with locals, make friends & feel at home | Speak-first language confidence",
     template: "%s | Fluoverse",
   },
-  description: "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking exercises at home, practice with real people or the AI, and build fluency through authentic conversations. Join 1000+ active learners speaking with confidence.",
+  description:
+    "Break language and cultural barriers through speak-first practice for real chats—meetups, errands, coworkers, hobbies. Gain listening and speaking habits that feel natural abroad so chats can deepen into friendships. Scenarios, guided conversations, and Fluency Rooms for the language you're navigating—on iOS & Android.",
   keywords: [
     "Fluoverse",
-    "Spanish Learning",
-    "English Learning",
-    "Greek Learning",
-    "Authentic Speaking Practice",
-    "Language Learning App",
-    "Conversational Spanish",
-    "Speaking Practice",
-    "Language Practice",
-    "Real Conversations",
-    "Language Immersion",
-    "Spanish Speaking Practice",
-    "Interactive Language Learning",
-    "Voice-Based Language Learning",
-    "Speak with Real People",
-    "Fluency Practice",
-    "Assign Speaking at Home",
-    "Immersive Language Learning",
-    "Interactive Speaking Practice",
-    "Learn Spanish Online",
-    "Learn English Online",
-    "Learn Greek Online",
-    "Language Learning Platform",
+    "make friends abroad",
+    "connect with locals",
+    "integrate abroad feeling at home",
+    "cultural barrier language barrier",
+    "genuine friendships expat",
+    "speaking practice app",
+    "voice-first language practice",
+    "second language friendships",
+    "local language anxiety confidence",
+    "real-world scenarios",
+    "Fluency Rooms",
+    "expats social integration",
+    "learn language abroad friendships",
+    "relocating locals confidence",
   ],
   authors: [{ name: "Fluoverse Team" }],
   creator: "Fluoverse",
@@ -66,27 +60,26 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://fluoverse.com",
     siteName: "Fluoverse",
-    title: "Fluoverse - Language Learning for the Real World | Authentic Speaking Practice",
-    description: "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking exercises at home and practice with real people or the AI. Build fluency through authentic conversations.",
+    title: "Fluoverse — Confidence for locals, friendships abroad",
+    description:
+      "Practice the conversations where language meets culture—listening, reacting, joking—so integrating feels warmer and friendships can spark. Scenario-first speaking and Fluency Rooms on mobile.",
     images: [
       {
         url: "https://fluoverse.com/android-chrome-512x512.png",
         width: 512,
         height: 512,
-        alt: "Fluoverse - Authentic Speaking Practice Platform for English, Spanish, and Greek",
+        alt: "Fluoverse — speak-first practice to soften language barriers so life abroad feels warmer with locals",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fluoverse - Language Learning for the Real World",
-    description: "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking at home and practice with real people or the AI to build fluency.",
+    title: "Fluoverse — Connect with locals abroad",
+    description:
+      "Speak-first scenarios & Fluency Rooms to bridge vocabulary and cultural gaps—meet people, integrate, grow friendships in the language you're living.",
     images: ["https://fluoverse.com/android-chrome-512x512.png"],
     creator: "@fluoverse",
-  },
-  alternates: {
-    canonical: "https://fluoverse.com",
   },
   category: "Education",
   classification: "Language Learning Application",
@@ -126,7 +119,8 @@ export default function RootLayout({
     "name": "Fluoverse",
     "url": "https://fluoverse.com",
     "logo": "https://fluoverse.com/android-chrome-512x512.png",
-    "description": "Language Learning for the Real World. Experience authentic speaking practice in English, Spanish, and Greek through immersive, interactive conversations with real people or the AI.",
+    "description":
+      "Fluoverse helps people integrate abroad and connect with locals by breaking language barriers—voice-first scenarios, guided conversations, and Fluency Rooms so everyday chats in the languages around them feel warmer and friendships form more easily.",
     "foundingDate": "2024",
     "sameAs": [
       "https://twitter.com/fluoverse",
@@ -135,8 +129,7 @@ export default function RootLayout({
     ],
     "contactPoint": {
       "@type": "ContactPoint",
-      "contactType": "Customer Support",
-      "availableLanguage": ["English", "Spanish", "Greek"]
+      "contactType": "Customer Support"
     }
   };
 
@@ -150,43 +143,29 @@ export default function RootLayout({
     "offers": {
       "@type": "Offer",
       "price": "0",
-      "priceCurrency": "USD"
+      "priceCurrency": "USD",
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "ratingCount": "2000",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
-    "description": "Master English, Spanish, and Greek through immersive, interactive speaking practice. Assign speaking exercises at home, practice with real people, and build fluency through authentic conversations.",
+    "description":
+      "Voice-first app for bridging language gaps and cultural friction—real-world scenarios and Fluency Rooms that strengthen listening and spontaneous speaking so friendships with locals grow more naturally abroad.",
     "screenshot": "https://fluoverse.com/android-chrome-512x512.png",
     "featureList": (() => {
       const all = [
-      "Authentic Speaking Practice",
-      "Assign Speaking at Home",
-      "Interactive Voice Conversations",
-      "Real-World Scenario Practice",
-      "Speak with Real People",
-      "Custom Scenario Creation",
-      "Progress Tracking",
-      "Multi-Language Support (English, Spanish, Greek)",
-      "Tutor Analytics Dashboard",
-      "Fluency Building Exercises",
-    ];
-      return LEARNERS_ONLY_SITE
-        ? all.filter(
-            (f) =>
-              f !== "Tutor Analytics Dashboard" &&
-              f !== "Assign Speaking at Home"
-          )
-        : all;
+        "Speak-first practice for everyday moments with locals",
+        "Confidence that softens cultural and language barriers",
+        "Scenario-based outings meetups errands and workplaces",
+        "Fluency Rooms for paired conversational role-play",
+        "Guided AI conversations grounded in culture and tone",
+        "Pathways tuned to the language wherever you relocate",
+        "Warmer introductions small talk jokes and goodwill",
+        "Custom scenario creation (Premium)",
+      ];
+      const withTutor = [
+        ...all,
+        "Tutor dashboards and classroom insights",
+      ];
+      return LEARNERS_ONLY_SITE ? all : withTutor;
     })(),
-    "inLanguage": ["en", "es", "el"],
-    "downloadUrl": [
-      "https://fluoverse.onelink.me/zcI3/9242fe8w",
-      "https://fluoverse.onelink.me/zcI3/9242fe8w"
-    ]
+    "downloadUrl": [APP_STORE_WEB_URLS.ios, APP_STORE_WEB_URLS.android],
   };
 
   // WebSite Schema
@@ -195,15 +174,8 @@ export default function RootLayout({
     "@type": "WebSite",
     "name": "Fluoverse",
     "url": "https://fluoverse.com",
-    "description": "Learn the language by living it. Immersive, interactive speaking practice platform for English, Spanish, and Greek. Assign speaking at home and practice with real people.",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": "https://fluoverse.com/search?q={search_term_string}"
-      },
-      "query-input": "required name=search_term_string"
-    }
+    "description":
+      "Practice the language you hear every day the way friendships start—scenario-first speaking, Fluency Rooms, and guided chats that help newcomers feel more at home with locals.",
   };
 
   // BreadcrumbList Schema
@@ -226,7 +198,6 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="theme-color" content="#7c3aed" />
         <meta name="format-detection" content="telephone=no" />
-        <link rel="canonical" href="https://fluoverse.com" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
         <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />

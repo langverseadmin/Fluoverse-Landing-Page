@@ -7,8 +7,21 @@ import { LEARNERS_ONLY_SITE } from "@/lib/config";
 export const metadata: Metadata = {
   title: "Pricing",
   description: LEARNERS_ONLY_SITE
-    ? "Simple, transparent pricing for learners. Start free or upgrade to Premium for unlimited speaking practice."
-    : "Choose the perfect plan for learners, tutors, or businesses. Flexible pricing options to suit your needs.",
+    ? "Fluoverse pricing for learners integrating abroad — start free or go Premium for unlimited scenarios and Fluency Rooms that sharpen the speaking you use with locals daily."
+    : "Flexible Fluoverse pricing for learners, tutors, and businesses — speaking practice scenarios, dashboards, and team options.",
+  alternates: { canonical: "https://fluoverse.com/pricing" },
+  openGraph: {
+    url: "https://fluoverse.com/pricing",
+    title: "Pricing | Fluoverse",
+    description: LEARNERS_ONLY_SITE
+      ? "Free and Premium for unlimited scenarios and Fluency Rooms—confidence for coffees with neighbours and coworkers."
+      : "Plans for learners, tutors, and organizations.",
+  },
+  keywords: [
+    "Fluoverse Premium",
+    "language learning abroad subscription",
+    "speaking locals confidence pricing",
+  ],
 };
 
 export default function PricingPage() {

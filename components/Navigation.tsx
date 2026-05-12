@@ -135,7 +135,7 @@ export default function Navigation() {
                 <a href="/" className="flex items-center space-x-2">
                   <Image
                     src="/logo.svg"
-                    alt="Fluoverse - Authentic Speaking Practice Platform for English, Spanish, and Greek"
+                    alt="Fluoverse — speak-first practice to connect with locals and soften language gaps"
                     width={160}
                     height={48}
                     className="h-12 w-auto rounded-lg"

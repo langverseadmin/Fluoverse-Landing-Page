@@ -1,71 +1,78 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://fluoverse.com'
-  const now = new Date()
-  
-  // All page routes
-  const pages = [
+  const baseUrl = "https://fluoverse.com";
+  const now = new Date();
+
+  const pages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: now,
-      changeFrequency: 'weekly' as const,
+      changeFrequency: "weekly",
       priority: 1,
+    },
+    {
+      url: `${baseUrl}/pricing`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.85,
     },
     {
       url: `${baseUrl}/contact`,
       lastModified: now,
-      changeFrequency: 'monthly' as const,
+      changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/faq`,
       lastModified: now,
-      changeFrequency: 'weekly' as const,
-      priority: 0.6,
+      changeFrequency: "weekly",
+      priority: 0.65,
     },
     {
       url: `${baseUrl}/privacy`,
       lastModified: now,
-      changeFrequency: 'monthly' as const,
+      changeFrequency: "monthly",
       priority: 0.5,
     },
     {
       url: `${baseUrl}/terms`,
       lastModified: now,
-      changeFrequency: 'monthly' as const,
+      changeFrequency: "monthly",
       priority: 0.5,
     },
     {
       url: `${baseUrl}/recap`,
       lastModified: now,
-      changeFrequency: 'weekly' as const,
+      changeFrequency: "weekly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/wrapped`,
       lastModified: now,
-      changeFrequency: 'weekly' as const,
+      changeFrequency: "weekly",
       priority: 0.7,
     },
-  ]
+  ];
 
-  // Hash-based section URLs (homepage sections)
+  // Anchors currently used on the marketing homepage for deep linking
   const hashSections = [
-    'benefits',
-    'testimonials',
-    'how-it-works',
-    'get-started',
-    'user-video',
-  ]
+    "hero",
+    "download",
+    "isolation-gallery",
+    "benefits",
+    "understand-journey",
+    "user-video",
+    "testimonials",
+    "easy-steps",
+  ];
 
-  const hashUrls = hashSections.map(section => ({
+  const hashUrls: MetadataRoute.Sitemap = hashSections.map((section) => ({
     url: `${baseUrl}/#${section}`,
     lastModified: now,
-    changeFrequency: 'weekly' as const,
-    priority: 0.6,
-  }))
+    changeFrequency: "weekly",
+    priority: 0.55,
+  }));
 
-  return [...pages, ...hashUrls]
+  return [...pages, ...hashUrls];
 }
-
