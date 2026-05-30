@@ -7,6 +7,7 @@
         "paths": [
           "/r",
           "/r/*",
+          "/community/invite/*",
           "/auth/email-confirm",
           "/auth/email-confirm*"
         ]
