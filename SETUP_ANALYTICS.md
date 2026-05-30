@@ -1,103 +1,81 @@
-# Analytics & A/B Testing Setup Guide
+# Google Analytics — download conversion setup
 
-This guide will help you set up Google Analytics and VWO for your Fluoverse landing page.
+Measurement ID in production: **G-BYX3GMDNEL** (`components/GoogleAnalytics.tsx`).
 
-## Prerequisites
+Events are defined in `lib/analytics.ts`. Store badge clicks send:
 
-1. A Google Analytics 4 (GA4) account
-2. A VWO account (free tier available)
+| Event | When |
+|-------|------|
+| `download_app_store_click` | App Store badge |
+| `download_google_play_click` | Google Play badge |
+| `download_intent` | Every store badge click (use as **main conversion**) |
 
-## Step 1: Get Your Google Analytics Measurement ID
+All store events include **`placement`**: `hero`, `benefits`, `isolation_showcase`, etc.
 
-1. Go to [Google Analytics](https://analytics.google.com/)
-2. Navigate to **Admin** (gear icon at bottom left)
-3. Under **Property**, click **Data Streams**
-4. Click on your web stream (or create one if you don't have one)
-5. Copy your **Measurement ID** (format: `G-XXXXXXXXXX`)
+---
 
-## Step 2: Get Your VWO Account ID
+## Step 1 — Verify events fire
 
-1. Go to [VWO](https://app.vwo.com/) and log in
-2. Navigate to **Settings** → **Installation**
-3. Find your **Account ID** (it's a number, e.g., `123456`)
-4. Copy the Account ID
+1. Open the site (production or local with GA loaded).
+2. DevTools → **Network** → filter `google-analytics` or `collect`.
+3. Click an App Store / Play badge.
+4. In GA4 **Reports → Realtime**, confirm `download_intent` (and store-specific events) appear within ~30s.
 
-## Step 3: Create Environment Variables
+---
 
-Create a `.env.local` file in the root of your project (if it doesn't exist) and add:
+## Step 2 — Register custom dimensions (required for hero breakdowns)
 
-```env
-# Google Analytics 4 Measurement ID
-NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+In GA4 **Admin → Data display → Custom definitions → Create custom dimensions**:
 
-# VWO Account ID (just the number)
-NEXT_PUBLIC_VWO_ACCOUNT_ID=123456
-```
+| Dimension name | Event parameter | Scope |
+|----------------|-----------------|-------|
+| placement | placement | Event |
+| store | store | Event |
 
-Replace the placeholder values with your actual IDs.
+Allow 24–48h after creating before explorations show data reliably.
 
-## Step 4: Restart Your Development Server
+---
 
-After adding the environment variables, restart your Next.js development server:
+## Step 3 — Mark conversions
 
-```bash
-npm run dev
-```
+**Admin → Data display → Events**
 
-## Step 5: Verify Installation
+Mark as conversions:
 
-### Google Analytics
-1. Visit your website in a browser
-2. Open the browser's Developer Tools (F12)
-3. Go to the **Network** tab
-4. Look for requests to `www.googletagmanager.com`
-5. You can also check Google Analytics Real-Time reports to see if you appear as an active user
+- `download_intent` (primary — all store clicks, all sections)
+- `download_app_store_click` (optional)
+- `download_google_play_click` (optional)
 
-### VWO
-1. Visit your website in a browser
-2. Open the browser's Developer Tools (F12)
-3. Go to the **Console** tab
-4. Type `window._vwo_code` and press Enter
-5. You should see an object (not `undefined`)
+---
 
-## Usage
+## Step 4 — Hero baseline (7–14 days)
 
-### Google Analytics
-- Track page views automatically
-- View reports in Google Analytics dashboard
-- Real-time visitor tracking is available
+Before changing the hero, log weekly numbers using **[docs/HERO_CONVERSION_BASELINE.md](docs/HERO_CONVERSION_BASELINE.md)**.
 
-### VWO
-- Create A/B tests in the VWO dashboard
-- Use the visual editor to modify your pages
-- Track conversions and analyze results
+Compare future hero changes against that table (same length of time, similar traffic).
+
+---
+
+## Quick hero conversion rate in Explore
+
+1. **Explore → Free form**
+2. Date range: baseline period
+3. **Filter:** Page path = `/`
+4. Metrics: Active users + Event count where event = `download_intent` and `placement` = `hero`
+5. Rate ≈ hero download_intent count ÷ active users
+
+Break down by **Device category** (mobile vs desktop).
+
+---
 
 ## Troubleshooting
 
-### Analytics not tracking?
-- Ensure your `.env.local` file is in the root directory
-- Make sure you've restarted your development server after adding environment variables
-- Check that the environment variable names are correct (they must start with `NEXT_PUBLIC_`)
+- No events: confirm `gtag` requests in Network; ad blockers block GA locally.
+- No `placement` in reports: finish Step 2 and wait 24–48h.
+- ID mismatch: `GoogleAnalytics.tsx` uses a hardcoded ID; keep it aligned with your GA4 property.
 
-### VWO not working?
-- Verify your Account ID is a number (not a string)
-- Check the browser console for any JavaScript errors
-- Ensure the VWO script is loading (check Network tab)
+---
 
-## Production Deployment
+## Optional: env-based measurement ID
 
-When deploying to production (e.g., Vercel, Netlify), make sure to add the environment variables in your hosting platform's settings:
-
-- **Vercel**: Project Settings → Environment Variables
-- **Netlify**: Site Settings → Environment Variables
-
-The environment variables should be:
-- `NEXT_PUBLIC_GA_MEASUREMENT_ID`
-- `NEXT_PUBLIC_VWO_ACCOUNT_ID`
-
-## Notes
-
-- Both scripts load using Next.js `Script` component with `afterInteractive` strategy for optimal performance
-- The scripts won't load if the environment variables are not set (graceful degradation)
-- All tracking respects user privacy settings and browser Do Not Track preferences
-
+You can later move the ID to `NEXT_PUBLIC_GA_MEASUREMENT_ID` if you want different IDs per environment. Tracking code in `lib/analytics.ts` does not need to change.

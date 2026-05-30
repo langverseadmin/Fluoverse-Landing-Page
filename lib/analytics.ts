@@ -40,11 +40,20 @@ export type StoreDownloadPlacement =
   | "after_testimonials"
   | "easy_steps_isolation_cta";
 
-export const trackStoreBadgeAppStore = (placement: StoreDownloadPlacement) =>
-  track("download_app_store_click", { placement });
+/** Fired alongside store-specific events — mark as primary conversion in GA4 */
+function trackDownloadIntent(placement: StoreDownloadPlacement, store: "ios" | "android") {
+  track("download_intent", { placement, store });
+}
 
-export const trackStoreBadgeGooglePlay = (placement: StoreDownloadPlacement) =>
+export const trackStoreBadgeAppStore = (placement: StoreDownloadPlacement) => {
+  track("download_app_store_click", { placement });
+  trackDownloadIntent(placement, "ios");
+};
+
+export const trackStoreBadgeGooglePlay = (placement: StoreDownloadPlacement) => {
   track("download_google_play_click", { placement });
+  trackDownloadIntent(placement, "android");
+};
 
 // ─── Benefits ─────────────────────────────────────────────────────────────────
 
