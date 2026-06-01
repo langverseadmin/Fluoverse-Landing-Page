@@ -38,7 +38,12 @@ export type StoreDownloadPlacement =
   | "isolation_showcase"
   | "benefits"
   | "after_testimonials"
-  | "easy_steps_isolation_cta";
+  | "easy_steps_isolation_cta"
+  | "guide_spain_hub"
+  | "guide_madrid"
+  | "guide_valencia"
+  | "guide_social_apps"
+  | "guide_intercambio_madrid";
 
 /** Fired alongside store-specific events — mark as primary conversion in GA4 */
 function trackDownloadIntent(placement: StoreDownloadPlacement, store: "ios" | "android") {
@@ -100,3 +105,15 @@ export const trackFaqOpen = (question: string) =>
 
 export const trackFooterSocialClick = (platform: string) =>
   track(`footer_social_${platform.toLowerCase()}`);
+
+// ─── Expat guides (social coordination) ────────────────────────────────────
+
+export type SocialLinkChannel = "whatsapp" | "telegram" | "meetup" | "event";
+
+/** Outbound click to WhatsApp, Telegram, Meetup, or event page from a city guide */
+export const trackSocialLinkClick = (city: string, channel: SocialLinkChannel) =>
+  track("social_link_click", { city, channel });
+
+/** Scroll-depth milestones on guide pages — target 60%+ engagement rate */
+export const trackGuideEngagement = (guide_slug: string, scroll_depth: number) =>
+  track("guide_engagement", { guide_slug, scroll_depth });

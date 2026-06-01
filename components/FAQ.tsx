@@ -1,12 +1,29 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useMemo } from "react";
+import Link from "next/link";
+import { useState, useMemo, type ReactNode } from "react";
 import { Minus, Plus } from "lucide-react";
 import { trackFaqOpen } from "@/lib/analytics";
 import { LEARNERS_ONLY_SITE } from "@/lib/config";
 
-const faqsAll = [
+const faqsAll: { question: string; answer: ReactNode }[] = [
+  {
+    question: "How can I make friends after moving abroad?",
+    answer: (
+      <>
+        Start with one recurring event, like a language exchange or hobby group, and go
+        twice before trying something new. See our{" "}
+        <Link
+          href="/guides/making-friends-abroad/spain"
+          className="text-purple-300 underline hover:text-purple-200"
+        >
+          Spain social guide
+        </Link>{" "}
+        for city calendars, language exchanges, and phrases to show up with confidence.
+      </>
+    ),
+  },
   {
     question: "What is Fluoverse?",
     answer: "Fluoverse is a speak-first language learning app where you practice with real-world scenarios and guided conversations.",

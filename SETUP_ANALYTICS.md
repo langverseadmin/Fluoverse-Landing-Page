@@ -14,6 +14,36 @@ All store events include **`placement`**: `hero`, `benefits`, `isolation_showcas
 
 ---
 
+## Expat guide events (social coordination)
+
+City and infrastructure guides also fire:
+
+| Event | When |
+|-------|------|
+| `social_link_click` | Outbound click to WhatsApp, Telegram, Meetup, or event URL on a guide page |
+| `guide_engagement` | Scroll-depth milestone (25, 50, 75, 90%) on guide pages |
+
+Guide store badges use **`placement`**: `guide_spain_hub`, `guide_madrid`, `guide_valencia`, `guide_social_apps`, `guide_intercambio_madrid`.
+
+### Custom dimensions for guides
+
+In GA4 **Admin → Data display → Custom definitions → Create custom dimensions**:
+
+| Dimension name | Event parameter | Scope |
+|----------------|-----------------|-------|
+| city | city | Event |
+| channel | channel | Event |
+| guide_slug | guide_slug | Event |
+| scroll_depth | scroll_depth | Event |
+
+### Measuring guide success
+
+1. **Explore → Free form** — filter page path contains `/guides/`
+2. Metrics: `social_link_click` count, `guide_engagement` at 75%+, assisted `download_intent` within 7 days
+3. Target **60%+ engagement rate** on guide pages; if lower, content may be too generic
+
+---
+
 ## Step 1 — Verify events fire
 
 1. Open the site (production or local with GA loaded).

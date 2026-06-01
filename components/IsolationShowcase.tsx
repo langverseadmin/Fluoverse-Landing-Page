@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { trackStoreBadgeAppStore, trackStoreBadgeGooglePlay } from "@/lib/analytics";
 import AppStoreBadgeLinks from "@/components/AppStoreBadgeLinks";
@@ -60,6 +61,16 @@ export default function IsolationShowcase() {
             Don&apos;t Face Isolation{" "}
             <span className="text-purple-400">Alone</span>
           </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg">
+            Recently moved to Spain and trying to make friends?{" "}
+            <Link
+              href="/guides/making-friends-abroad/spain"
+              className="font-medium text-purple-300 underline decoration-purple-400/50 underline-offset-2 transition-colors hover:text-purple-200"
+            >
+              See our city-by-city social calendar
+            </Link>
+            : language exchanges, meetups, and a first-30-days plan.
+          </p>
         </motion.div>
       </div>
 

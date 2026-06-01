@@ -9,7 +9,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'flagcdn.com',
+        hostname: 'secure.meetupstatic.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'photos2.meetupstatic.com',
       },
     ],
   },
