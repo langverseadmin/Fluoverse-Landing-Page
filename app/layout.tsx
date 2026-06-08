@@ -19,27 +19,26 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://fluoverse.com"),
   title: {
     default:
-      "Fluoverse — Connect with locals, make friends & feel at home | Speak-first language confidence",
+      "Fluoverse — Stop Feeling Alone. Start Feeling at Home in Spain",
     template: "%s | Fluoverse",
   },
   description:
-    "Break language and cultural barriers through speak-first practice for real chats—meetups, errands, coworkers, hobbies. Gain listening and speaking habits that feel natural abroad so chats can deepen into friendships. Scenarios, guided conversations, and Fluency Rooms for the language you're navigating—on iOS & Android.",
+    "New in Spain with no real friends? Fluoverse is the social integration app for expats: real Spanish for everyday situations, cultural coaching, and recurring meetups so you go from lonely newcomer to feeling at home.",
   keywords: [
     "Fluoverse",
-    "make friends abroad",
-    "connect with locals",
-    "integrate abroad feeling at home",
-    "cultural barrier language barrier",
-    "genuine friendships expat",
-    "speaking practice app",
-    "voice-first language practice",
-    "second language friendships",
-    "local language anxiety confidence",
-    "real-world scenarios",
-    "Fluency Rooms",
-    "expats social integration",
-    "learn language abroad friendships",
-    "relocating locals confidence",
+    "feel at home in Spain",
+    "make friends in Spain",
+    "lonely in Spain",
+    "new in Spain no friends",
+    "expat Spain social app",
+    "social integration app Spain",
+    "learn Spanish real life",
+    "meet locals Spain",
+    "make real friends Spain",
+    "moved to Spain alone",
+    "Spanish culture for expats",
+    "language anxiety Spain",
+    "recurring meetups Spain",
   ],
   authors: [{ name: "Fluoverse Team" }],
   creator: "Fluoverse",
@@ -60,29 +59,29 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://fluoverse.com",
     siteName: "Fluoverse",
-    title: "Fluoverse — Confidence for locals, friendships abroad",
+    title: "Fluoverse — Stop Feeling Alone. Start Feeling at Home in Spain",
     description:
-      "Practice the conversations where language meets culture—listening, reacting, joking—so integrating feels warmer and friendships can spark. Scenario-first speaking and Fluency Rooms on mobile.",
+      "Make real friends in Spain, starting today. Fluoverse pairs you with locals and fellow expats, teaches how people actually speak, and guides recurring meetups until friendships stick.",
     images: [
       {
         url: "https://fluoverse.com/android-chrome-512x512.png",
         width: 512,
         height: 512,
-        alt: "Fluoverse — speak-first practice to soften language barriers so life abroad feels warmer with locals",
+        alt: "Fluoverse — social integration app for expats in Spain to make real friends and feel at home",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fluoverse — Connect with locals abroad",
+    title: "Fluoverse — Stop Feeling Alone. Start Feeling at Home",
     description:
-      "Speak-first scenarios & Fluency Rooms to bridge vocabulary and cultural gaps—meet people, integrate, grow friendships in the language you're living.",
+      "The app for expats in Spain who want real friends, not awkward one-offs. Practical Spanish, cultural coaching, and guided meetups on iOS and Android.",
     images: ["https://fluoverse.com/android-chrome-512x512.png"],
     creator: "@fluoverse",
   },
-  category: "Education",
-  classification: "Language Learning Application",
+  category: "Social Networking",
+  classification: "Social Integration Application",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -120,7 +119,7 @@ export default function RootLayout({
     "url": "https://fluoverse.com",
     "logo": "https://fluoverse.com/android-chrome-512x512.png",
     "description":
-      "Fluoverse helps people integrate abroad and connect with locals by breaking language barriers—voice-first scenarios, guided conversations, and Fluency Rooms so everyday chats in the languages around them feel warmer and friendships form more easily.",
+      "Fluoverse is the social integration app for expats in Spain who want to feel at home fast. Real Spanish for real situations, cultural coaching, and recurring meetups that turn lonely newcomers into lasting friendships.",
     "foundingDate": "2024",
     "sameAs": [
       "https://twitter.com/fluoverse",
@@ -138,7 +137,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "Fluoverse",
-    "applicationCategory": "EducationalApplication",
+    "applicationCategory": "SocialNetworkingApplication",
     "operatingSystem": ["iOS", "Android"],
     "offers": {
       "@type": "Offer",
@@ -146,18 +145,18 @@ export default function RootLayout({
       "priceCurrency": "USD",
     },
     "description":
-      "Voice-first app for bridging language gaps and cultural friction—real-world scenarios and Fluency Rooms that strengthen listening and spontaneous speaking so friendships with locals grow more naturally abroad.",
+      "Social integration app for expats in Spain: practice everyday Spanish and culture, join guided group activities, and build a real social circle from your first weeks abroad.",
     "screenshot": "https://fluoverse.com/android-chrome-512x512.png",
     "featureList": (() => {
       const all = [
-        "Speak-first practice for everyday moments with locals",
-        "Confidence that softens cultural and language barriers",
-        "Scenario-based outings meetups errands and workplaces",
-        "Fluency Rooms for paired conversational role-play",
-        "Guided AI conversations grounded in culture and tone",
-        "Pathways tuned to the language wherever you relocate",
-        "Warmer introductions small talk jokes and goodwill",
-        "Custom scenario creation (Premium)",
+        "Real Spanish for everyday situations with locals",
+        "Cultural coaching so you stop feeling like an outsider",
+        "Interest-based matching with trustworthy people",
+        "Recurring group meetups that build real friendships",
+        "Conversation practice before you walk into social events",
+        "Guided path from lonely newcomer to feeling at home",
+        "Activities with locals and fellow expats in Spain",
+        "Custom scenarios for your city and situation (Premium)",
       ];
       const withTutor = [
         ...all,
@@ -175,7 +174,7 @@ export default function RootLayout({
     "name": "Fluoverse",
     "url": "https://fluoverse.com",
     "description":
-      "Practice the language you hear every day the way friendships start—scenario-first speaking, Fluency Rooms, and guided chats that help newcomers feel more at home with locals.",
+      "Stop feeling alone. Start feeling at home in Spain. Fluoverse helps expats make real friends through practical Spanish, cultural know-how, and recurring meetups.",
   };
 
   // BreadcrumbList Schema

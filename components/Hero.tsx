@@ -50,25 +50,20 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="hero-headline-pop w-full min-w-0 text-center text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] sm:leading-[1.08]"
             >
-              {/* Mobile / tablet: same two-line headline as before (< lg) */}
+              {/* Mobile / tablet: two-line tagline (< lg) */}
               <span className="flex flex-col items-center gap-3 sm:gap-4 lg:gap-5 lg:hidden">
-                <span className="block max-w-full whitespace-nowrap">
-                  Bridge the Gap to
+                <span className="block max-w-full">
+                  Stop feeling alone.
                 </span>
-                <span className="block max-w-full whitespace-nowrap text-purple-400 italic font-black">
-                  Genuine Friendships
+                <span className="block max-w-full text-purple-400 italic font-black">
+                  Start feeling at home.
                 </span>
               </span>
-              {/* lg+: Genuine sits on the first line */}
+              {/* lg+: same tagline, larger layout */}
               <span className="hidden flex-col items-center gap-3 sm:gap-4 lg:gap-5 lg:flex">
-                <span className="block">
-                  Bridge the Gap to{" "}
-                  <span className="text-purple-400 italic font-black">
-                    Genuine
-                  </span>
-                </span>
+                <span className="block">Stop feeling alone.</span>
                 <span className="block text-purple-400 italic font-black">
-                  Friendships
+                  Start feeling at home.
                 </span>
               </span>
             </motion.h1>
@@ -86,7 +81,9 @@ export default function Hero() {
                   transition={{ duration: 0.6, delay: 0.22 }}
                   className="text-center text-base sm:text-lg lg:text-xl text-white/90 drop-shadow-[0_1px_10px_rgba(0,0,0,0.25)]"
                 >
-                  Are you struggling to connect with locals in your new home?
+                  New in Spain with no real friends? Fluoverse teaches real
+                  Spanish and culture and guides you through meetups until
+                  someone becomes a real friend.
                 </motion.p>
               </div>
 

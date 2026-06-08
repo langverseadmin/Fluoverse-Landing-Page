@@ -2,15 +2,18 @@ import type { CityGuideData, ExchangeListing, SpainHubData } from "./types";
 import { MEETUP_LISTING_IMAGES as IMG } from "./listing-images";
 const GUIDE_BASE = "/guides/making-friends-abroad/spain";
 export const spainHubData: SpainHubData = {
-  title: "How to Make Friends in Spain (2026 Guide)",
+  title: "How to Make Friends in Spain & Feel at Home (2026)",
   description:
-    "How to make friends in Spain after moving abroad: city guides for Madrid and Valencia, language exchanges, best social apps, and a practical first-month plan if you feel lonely.",
+    "Moved to Spain and still feel like a stranger? City guides for Madrid and Valencia, language exchanges, social apps, and a plan to turn lonely weekends into real friendships.",
   keywords: [
     "how to make friends in Spain",
-    "feeling lonely in Spain",
+    "feel at home in Spain",
+    "lonely in Spain",
+    "new in Spain no friends",
     "moved to Spain alone",
-    "make friends Spain moving abroad",
-    "social life Spain foreigner",
+    "make real friends Spain",
+    "expat friends Spain",
+    "social life Spain",
     "how to meet people in Spain",
   ],
   heroTitle: "How to make friends in Spain",
@@ -134,16 +137,17 @@ export const madridGuideData: CityGuideData = {
   city: "Madrid",
   citySpanish: "Madrid",
   path: `${GUIDE_BASE}/madrid`,
-  title: "How to Make Friends in Madrid (2026 Guide)",
+  title: "How to Make Friends in Madrid & Feel at Home (2026)",
   description:
-    "How to make friends in Madrid when you moved alone: weekly language exchanges, international meetups, padel groups, WhatsApp plans, and Spanish phrases for your first month.",
+    "Still have no one to go out with in Madrid? Weekly language exchanges, meetups, social apps, and real Spanish for social situations so you stop feeling like an outsider.",
   keywords: [
     "how to make friends in Madrid",
-    "making friends Madrid",
-    "moved to Madrid alone",
+    "feel at home Madrid",
     "lonely in Madrid",
+    "moved to Madrid alone",
+    "new in Madrid no friends",
+    "making friends Madrid expat",
     "language exchange Madrid",
-    "international meetups Madrid",
     "how to meet people in Madrid",
   ],
   heroTitle: "How to make friends in Madrid",
@@ -434,15 +438,17 @@ export const valenciaGuideData: CityGuideData = {
   city: "Valencia",
   citySpanish: "Valencia",
   path: `${GUIDE_BASE}/valencia`,
-  title: "How to Make Friends in Valencia (2026 Guide)",
+  title: "How to Make Friends in Valencia & Feel at Home (2026)",
   description:
-    "How to make friends in Valencia: weekly language exchanges in Ruzafa and Benimaclet, beach meetups, social apps, and a first-30-days plan if you moved alone.",
+    "Moved to Valencia and weekends still feel empty? Language exchanges in Ruzafa, beach meetups, social apps, and a first-month plan to build a real social circle.",
   keywords: [
     "how to make friends in Valencia",
-    "making friends Valencia",
-    "moved to Valencia alone",
-    "language exchange Valencia",
+    "feel at home Valencia",
     "lonely in Valencia",
+    "moved to Valencia alone",
+    "new in Valencia no friends",
+    "making friends Valencia expat",
+    "language exchange Valencia",
     "how to meet people in Valencia",
   ],
   heroTitle: "How to make friends in Valencia",
@@ -733,16 +739,18 @@ export const valenciaGuideData: CityGuideData = {
 };
 export const socialAppsGuideData = {
   path: "/guides/social-apps-expats-spain-2026",
-  title: "Best Social Apps in Spain (2026 Ranked)",
+  title: "Best Social Apps in Spain to Make Friends (2026)",
   description:
-    "Best social apps in Spain ranked for making friends: WhatsApp, Meetup, Facebook Groups, Telegram, Playtomic, and InterNations compared with honest pros and cons.",
+    "Best social apps in Spain ranked for making real friends, not awkward one-offs. WhatsApp, Meetup, Fluoverse, Facebook Groups, and more compared honestly for expats in 2026.",
   keywords: [
     "best social apps in Spain",
-    "best apps to meet people in Spain",
     "apps to make friends in Spain",
+    "best apps to meet people in Spain",
+    "expat apps Spain",
     "social apps Spain 2026",
     "WhatsApp groups Spain",
-    "Meetup Spain",
+    "Meetup Spain friends",
+    "feel at home Spain app",
   ],
   heroTitle: "Best social apps in Spain",
   heroAccent: "ranked for 2026",
@@ -864,15 +872,16 @@ export const socialAppsGuideData = {
 };
 export const intercambioMadridData = {
   path: "/guides/intercambio-idiomas-madrid",
-  title: "Best Language Exchanges in Madrid (2026 Guide)",
+  title: "Best Language Exchanges in Madrid to Make Friends (2026)",
   description:
-    "Best language exchanges in Madrid: weekly schedules, neighborhoods like Lavapiés and Malasaña, beginner tips, and Spanish phrases for your first night.",
+    "Best language exchanges in Madrid for expats who want real friends: weekly schedules in Lavapiés and Malasaña, beginner tips, and what to say on your first night out.",
   keywords: [
     "language exchange Madrid",
     "best language exchange Madrid",
-    "language exchanges Madrid",
+    "language exchanges Madrid friends",
     "language exchange Madrid beginners",
-    "where to meet people Madrid",
+    "meet people Madrid expat",
+    "feel at home Madrid",
   ],
   heroTitle: "Best language exchanges in Madrid",
   heroAccent: "(2026 guide)",

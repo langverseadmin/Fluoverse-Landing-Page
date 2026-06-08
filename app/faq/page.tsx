@@ -6,21 +6,22 @@ import FAQ from "@/components/FAQ";
 export const metadata: Metadata = {
   title: "FAQ",
   description:
-    "Answers about Fluoverse — connecting abroad, bridging language gaps, scenarios and Fluency Rooms, Premium vs Free, privacy, tutors, and support.",
+    "Answers about Fluoverse, the social integration app for expats in Spain: making real friends, learning real Spanish, cultural coaching, meetups, Premium vs Free, and support.",
   keywords: [
     "Fluoverse FAQ",
-    "making friends abroad",
-    "locals integration Fluency Rooms",
-    "cultural barrier language scenarios",
+    "make friends in Spain",
+    "feel at home Spain",
+    "expat app Spain",
     "Fluoverse Premium",
-    "expat friendships support",
+    "social integration app",
+    "lonely in Spain help",
   ],
   alternates: { canonical: "https://fluoverse.com/faq" },
   openGraph: {
     url: "https://fluoverse.com/faq",
     title: "FAQ | Fluoverse",
     description:
-      "Common questions about befriending locals abroad, Fluency Rooms, downloads, subscriptions, classrooms, and support.",
+      "Common questions about making friends in Spain, Fluoverse meetups, downloads, subscriptions, and support.",
   },
 };
 
