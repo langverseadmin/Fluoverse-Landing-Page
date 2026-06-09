@@ -4,7 +4,7 @@ const GUIDE_BASE = "/guides/making-friends-abroad/spain";
 export const spainHubData: SpainHubData = {
   title: "How to Make Friends in Spain & Feel at Home (2026)",
   description:
-    "Moved to Spain and still feel like a stranger? City guides for Madrid and Valencia, language exchanges, social apps, and a plan to turn lonely weekends into real friendships.",
+    "Stop feeling alone in Spain. Start feeling at home. City guides for Madrid and Valencia, language exchanges, social apps, and a plan to turn lonely weekends into real friendships.",
   keywords: [
     "how to make friends in Spain",
     "feel at home in Spain",
@@ -139,7 +139,7 @@ export const madridGuideData: CityGuideData = {
   path: `${GUIDE_BASE}/madrid`,
   title: "How to Make Friends in Madrid & Feel at Home (2026)",
   description:
-    "Still have no one to go out with in Madrid? Weekly language exchanges, meetups, social apps, and real Spanish for social situations so you stop feeling like an outsider.",
+    "Stop feeling alone in Spain. Start feeling at home. Weekly language exchanges, meetups, social apps, and real Spanish for social situations in Madrid.",
   keywords: [
     "how to make friends in Madrid",
     "feel at home Madrid",
@@ -376,7 +376,7 @@ export const madridGuideData: CityGuideData = {
     'Dinner starts late (21:00+); "quedar" for drinks often means 20:00 to 20:30.',
   ],
   languageBridge: {
-    heading: "From just landed to feeling at home",
+    heading: "Stop feeling alone in Spain. Start feeling at home",
     body: "Friendships need more than one good night out. Fluoverse helps you find shared-interest activities, practice real Spanish situations (ordering coffee, small talk, asking to meet again), learn cultural context, and stay in conversation between events so integration feels natural, not forced.",
   },
   faqs: [
@@ -440,7 +440,7 @@ export const valenciaGuideData: CityGuideData = {
   path: `${GUIDE_BASE}/valencia`,
   title: "How to Make Friends in Valencia & Feel at Home (2026)",
   description:
-    "Moved to Valencia and weekends still feel empty? Language exchanges in Ruzafa, beach meetups, social apps, and a first-month plan to build a real social circle.",
+    "Stop feeling alone in Spain. Start feeling at home. Language exchanges in Ruzafa, beach meetups, social apps, and a first-month plan to build a real social circle in Valencia.",
   keywords: [
     "how to make friends in Valencia",
     "feel at home Valencia",
@@ -693,7 +693,7 @@ export const valenciaGuideData: CityGuideData = {
     'Dinner is still late; "tomar algo" often means drinks + tapas first.',
   ],
   languageBridge: {
-    heading: "From just landed to feeling at home",
+    heading: "Stop feeling alone in Spain. Start feeling at home",
     body: "Valencia rewards consistency, and Fluoverse helps you keep showing up. Practice the scripts above, learn local cultural context, and stay in conversation between events so your second Ruzafa visit feels like a routine, not a gamble.",
   },
   faqs: [
@@ -741,7 +741,7 @@ export const socialAppsGuideData = {
   path: "/guides/social-apps-expats-spain-2026",
   title: "Best Social Apps in Spain to Make Friends (2026)",
   description:
-    "Best social apps in Spain ranked for making real friends, not awkward one-offs. WhatsApp, Meetup, Fluoverse, Facebook Groups, and more compared honestly for expats in 2026.",
+    "Stop feeling alone in Spain. Start feeling at home. Best social apps ranked for making real friends: WhatsApp, Meetup, Fluoverse, Facebook Groups, and more for expats in 2026.",
   keywords: [
     "best social apps in Spain",
     "apps to make friends in Spain",
@@ -874,7 +874,7 @@ export const intercambioMadridData = {
   path: "/guides/intercambio-idiomas-madrid",
   title: "Best Language Exchanges in Madrid to Make Friends (2026)",
   description:
-    "Best language exchanges in Madrid for expats who want real friends: weekly schedules in Lavapiés and Malasaña, beginner tips, and what to say on your first night out.",
+    "Stop feeling alone in Spain. Start feeling at home. Best language exchanges in Madrid for expats who want real friends: weekly schedules, neighborhoods, and beginner tips.",
   keywords: [
     "language exchange Madrid",
     "best language exchange Madrid",

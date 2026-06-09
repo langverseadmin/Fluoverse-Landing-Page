@@ -323,8 +323,8 @@ export default function SpainHubContent({ data }: SpainHubContentProps) {
       <Reveal>
         {" "}
         <GuideSoftCta
-          heading="Ready to feel at home, not just arrived?"
-          body="Our founders relocated abroad and know how isolating the first months can feel. Fluoverse helps you find activities with people who share your interests, learn language and culture for real conversations, and keep interacting until friendships stick."
+          heading="Stop feeling alone in Spain. Start feeling at home."
+          body="Fluoverse pairs you with people who share your interests, guides recurring meetups until friendships stick, and teaches Spanish and culture along the way."
           placement="guide_spain_hub"
         />{" "}
       </Reveal>{" "}

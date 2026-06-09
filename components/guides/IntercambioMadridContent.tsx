@@ -175,8 +175,8 @@ export default function IntercambioMadridContent() {
       <Reveal>
         {" "}
         <GuideSoftCta
-          heading="Feel at home before you walk in"
-          body="Fluoverse helps you practice intro and follow-up lines, learn local cultural context, and build confidence for language exchange small talk, so night one is the start of something, not a one-off."
+          heading="Stop feeling alone in Spain. Start feeling at home"
+          body="Fluoverse helps you practice intro and follow-up lines, join recurring meetups, and learn local cultural context so night one is the start of something, not a one-off."
           placement="guide_intercambio_madrid"
         />{" "}
       </Reveal>{" "}

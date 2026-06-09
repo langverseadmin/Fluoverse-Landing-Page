@@ -4,6 +4,11 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { trackStoreBadgeAppStore, trackStoreBadgeGooglePlay } from "@/lib/analytics";
 import AppStoreBadgeLinks from "@/components/AppStoreBadgeLinks";
+import {
+  SITE_SUBHEAD,
+  SITE_TAGLINE_LINE1,
+  SITE_TAGLINE_LINE2,
+} from "@/lib/site-metadata";
 
 export default function Hero() {
   return (
@@ -52,18 +57,15 @@ export default function Hero() {
             >
               {/* Mobile / tablet: two-line tagline (< lg) */}
               <span className="flex flex-col items-center gap-3 sm:gap-4 lg:gap-5 lg:hidden">
-                <span className="block max-w-full">
-                  Stop feeling alone.
-                </span>
+                <span className="block max-w-full">{SITE_TAGLINE_LINE1}</span>
                 <span className="block max-w-full text-purple-400 italic font-black">
-                  Start feeling at home.
+                  {SITE_TAGLINE_LINE2}
                 </span>
               </span>
-              {/* lg+: same tagline, larger layout */}
               <span className="hidden flex-col items-center gap-3 sm:gap-4 lg:gap-5 lg:flex">
-                <span className="block">Stop feeling alone.</span>
+                <span className="block">{SITE_TAGLINE_LINE1}</span>
                 <span className="block text-purple-400 italic font-black">
-                  Start feeling at home.
+                  {SITE_TAGLINE_LINE2}
                 </span>
               </span>
             </motion.h1>
@@ -81,9 +83,7 @@ export default function Hero() {
                   transition={{ duration: 0.6, delay: 0.22 }}
                   className="text-center text-base sm:text-lg lg:text-xl text-white/90 drop-shadow-[0_1px_10px_rgba(0,0,0,0.25)]"
                 >
-                  New in Spain with no real friends? Fluoverse teaches real
-                  Spanish and culture and guides you through meetups until
-                  someone becomes a real friend.
+                  {SITE_SUBHEAD}
                 </motion.p>
               </div>
 
