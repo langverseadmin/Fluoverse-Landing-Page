@@ -8,6 +8,9 @@ export default function TrustedBy() {
       name: "ESN Erasmus Student Network Athens AUEB",
       logo: "/ESN.jpg",
       displayName: "ESN",
+      containerClassName: "overflow-visible",
+      logoClassName:
+        "object-contain max-h-[100px] max-w-[180px] scale-[1.55] origin-center",
     },
     {
       name: "GREECE RELOCATION",
@@ -28,6 +31,14 @@ export default function TrustedBy() {
       name: "ORANG GROVE",
       logo: "/orange_grove.webp",
       displayName: "ORANG GROVE",
+    },
+    {
+      name: "Airalo",
+      logo: "/airalo.svg",
+      displayName: "Airalo",
+      containerClassName: "overflow-visible",
+      logoClassName:
+        "object-contain max-h-[100px] max-w-[180px] scale-[1.05] origin-center",
     },
   ];
 
@@ -68,7 +79,7 @@ export default function TrustedBy() {
                 >
                   <a
                     href="#"
-                    className="relative w-[200px] h-[120px] bg-white rounded-lg flex items-center justify-center p-4 group/logo cursor-pointer overflow-hidden"
+                    className={`relative w-[200px] h-[120px] bg-white rounded-lg flex items-center justify-center p-4 group/logo cursor-pointer overflow-hidden ${partner.containerClassName ?? ""}`}
                     onClick={(e) => {
                       e.preventDefault();
                       // Add your click handler here if needed
@@ -79,7 +90,7 @@ export default function TrustedBy() {
                       alt={`${partner.name} - Partner organization trusted by Fluoverse`}
                       width={200}
                       height={120}
-                      className="object-contain max-h-[100px] max-w-[180px] w-auto h-auto transition-transform duration-300 group-hover/logo:scale-105"
+                      className={`${partner.logoClassName ?? "object-contain max-h-[100px] max-w-[180px] w-auto h-auto"} transition-transform duration-300 group-hover/logo:scale-105`}
                       onError={(e) => {
                         // Fallback to text if image fails to load
                         const target = e.target as HTMLImageElement;
