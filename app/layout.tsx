@@ -134,7 +134,7 @@ export default function RootLayout({
       "priceCurrency": "USD",
     },
     "description":
-      `${SITE_TAGLINE} Friend-making app for expats in Spain through shared activities, recurring meetups, and Spanish and culture coaching.`,
+      `${SITE_TAGLINE} Friend-making app for people who moved abroad through shared activities, recurring meetups, and language and culture coaching.`,
     "screenshot": "https://fluoverse.com/android-chrome-512x512.png",
     "featureList": (() => {
       const all = [

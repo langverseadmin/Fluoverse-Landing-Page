@@ -6,7 +6,7 @@ import FAQ from "@/components/FAQ";
 export const metadata: Metadata = {
   title: "FAQ",
   description:
-    "Stop feeling alone in Spain. Start feeling at home. Answers about Fluoverse: making real friends, meetups, Spanish and culture coaching, Premium vs Free, and support.",
+    "Stop feeling alone. Start feeling at home. Answers about Fluoverse: making real friends, meetups, language and culture coaching, Premium vs Free, and support.",
   keywords: [
     "Fluoverse FAQ",
     "make friends in Spain",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     url: "https://fluoverse.com/faq",
     title: "FAQ | Fluoverse",
     description:
-      "Stop feeling alone in Spain. Start feeling at home. Common questions about making friends, meetups, downloads, and support.",
+      "Stop feeling alone. Start feeling at home. Common questions about making friends abroad, meetups, downloads, and support.",
   },
 };
 

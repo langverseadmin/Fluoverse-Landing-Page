@@ -151,7 +151,7 @@ export default function SocialAppsGuideContent() {
           </p>{" "}
           <h2 className="mt-3 text-2xl font-bold leading-tight text-white sm:text-3xl">
             {" "}
-            Apps find the room. Stop feeling alone in Spain. Start feeling at home.{" "}
+            Apps find the room. Fluoverse helps you feel at home.{" "}
           </h2>{" "}
           <div className="mt-4 h-px w-20 bg-gradient-to-r from-purple-400/80 to-transparent" />{" "}
           <p className="mt-5 text-pretty leading-relaxed text-white/80">
@@ -193,8 +193,8 @@ export default function SocialAppsGuideContent() {
       <Reveal>
         {" "}
         <GuideSoftCta
-          heading="Stop feeling alone in Spain. Start feeling at home"
-          body="Meetup gets you in the room. Fluoverse helps you stay there: recurring meetups, follow-ups that stick, and Spanish and culture coaching when you need it."
+          heading="Stop feeling alone. Start feeling at home"
+          body="Meetup gets you in the room. Fluoverse helps you stay there: recurring meetups, follow-ups that stick, and language and culture coaching when you need it."
           placement="guide_social_apps"
         />{" "}
       </Reveal>{" "}

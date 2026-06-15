@@ -323,8 +323,8 @@ export default function SpainHubContent({ data }: SpainHubContentProps) {
       <Reveal>
         {" "}
         <GuideSoftCta
-          heading="Stop feeling alone in Spain. Start feeling at home."
-          body="Fluoverse pairs you with people who share your interests, guides recurring meetups until friendships stick, and teaches Spanish and culture along the way."
+          heading="Stop feeling alone. Start feeling at home."
+          body="Fluoverse pairs you with people who share your interests, guides recurring meetups until friendships stick, and teaches language and culture along the way."
           placement="guide_spain_hub"
         />{" "}
       </Reveal>{" "}

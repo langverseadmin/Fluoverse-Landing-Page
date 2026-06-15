@@ -5,12 +5,37 @@ import Image from "next/image";
 export default function TrustedBy() {
   const partners = [
     {
-      name: "ESN Erasmus Student Network Athens AUEB",
-      logo: "/ESN.jpg",
+      name: "Erasmus Student Network",
+      logo: "/esn.png",
       displayName: "ESN",
       containerClassName: "overflow-visible",
       logoClassName:
-        "object-contain max-h-[100px] max-w-[180px] scale-[1.55] origin-center",
+        "object-contain max-h-[100px] max-w-[180px] scale-[1.05] origin-center",
+    },
+    {
+      name: "Airalo",
+      logo: "/airalo.svg",
+      displayName: "Airalo",
+      href: "https://try.airalo.com/Fluoverse",
+      containerClassName: "overflow-visible",
+      logoClassName:
+        "object-contain max-h-[100px] max-w-[180px] scale-[1.05] origin-center",
+    },
+    {
+      name: "NordVPN",
+      logo: "/nordvpn.svg",
+      displayName: "NordVPN",
+      containerClassName: "overflow-visible",
+      logoClassName:
+        "object-contain max-h-[100px] max-w-[180px] scale-[1.05] origin-center",
+    },
+    {
+      name: "Saily",
+      logo: "/saily.svg",
+      displayName: "Saily",
+      containerClassName: "overflow-visible",
+      logoClassName:
+        "object-contain max-h-[100px] max-w-[180px] scale-[1.0] origin-center",
     },
     {
       name: "GREECE RELOCATION",
@@ -31,14 +56,6 @@ export default function TrustedBy() {
       name: "ORANG GROVE",
       logo: "/orange_grove.webp",
       displayName: "ORANG GROVE",
-    },
-    {
-      name: "Airalo",
-      logo: "/airalo.svg",
-      displayName: "Airalo",
-      containerClassName: "overflow-visible",
-      logoClassName:
-        "object-contain max-h-[100px] max-w-[180px] scale-[1.05] origin-center",
     },
   ];
 
@@ -78,12 +95,17 @@ export default function TrustedBy() {
                   title={partner.name}
                 >
                   <a
-                    href="#"
+                    href={partner.href ?? "#"}
+                    target={partner.href ? "_blank" : undefined}
+                    rel={partner.href ? "noopener noreferrer" : undefined}
                     className={`relative w-[200px] h-[120px] bg-white rounded-lg flex items-center justify-center p-4 group/logo cursor-pointer overflow-hidden ${partner.containerClassName ?? ""}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      // Add your click handler here if needed
-                    }}
+                    onClick={
+                      partner.href
+                        ? undefined
+                        : (e) => {
+                            e.preventDefault();
+                          }
+                    }
                   >
                     <Image
                       src={partner.logo}

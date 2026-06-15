@@ -14,11 +14,11 @@ social,expat,lonely,newcomer,Spain,community,abroad,integrate,Spanish,culture,la
 
 ## Promotional Text (170 characters)
 
-Stop feeling alone in Spain. Start feeling at home. Fluoverse pairs you with people who share your interests and guides recurring meetups until friendships stick.
+Stop feeling alone. Start feeling at home. Fluoverse pairs you with people who share your interests and guides recurring meetups until friendships stick.
 
 ## Description (copy everything below)
 
-Stop feeling alone in Spain. Start feeling at home.
+Stop feeling alone. Start feeling at home.
 
 You moved to Spain to start a new life. But when Friday night comes, you still have no one to go out with. Fluoverse helps expats make real friends and finally feel at home.
 

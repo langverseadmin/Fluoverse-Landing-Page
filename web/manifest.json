@@ -1,11 +1,11 @@
 {
-    "name": "Fluoverse — Stop feeling alone in Spain. Start feeling at home",
+    "name": "Fluoverse — Stop feeling alone. Start feeling at home",
     "short_name": "Fluoverse",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#3b0764",
     "theme_color": "#7c3aed",
-    "description": "Stop feeling alone in Spain. Start feeling at home. Make real friends through shared activities and recurring meetups.",
+    "description": "Stop feeling alone. Start feeling at home. Make real friends through shared activities and recurring meetups.",
     "orientation": "portrait-primary",
     "prefer_related_applications": true,
     "related_applications": [
