@@ -102,7 +102,7 @@ export default function Navigation() {
   { name: "Testimonials", href: "#understand-journey" },
   { name: "Meetups", href: "#meetups" },
   { name: "Blog", href: "https://blog.fluoverse.com", external: true },
-];
+  ];
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 px-3 pt-3 pb-0 sm:px-5 sm:pt-4 md:px-8 md:pt-5 pointer-events-none">
