@@ -13,6 +13,7 @@ import Benefits from "@/components/Benefits";
 import UnderstandJourney from "@/components/UnderstandJourney";
 import UserVideo from "@/components/UserVideo";
 import Testimonials from "@/components/Testimonials";
+import Meetups from "@/components/Meetups";
 import Footer from "@/components/Footer";
 
 type TabType = "learners" | "tutors";
@@ -30,6 +31,7 @@ export default function HomeClient() {
       <UnderstandJourney />
       <UserVideo />
       <Testimonials activeTab={activeTab} />
+      <Meetups />
       <section aria-label="Download Fluoverse" className="py-12 lg:py-14">
         <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
           <motion.div
