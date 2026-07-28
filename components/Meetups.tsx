@@ -65,7 +65,7 @@ export default function Meetups() {
           transition={{ duration: 0.55, delay: 0.15 }}
           className="text-center"
         >
-          
+          <a
             href="mailto:operations@fluoverse.com?subject=Meetup%20Partnership%20Inquiry"
             className="neon-cta-3d inline-flex px-6 py-3 text-sm font-semibold text-white"
           >
