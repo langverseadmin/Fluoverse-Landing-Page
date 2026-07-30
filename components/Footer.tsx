@@ -98,13 +98,21 @@ export default function Footer() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="flex flex-col md:flex-row items-center justify-between gap-6"
         >
-          {/* Terms */}
-          <a
-            href="/terms"
-            className="text-white/70 hover:text-white text-sm font-medium transition-colors"
-          >
-            Terms & Conditions
-          </a>
+          {/* Legal links */}
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
+            <a
+              href="/terms"
+              className="text-white/70 hover:text-white text-sm font-medium transition-colors"
+            >
+              Terms & Conditions
+            </a>
+            <a
+              href="/community-guidelines"
+              className="text-white/70 hover:text-white text-sm font-medium transition-colors"
+            >
+              Community Guidelines
+            </a>
+          </div>
 
           {/* Social Icons */}
           <div className="flex items-center gap-4">
