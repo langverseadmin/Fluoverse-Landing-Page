@@ -41,7 +41,7 @@ export default function CTA() {
 
           {/* Description */}
           <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto">
-            Join thousands of learners who are mastering Spanish with Fluoverse. 
+            Join 10,000+ learners who are mastering Spanish with Fluoverse. 
             Start your free trial today and experience the future of language learning.
           </p>
 

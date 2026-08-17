@@ -96,6 +96,9 @@ export const trackPricingCtaClick = (plan: string) =>
 export const trackCtaStartLearningFree = () =>
   track("cta_start_learning_free");
 
+export const trackPartnerCtaClick = () =>
+  track("partner_cta_click");
+
 // ─── FAQ ──────────────────────────────────────────────────────────────────────
 
 export const trackFaqOpen = (question: string) =>

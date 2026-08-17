@@ -44,19 +44,19 @@ const tutorTestimonial = {
 
 const statsAll = [
   {
-    value: "5000+",
+    value: "10,000+",
     label: "Language Learners",
   },
   {
-    value: "40+",
+    value: "80+",
     label: "Tutors",
   },
   {
-    value: "30,000+",
+    value: "60,000+",
     label: "Conversations Started",
   },
   {
-    value: "50,000+",
+    value: "100,000+",
     label: "Minutes Spoken",
   },
 ];
@@ -64,7 +64,7 @@ const statsAll = [
 const stats =
   LEARNERS_ONLY_SITE
     ? statsAll.map((s) =>
-        s.label === "Tutors" ? { value: "50+", label: "Speaking topics" } : s
+        s.label === "Tutors" ? { value: "100+", label: "Speaking topics" } : s
       )
     : statsAll;
 

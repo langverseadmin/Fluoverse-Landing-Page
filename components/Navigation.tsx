@@ -100,7 +100,7 @@ export default function Navigation() {
   const navItems = [
   { name: "Benefits", href: "#benefits" },
   { name: "Testimonials", href: "#understand-journey" },
-  { name: "Meetups", href: "#meetups" },
+  { name: "Become a Partner", href: "#become-a-partner" },
   { name: "Blog", href: "https://blog.fluoverse.com", external: true },
   ];
 
